@@ -1,5 +1,7 @@
 include <oem.scad>;
 
+$fn = 32;
+
 kCaseRadius = 200;
 kCaseHeight = 70;
 kCaseThickness = 2;

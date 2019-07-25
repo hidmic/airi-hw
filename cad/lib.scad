@@ -1,3 +1,11 @@
+
+module ring(id, od) {
+     difference() {
+          circle(d=od);
+          circle(d=id);
+     }
+}
+
 module sector(radius, angles, fn = $fn) {
      r = radius / cos(180 / fn);
      step = -360 / fn;

@@ -1,3 +1,5 @@
+kEpsilon = 1e-1;
+
 kA1M8r1WorkingWidth = 6;
 kA1M8r1Range = 6000;
 
@@ -53,11 +55,14 @@ module mIMU() {
      import("oem/GY521.stl");
 }
 
-kJetsonNanoLength = 100;
-kJetsonNanoWidth = 81.021973;
+kComputerLength = 100;
+kComputerWidth = 81.021973;
+kComputerHeight = 30.506195;
 
-module mHighLvlComputer() {
-     // BB 81.021973 30.506195 100.000000
+module mComputer() {
+     translate([0, 0, kComputerHeight/2 - 2.2])
+     rotate([90, 0, 0])
+     translate([-2.51098442, -41.02810287, 13.])
      import("oem/Jetson-Nano-DK.stl");
 }
 
@@ -65,7 +70,7 @@ kSTM32F407DISCOWidth = 66;
 kSTM32F407DISCOLength = 97;
 kSTM32F407DISCOThickness = 1.6;
 
-module mLowLvlComputer() {
+module mController() {
      difference() {
           linear_extrude(height=kSTM32F407DISCOThickness, center=true) {
                square([kSTM32F407DISCOWidth, kSTM32F407DISCOLength]);
@@ -107,20 +112,65 @@ module mClampingHub() {
      import("oem/1310-0016-0008.stl");
 }
 
-k8x22x7BallBearingWidth = 7;
+kBearingHeight = 7;
+kBearingOuterDiameter = 22;
+kBearingInnerDiameter = 8;
 
-module m8x22x7BallBearing() {
-     import("oem/608.stl");
+module mBearing() {
+     rotate([90, 0, 0])
+     import("oem/608.stl", convexity=10);
 }
 
-module m8x100RoundShaft() {
-     rotate([-90, 0, 0])
+module mBearingHull(center=false) {
+     z_offset = -kEpsilon/2 - (center ? kBearingHeight/2 : 0);
+     translate([0, 0, z_offset])
+     cylinder(d=kEpsilon + kBearingOuterDiameter,
+              h=kEpsilon + kBearingHeight);
+}
+
+kThrustBearingInnerDiameter=10;
+kThrustBearingOuterDiameter=24;
+kThrustBearingHeight = 9;
+
+module mThrustBearing() {
+     rotate([0, -90, 0])
+     import("oem/51100.stl");
+}
+
+kBushingHeight = 10;
+kBushingOuterDiameter = 10;
+kBushingInnerDiameter = 8;
+
+module mBushing() {
+     rotate([0, -90, 0])
+     import("oem/PCM_081010_M.stl");
+}
+
+module mBushingHull(center=false) {
+     z_offset = -kEpsilon/2 - (center ? kBushingHeight/2 : 0);
+     translate([0, 0, z_offset])
+     cylinder(d=kEpsilon + kBushingOuterDiameter,
+              h=kEpsilon + kBushingHeight);
+}
+
+kShockAbsorberLength = 84.3746;
+kShockAbsorberDiameter = 16.9889;
+
+module mShockAbsorber() {
+     translate([2.250000e-03, -11.99665, 3.238])
+     import("oem/Shock_Absorber.stl");
+}
+
+kRoundShaftDiameter = 8;
+
+module mRoundShaftL100() {
+     rotate([90, 0, 0])
      import("oem/2100-0008-0100.stl");
 }
 
-k12vDCMotorShaftLength = 28;
+kDCMotorShaftLength = 28;
 
-module m12vDCMotor() {
+module mDCMotor() {
      translate([-28, 0, 0])
      rotate([0, 90, 0])
      rotate([0, 0, -15])
@@ -180,19 +230,13 @@ module mTransmission() {
           rotate([0, 0, 90])
           mM15BevelGear();
           rotate([-90, 0, 0])
-          m8x100RoundShaft();
-          translate([0, -k8x22x7BallBearingWidth-25, 0])
-          m8x22x7BallBearing();
-          translate([0, -k8x22x7BallBearingWidth-60, 0])
-          m8x22x7BallBearing();
+          mRoundShaftL100();
+          translate([0, -kBearingWidth-25, 0])
+          mBearing();
+          translate([0, -BearingWidth-60, 0])
+          mBearing();
           translate([0, -100, 0])
           rotate([0, 0, -90])
           mMountedRoundBeltPulley();
      };
 }
-
-$fn=64;
-
-mTransmission();
-m12vDCMotor();
-
