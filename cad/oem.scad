@@ -137,13 +137,13 @@ module mThrustBearing() {
      import("oem/51100.stl");
 }
 
-kBushingHeight = 10;
-kBushingOuterDiameter = 10;
-kBushingInnerDiameter = 8;
+kBushingHeight = 6;
+kBushingOuterDiameter = 8;
+kBushingInnerDiameter = 6;
 
 module mBushing() {
      rotate([0, -90, 0])
-     import("oem/PCM_081010_M.stl");
+     import("oem/PCM_060806_E.stl");
 }
 
 module mBushingHull(center=false) {
@@ -153,12 +153,12 @@ module mBushingHull(center=false) {
               h=kEpsilon + kBushingHeight);
 }
 
-kShockAbsorberLength = 84.3746;
-kShockAbsorberDiameter = 16.9889;
+kShockAbsorberLength = 68;
+kShockAbsorberDiameter = 17;
 
 module mShockAbsorber() {
-     translate([2.250000e-03, -11.99665, 3.238])
-     import("oem/Shock_Absorber.stl");
+     translate([0.0, 0.07597303, -33.29282761])
+     import("oem/shock_absorber_1_10_70.stl");
 }
 
 kRoundShaftDiameter = 8;
@@ -240,3 +240,9 @@ module mTransmission() {
           mMountedRoundBeltPulley();
      };
 }
+
+module mBallCaster() {
+     rotate([180, 0, 0])
+     import("oem/cy-15a.stl");
+}
+
