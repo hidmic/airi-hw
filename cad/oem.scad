@@ -95,9 +95,9 @@ module mController() {
 }
 
 module mRubberWheel() {
-     translate([0, 12, 0])
+     translate([0, 16, 0])
      rotate([-90, 0, 0])
-     import("oem/3601-0014-0072.stl");
+     import("oem/3601-0014-0096.stl");
 }
 
 kRoundBeltPulleyWidth = 6;
@@ -106,10 +106,13 @@ module mRoundBeltPulley() {
      import("oem/3400-0014-0032.stl");
 }
 
+kClampingHubWidth = 8;
+
 module mClampingHub() {
-     rotate([0, -90, 0])
-     translate([14.01232946, -7.45843506, 8.17303562-1])
-     import("oem/1310-0016-0008.stl");
+     translate([0.5, 0, 3.3303027798233593])
+     rotate([0, -180, 90])
+     translate([26.56210756, 12.11835694, -22.16415906])
+     import("oem/1301-0016-0008.stl");
 }
 
 kBearingHeight = 7;
@@ -137,13 +140,13 @@ module mThrustBearing() {
      import("oem/51100.stl");
 }
 
-kBushingHeight = 6;
+kBushingHeight = 8;
 kBushingOuterDiameter = 8;
 kBushingInnerDiameter = 6;
 
 module mBushing() {
      rotate([0, -90, 0])
-     import("oem/PCM_060806_E.stl");
+     import("oem/PCM_060808_E.stl");
 }
 
 module mBushingHull(center=false) {
@@ -164,19 +167,19 @@ module mShockAbsorber() {
 kRoundShaftDiameter = 8;
 
 module mRoundShaftL100() {
-     rotate([90, 0, 0])
+     translate([0, -50, 0])
      import("oem/2100-0008-0100.stl");
 }
 
 kDCMotorShaftLength = 28;
 
 module mDCMotor() {
-     translate([-28, 0, 0])
      rotate([0, 90, 0])
-     rotate([0, 0, -15])
-     translate([0, 0, -92])
-     import("oem/MR08D-012004.stl");
+     // TODO(hidmic): revisar!
+     translate([0.02841282, 0, 28-144.04437256])
+     import("oem/MR08D-024022.stl");
 }
+
 
 kM3x4_8ThreadedInsertDiameter = 4;
 kM3x4_8ThreadedInsertLength = 4.8;
@@ -215,7 +218,7 @@ module mM15BevelGear() {
 
 
 module mMountedRoundBeltPulley() {
-     translate([-kRoundBeltPulleyWidth/2, 0, 0]) {
+     translate([-kRoundBeltPulleyWidth/2 - kClampingHubWidth/2, 0, 0]) {
           mClampingHub();
      }
      mRoundBeltPulley();
@@ -229,12 +232,18 @@ module mTransmission() {
      union() {
           rotate([0, 0, 90])
           mM15BevelGear();
-          rotate([-90, 0, 0])
+          translate([0, -50, 0])
           mRoundShaftL100();
-          translate([0, -kBearingWidth-25, 0])
-          mBearing();
-          translate([0, -BearingWidth-60, 0])
-          mBearing();
+          for (y = [-kM15BevelGearLength - 10, -80]) {
+               translate([0, y, 0]) {
+                    rotate([-90, 0, 0]) {
+                         translate([0, 0, -kBearingHeight/2]) {
+                              mBearing();
+                         }
+                    }
+               }
+
+          }
           translate([0, -100, 0])
           rotate([0, 0, -90])
           mMountedRoundBeltPulley();
@@ -246,3 +255,17 @@ module mBallCaster() {
      import("oem/cy-15a.stl");
 }
 
+kEncoderHeight = 10.34;
+kEncoderWidth = 28.58;
+kEncoderLength = 37.25;
+kEncoderAxleToTop = 15.33;
+kEncoderMountingDiameter = 25.4;
+kEncoderMountingAngles = [-135, -45, 45, 135];
+kEncoderMountingHoleDiameter = 2;
+
+module mEncoder() {
+     rotate([0, 0, 180])
+     translate([-kEncoderWidth/2, 0, -(kEncoderLength - kEncoderAxleToTop)])
+     rotate([90, 0, 0])
+     import("oem/CUI_AMT112S-4096-8000-S.STL");
+}

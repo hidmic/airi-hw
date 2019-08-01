@@ -106,51 +106,46 @@ module mCasterJoint() {
 /*      } */
 /* } */
 
-kSuspensionSupportWidth = 10;
+kCurvedLinkThickness = 3;
+kCurvedLinkWidth = 10;
+kCurvedLinkAngularLength = 130;
+kCurvedLinkFasteningAngles = [30, 120];
+kCurvedLinkFasteningAngularDelta = 5;
+kCurvedLinkShockMountsAngularRange = [10:10:120];
+kCurvedLinkFillet = 3;
 
 
-module mSuspensionSupport() {
-     difference() {
-          rounded_ring(inner_diameter=2 * (kSuspensionLinkBarLength - kSuspensionSupportWidth/2),
-                       outer_diameter=2 * (kSuspensionLinkBarLength + kSuspensionSupportWidth/2),
-                       angles=[0, 155]);
-          translate([kSuspensionLinkBarLength, 0])
-          circle(d=kBushingInnerDiameter);
-          for(angle = [20:10:140]) {
-               rotate([0, 0, angle])
-               translate([kSuspensionLinkBarLength, 0])
-               circle(d=4);
-          }
-          for(angle = [15:10:145]) {
-               rotate([0, 0, angle]) {
-                    hull() {
-                         for(theta = [-1, 1]) {
-                              rotate([0, 0, theta])
-                              translate([kSuspensionLinkBarLength, 0])
-                              circle(d=4);
+module mCurvedLink() {
+     linear_extrude(height=kCurvedLinkThickness, center=true) {
+          difference() {
+               fillet(kCurvedLinkFillet) {
+                    rounded_ring(inner_radius=kSuspensionLinkBarLength - kCurvedLinkWidth/2,
+                                 outer_radius=kSuspensionLinkBarLength + kCurvedLinkWidth/2 + kWheelCaseThickness,
+                                 angles=[0, kCurvedLinkAngularLength]);
+                    translate([kSuspensionLinkBarLength, 0]) {
+                         circle(d=kPivotJointDiameter);
+                    }
+               }
+               translate([kSuspensionLinkBarLength, 0]) {
+                    circle(d=kBushingInnerDiameter);
+               }
+               for (angle = kCurvedLinkFasteningAngles) {
+                    rounded_ring(inner_radius=kSuspensionLinkBarLength - kCurvedLinkSupportHoleDiameter/2,
+                                 outer_radius=kSuspensionLinkBarLength + kCurvedLinkSupportHoleDiameter/2,
+                                 angles=[angle - kCurvedLinkFasteningAngularDelta/2,
+                                         angle + kCurvedLinkFasteningAngularDelta/2]);
+               }
+               for (angle = kCurvedLinkShockMountsAngularRange) {
+                    rotate(angle) {
+                         translate([kSuspensionLinkBarLength, 0]) {
+                              circle(d=kCurvedLinkSupportHoleDiameter);
                          }
                     }
                }
           }
-          
-          /* rounded_ring(inner_diameter=2 * (kSuspensionLinkBarLength - kSuspensionSupportWidth/6), */
-          /*              outer_diameter=2 * (kSuspensionLinkBarLength + kSuspensionSupportWidth/6), */
-          /*              angles=[-5, 40]); */
-          /* rounded_ring(inner_diameter=2 * (kSuspensionLinkBarLength - kSuspensionSupportWidth/6), */
-          /*              outer_diameter=2 * (kSuspensionLinkBarLength + kSuspensionSupportWidth/6), */
-          /*              angles=[50, 95]); */
      }
 }
 
-
-mSuspensionSupport();
-
-/* rotate_extrude() { */
-/*      square(10); */
-/*      translate([10, 0]) */
-/*           sigmoid_profile(10, 10); */
-/* } */
-//mSuspensionLink();
 
 
 module mBearingSupportedJoint() {
@@ -166,32 +161,29 @@ module mBearingSupportedJoint() {
                }
           }
           translate([0, 0, kJointHeight - kBearingHeight])
-               mBearingHull();
+          mBearingHull();
           translate([0, 0, -kEpsilon])
-               mRoundShaftL100();
+          mRoundShaftL100();
      }
      translate([0, 0, kJointHeight - kBearingHeight])
-          mBearing();
+     mBearing();
 }
 
 
 
 
-kSuspensionLinkBarLength = 80;
+kSuspensionLinkBarLength = 65;
 kSuspensionLinkBarWidth = 10;
 kSuspensionLinkBarFillet = 5;
 kSuspensionLinkBarThickness = 3;
 
 kAxleJointHeight = kBearingHeight + 1;
-
-kAxleJointDiameter = 35;
-kPivotJointDiameter = 20;
+kPivotJointHeight = kBushingHeight;
+kAxleJointDiameter = 30;
+kPivotJointDiameter = 15;
 
 kM3ScrewDiameter = 3;
 
-kEncoderMountingDiameter = 25.4;
-kEncoderMountingAngles = [-135, -45, 45, 135];
-kEncoderMountingHoleDiameter = 2;
 
 kAxleJointFasteningAngles = kEncoderMountingAngles;
 kAxleJointFasteningDiameter = kEncoderMountingDiameter;
@@ -201,20 +193,35 @@ kPivotJointFasteningAngles = kAxleJointFasteningAngles;
 kPivotJointFasteningDiameter = (kPivotJointDiameter + kBushingOuterDiameter)/2;
 kPivotJointFasteningHoleDiameter = kAxleJointFasteningHoleDiameter;
 
-kSuspensionLinkAssemblyHeight = 2 * kSuspensionLinkBarThickness + kAxleJointHeight;
-
+kSuspensionLinkHeight = 2 * kSuspensionLinkBarThickness + kAxleJointHeight;
 
 module mSuspensionLink() {
-     translate([0, 0, -kBearingHeight/2]) mBearing();
+     duplicate([0, 0, 1]) {
+          translate([0, 0, -kAxleJointHeight/2 - kSuspensionLinkBarThickness/2]) {
+               mSuspensionLinkBar();
+          }
+     }
+     mSuspensionLinkAxleJoint();
+     translate([0, 0, -kBearingHeight/2]) {
+          mBearing();
+     }
+     translate([kSuspensionLinkBarLength, 0, 0]) {
+          mSuspensionLinkPivotJoint();
+          translate([0, 0, -kBushingHeight/2]) {
+               mBushing();
+          }
+     }
 }
 
 module mSuspensionLinkAxleJointXSection() {
      difference() {
           circle(d=kAxleJointDiameter);
           for (angle = kAxleJointFasteningAngles) {
-               rotate([0, 0, angle])
-                    translate([kAxleJointFasteningDiameter/2, 0])
-                    circle(d=kAxleJointFasteningHoleDiameter);
+               rotate([0, 0, angle]) {
+                    translate([kAxleJointFasteningDiameter/2, 0]) {
+                         circle(d=kAxleJointFasteningHoleDiameter);
+                    }
+               }
           }
           circle(d=kBearingOuterDiameter);
      }
@@ -230,9 +237,11 @@ module mSuspensionLinkPivotJointXSection() {
      difference() {
           circle(d=kPivotJointDiameter);
           for (angle = kPivotJointFasteningAngles) {
-               rotate([0, 0, angle])
-                    translate([kPivotJointFasteningDiameter/2, 0])
-                    circle(d=kPivotJointFasteningHoleDiameter);
+               rotate([0, 0, angle]) {
+                    translate([kPivotJointFasteningDiameter/2, 0]) {
+                         circle(d=kPivotJointFasteningHoleDiameter);
+                    }
+               }
           }
           circle(d=kBushingOuterDiameter);
      }
@@ -249,25 +258,31 @@ module mSuspensionLinkBar() {
           difference() {
                offset(r=-kSuspensionLinkBarFillet) {
                     offset(delta=kSuspensionLinkBarFillet) {
-                         translate([kSuspensionLinkBarLength/2, 0])
-                         square([kSuspensionLinkBarLength, kSuspensionLinkBarWidth], center=true);
+                         translate([kSuspensionLinkBarLength/2, 0]) {
+                              square([kSuspensionLinkBarLength, kSuspensionLinkBarWidth], center=true);
+                         }
                          circle(d=kAxleJointDiameter);
-                         translate([kSuspensionLinkBarLength, 0])
-                         circle(d=kPivotJointDiameter);
+                         translate([kSuspensionLinkBarLength, 0]) {
+                              circle(d=kPivotJointDiameter);
+                         }
                     }
                }
                circle(d=(kBearingOuterDiameter + kRoundShaftDiameter)/2);
                for (angle = kAxleJointFasteningAngles) {
-                    rotate([0, 0, angle])
-                         translate([kAxleJointFasteningDiameter/2, 0])
-                         circle(d=kAxleJointFasteningHoleDiameter);
+                    rotate([0, 0, angle]) {
+                         translate([kAxleJointFasteningDiameter/2, 0]) {
+                              circle(d=kAxleJointFasteningHoleDiameter);
+                         }
+                    }
                }
                translate([kSuspensionLinkBarLength, 0]) {
                     circle(d=(kBushingOuterDiameter + kBushingInnerDiameter)/2);
                     for (angle = kPivotJointFasteningAngles) {
-                         rotate([0, 0, angle])
-                         translate([kPivotJointFasteningDiameter/2, 0])
-                         circle(d=kPivotJointFasteningHoleDiameter);
+                         rotate([0, 0, angle]) {
+                              translate([kPivotJointFasteningDiameter/2, 0]) {
+                                   circle(d=kPivotJointFasteningHoleDiameter);
+                              }
+                         }
                     }
                }
                for (x = steps(kAxleJointDiameter/2+5, kSuspensionLinkBarLength-kPivotJointDiameter/2-5, 6)) {
@@ -277,8 +292,20 @@ module mSuspensionLinkBar() {
      }
 }
 
-mSuspensionLinkBar();
 
+
+kSuspensionArmHeight = kSuspensionLinkHeight + 2 * kCurvedLinkThickness;
+
+module mSuspensionArm() {
+     rotate([90, 0, 0]) {
+          duplicate([0, 0, 1]) {
+               translate([0, 0, -kSuspensionLinkHeight/2-kCurvedLinkThickness/2]) {
+                    mCurvedLink();
+               }
+          }
+          mSuspensionLink();
+     }
+}
 
 //translate([0, 0, -kAxleJointHeight/2])
 
@@ -301,12 +328,12 @@ mSuspensionLinkBar();
 
 
 
+kWheelAxleZOffset = 48 - 15.5 - 3;
 
-
-kWheelCaseWidth = 50;
+kWheelCaseWidth = 40;
 kWheelCaseDiameter = 140;
-kWheelCaseOffset = 13;
 kWheelCaseThickness = 3;
+kWheelCaseToeWidth = 15;
 
 kCurvedLinkSupportHoleDiameter = 4;
 kCurvedLinkSupportDiameter = 10;
@@ -314,49 +341,107 @@ kCurvedLinkSupportBaseWidth = 16;
 kCurvedLinkSupportFilletRadius = 4;
 
 module mCurvedLinkSupportXSection() {
-     rotate([0, 0, 180])
-     difference() {
-          window(4*kCurvedLinkSupportDiameter) {
-               curved_bench_fillet(kCurvedLinkSupportFilletRadius, bench_radius=kWheelCaseDiameter/2) {
-                    hull() {
-                         translate([(kCurvedLinkSupportDiameter + kWheelCaseThickness)/2, 0]) {
-                              circle(d=kCurvedLinkSupportDiameter);
+     rotate([0, 0, 180]) {
+          difference() {
+               window(4*kCurvedLinkSupportDiameter) {
+                    curved_bench_fillet(kCurvedLinkSupportFilletRadius, bench_radius=kWheelCaseDiameter/2) {
+                         hull() {
+                              translate([(kCurvedLinkSupportDiameter + kWheelCaseThickness)/2, 0]) {
+                                   circle(d=kCurvedLinkSupportDiameter);
+                              }
+                              translate([kWheelCaseDiameter/2 + kWheelCaseThickness/2, 0])
+                                   ring(inner_radius=kWheelCaseDiameter/2,
+                                        outer_radius=kWheelCaseDiameter/2 + kWheelCaseThickness,
+                                        angles=[170, 190]);
                          }
                          translate([kWheelCaseDiameter/2 + kWheelCaseThickness/2, 0])
-                              ring(inner_diameter=kWheelCaseDiameter, outer_diameter=kWheelCaseDiameter + 2 * kWheelCaseThickness, angles=[170, 190]);
+                              ring(inner_radius=kWheelCaseDiameter/2,
+                                   outer_radius=kWheelCaseDiameter/2 + kWheelCaseThickness,
+                                   angles=[150, 210]);
                     }
-                    translate([kWheelCaseDiameter/2 + kWheelCaseThickness/2, 0])
-                         ring(inner_diameter=kWheelCaseDiameter, outer_diameter=kWheelCaseDiameter + 2 * kWheelCaseThickness, angles=[150, 210]);
                }
-          }
-          translate([(kCurvedLinkSupportDiameter + kWheelCaseThickness)/2, 0]) {
-               circle(d=kCurvedLinkSupportHoleDiameter);
+               translate([kCurvedLinkSupportDiameter/2 + kWheelCaseThickness, 0]) {
+                    circle(d=kCurvedLinkSupportHoleDiameter);
+               }
           }
      }
 }
 
 
 module mWheelCase() {
+     rotate([90, 0, 0])
      linear_extrude(height=kWheelCaseWidth, center=true) {
-          translate([kWheelCaseOffset, 0]) {
-               ring(inner_diameter=kWheelCaseDiameter,
-                    outer_diameter=kWheelCaseDiameter + 2 * kWheelCaseThickness,
-                    angles=[-90, 90]);
-               for(angle=[-45, 45]) {
+          translate([0, kWheelAxleZOffset]) {
+               ring(inner_radius=kWheelCaseDiameter/2,
+                    outer_radius=kWheelCaseDiameter/2 + kWheelCaseThickness,
+                    angles=[0, 180]);
+               for(angle=kCurvedLinkFasteningAngles) {
                     rotate([0, 0, angle]) {
-                         translate([kWheelCaseDiameter/2 + kWheelCaseThickness, 0])
+                         translate([kWheelCaseDiameter/2 + kWheelCaseThickness, 0]) {
                               mCurvedLinkSupportXSection();
+                         }
                     }
                }
           }
-          duplicate([0, 1, 0]) {
-               translate([0, -kWheelCaseDiameter/2 - kWheelCaseThickness]) {
-                    square([kWheelCaseOffset, kWheelCaseThickness]);
-                    square([kWheelCaseThickness, kWheelCaseOffset]);
+          duplicate([1, 0, 0]) {
+               translate([-kWheelCaseDiameter/2 - kWheelCaseThickness, 0]) {
+                    square([kWheelCaseToeWidth, kWheelCaseThickness]);
+                    square([kWheelCaseThickness, kWheelAxleZOffset]);
                }
           }
      }
 }
 
-//mWheelCase();
+module mWheelBlock() {
+     translate([0, 0, kWheelAxleZOffset]) {
+          duplicate([0, 1, 0]) {
+               translate([0, kWheelCaseWidth/2 + kSuspensionArmHeight/2, 0]) {
+                    mSuspensionArm();
+               }
+          }
+          translate([0, kWheelCaseWidth/2 + kSuspensionArmHeight - kCurvedLinkThickness, 0]) {
+               rotate([0, 90, 0]) mEncoder();
+          }
+          translate([0, -kWheelCaseWidth/2 - kSuspensionArmHeight - 10, 0]) {
+               rotate([0, 0, -90]) mMountedRoundBeltPulley();
+          }
+          mRoundShaftL100();
+          mRubberWheel();
+     }
+     mWheelCase();
 
+     duplicate([0, 1, 0]) {
+          translate([27, -kWheelCaseWidth/2-kSuspensionArmHeight/2, kWheelAxleZOffset - 3]) {
+               rotate([180, 5, 0]) mShockAbsorber();
+          }
+     }
+}
+
+$fn = 64;
+
+kDCMotorAxleZOffset = 20;
+
+duplicate([0, 1, 0])
+translate([0, 40, 0]) {
+translate([30, -10, 0]) {
+translate([0, 0, kDCMotorAxleZOffset]) {
+     rotate([180, 0, 0]) {
+     translate([-kDCMotorShaftLength, 0, 0])
+     mDCMotor();
+     mTransmission();
+     }
+}
+}
+translate([-85, 90, 0])
+mWheelBlock();
+}
+
+translate([-85, 0, 0]) {
+     color([1, 0, 0])
+
+          translate([-110, 0, 45]) 
+cube([120, 150, 90], center=true);
+circle(d=400);
+}
+translate([0, 0, 40])
+mLidar();

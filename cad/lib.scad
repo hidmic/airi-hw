@@ -17,26 +17,27 @@ module sector(radius, angles, fn = $fn) {
      }
 }
 
-module ring(inner_diameter, outer_diameter, angles = [0, 360], fn = $fn) {
+module ring(inner_radius, outer_radius, angles = [0, 360], fn = $fn) {
      difference() {
-          sector(radius=outer_diameter/2, angles=angles, fn=fn);
-          sector(radius=inner_diameter/2, angles=angles+[-kEpsilon, kEpsilon], fn=fn);
+          sector(radius=outer_radius, angles=angles, fn=fn);
+          sector(radius=inner_radius, angles=angles+[-kEpsilon, kEpsilon], fn=fn);
      }
 }
 
-module rounded_ring(inner_diameter, outer_diameter, angles = [0, 360], fn = $fn) {
+module rounded_ring(inner_radius, outer_radius, angles = [0, 360], fn = $fn) {
      step_angle = 360 / fn;
-     ring_radius = (outer_diameter + inner_diameter) / 4;
-     ring_width = (outer_diameter - inner_diameter) / 2;
+     ring_width = outer_radius - inner_radius;
+     ring_mean_radius = (outer_radius + inner_radius) / 2;
      for (theta = angles) {
           theta_d = theta / step_angle;
           theta_frac = (theta_d - floor(theta_d) - 0.5) * step_angle;
-          rho = ring_radius * cos(step_angle/2) / cos(theta_frac);
-          translate([rho * cos(theta), rho * sin(theta)])
+          rho = ring_mean_radius * cos(step_angle/2) / cos(theta_frac);
+          rotate(theta)
+          translate([rho, 0])
           circle(d=ring_width);
      }
-     ring(inner_diameter=inner_diameter,
-          outer_diameter=outer_diameter,
+     ring(inner_radius=inner_radius,
+          outer_radius=outer_radius,
           angles=angles, fn=fn);
 }
 
@@ -78,14 +79,14 @@ module curved_bench_fillet(r, bench_radius, order=1000) {
      difference() {
           fillet(r) {
                translate([bench_radius, 0]) {
-                    ring(inner_diameter=2*bench_radius,
-                         outer_diameter=2*bench_radius * order);
+                    ring(inner_radius=bench_radius,
+                         outer_radius=bench_radius * order);
                }
                children();
           }
           translate([bench_radius, 0]) {
-               ring(inner_diameter=2 * (bench_radius - kEpsilon),
-                    outer_diameter=2 * (bench_radius * order - kEpsilon));
+               ring(inner_radius=bench_radius - kEpsilon,
+                    outer_radius=bench_radius * order - kEpsilon);
           }
      }
 }
