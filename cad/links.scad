@@ -392,6 +392,10 @@ module mWheelCase() {
      }
 }
 
+kWheelBlockCenterToEncoderDistance = kWheelCaseWidth/2 + kSuspensionArmHeight - kCurvedLinkThickness;
+kWheelBlockCenterToClampDistance = kWheelCaseWidth/2 + kSuspensionArmHeight - kCurvedLinkThickness  + kClampingHubWidth/2 + kM8WasherThickness;
+kWheelBlockCenterToPulleyDistance = kWheelBlockCenterToClampDistance + kClampingHubWidth/2 + kRoundBeltPulleyWidth/2;
+
 module mWheelBlock() {
      translate([0, 0, kWheelAxleZOffset]) {
           duplicate([0, 1, 0]) {
@@ -399,10 +403,10 @@ module mWheelBlock() {
                     mSuspensionArm();
                }
           }
-          translate([0, kWheelCaseWidth/2 + kSuspensionArmHeight - kCurvedLinkThickness, 0]) {
+          translate([0, kWheelBlockCenterToEncoderDistance, 0]) {
                rotate([0, 90, 0]) mEncoder();
           }
-          translate([0, -kWheelCaseWidth/2 - kSuspensionArmHeight - 10, 0]) {
+          translate([0, -kWheelBlockCenterToClampDistance, 0]) {
                rotate([0, 0, -90]) mMountedRoundBeltPulley();
           }
           mRoundShaftL100();
@@ -417,31 +421,232 @@ module mWheelBlock() {
      }
 }
 
-$fn = 64;
+kBevelGearBoxOffset = 8;
 
-kDCMotorAxleZOffset = 20;
+kBevelGearBoxPillowFinWidth = 2;
+kBevelGearBoxPillowFinThickness = 2;
+kBevelGearBoxPillowSlotThickness = 4;
+kBevelGearBoxPillowBaseHeight = kBearingHeight + kBevelGearBoxPillowFinThickness;
+kBevelGearBoxPillowHeight = kBevelGearBoxPillowBaseHeight + kBevelGearBoxPillowFinThickness;
+kBevelGearBoxPillowFasteningAngles = [-135, -45, 45, 135];
+kBevelGearBoxPillowFasteningDiameter = 30;
 
-duplicate([0, 1, 0])
-translate([0, 40, 0]) {
-translate([30, -10, 0]) {
-translate([0, 0, kDCMotorAxleZOffset]) {
-     rotate([180, 0, 0]) {
-     translate([-kDCMotorShaftLength, 0, 0])
-     mDCMotor();
-     mTransmission();
+kBevelGearBoxCaseThickness = 2;
+kBevelGearBoxOuterHeight = 45;
+kBevelGearBoxInnerHeight = kBevelGearBoxOuterHeight - kBevelGearBoxCaseThickness;
+kBevelGearBoxInnerWidth = 2 * kM15BevelGearMountingDistance + 2 * kM8WasherThickness - 2 * kBevelGearBoxPillowSlotThickness - kBevelGearBoxOffset;
+kBevelGearBoxOuterWidth = kBevelGearBoxInnerWidth + 2 * kBevelGearBoxPillowHeight + 2 * kBevelGearBoxPillowSlotThickness;
+kBevelGearBoxInnerLength = kBevelGearBoxInnerWidth;
+kBevelGearBoxOuterLength = kBevelGearBoxOuterWidth;
+
+module mBevelGearBoxPillowBase() {
+     linear_extrude(height=kBevelGearBoxPillowFinThickness) {
+          difference() {
+               square([kBevelGearBoxInnerHeight,
+                       kBevelGearBoxInnerLength + 2 * kBevelGearBoxPillowFinWidth], center=true);
+               translate([0, -kBevelGearBoxOffset/2]) {
+                    circle(d=kBearingOuterRingDiameter);
+                    for(angle = kBevelGearBoxPillowFasteningAngles) {
+                         rotate([0, 0, angle]) {
+                              translate([kBevelGearBoxPillowFasteningDiameter/2, 0]) {
+                                   circle(d=kM3ScrewDiameter);
+                              }
+                         }
+                    }
+               }
+          }
+     }
+     translate([0, 0, kBevelGearBoxPillowFinThickness]) {
+          linear_extrude(height=kBevelGearBoxPillowBaseHeight - kBevelGearBoxPillowFinThickness) {
+               difference() {
+                    square([kBevelGearBoxInnerHeight, kBevelGearBoxInnerLength], center=true);
+                    translate([0, -kBevelGearBoxOffset/2]) {
+                         circle(d=kBearingOuterDiameter);
+                         for(angle = kBevelGearBoxPillowFasteningAngles) {
+                              rotate([0, 0, angle]) {
+                                   translate([kBevelGearBoxPillowFasteningDiameter/2, 0]) {
+                                        circle(d=kM3ScrewDiameter);
+                                   }
+                              }
+                         }
+                    }
+               }
+          }
      }
 }
-}
-translate([-85, 90, 0])
-mWheelBlock();
+
+module mBevelGearBoxPillowCover() {
+     linear_extrude(height=kBevelGearBoxPillowFinThickness) {
+          difference() {
+               square([kBevelGearBoxInnerHeight, kBevelGearBoxInnerLength], center=true);
+               translate([0, -kBevelGearBoxOffset/2]) {
+                    circle(d=kBearingOuterRingDiameter);
+                    for(angle = kBevelGearBoxPillowFasteningAngles) {
+                         rotate([0, 0, angle]) {
+                              translate([kBevelGearBoxPillowFasteningDiameter/2, 0]) {
+                                   circle(d=kM3ScrewDiameter);
+                              }
+                         }
+                    }
+               }
+          }
+     }
 }
 
-translate([-85, 0, 0]) {
-     color([1, 0, 0])
-
-          translate([-110, 0, 45]) 
-cube([120, 150, 90], center=true);
-circle(d=400);
+module mBevelGearBoxPillow() {
+     translate([0, 0, kBevelGearBoxPillowBaseHeight]) {
+          mBevelGearBoxPillowCover();
+     }
+     mBevelGearBoxPillowBase();
+     translate([0,  -kBevelGearBoxOffset/2, kBevelGearBoxPillowFinThickness]) {
+          mBearing();
+     }
 }
-translate([0, 0, 40])
-mLidar();
+
+kBevelGearBoxPillarLength = (kBevelGearBoxOuterLength - kBevelGearBoxInnerLength)/2;
+kBevelGearBoxPillarWidth = (kBevelGearBoxOuterWidth - kBevelGearBoxInnerWidth)/2;
+
+
+module mBevelGearBoxCase() {
+     linear_extrude(height=kBevelGearBoxCaseThickness) {
+          difference() {
+               square([kBevelGearBoxOuterLength, kBevelGearBoxOuterWidth], center=true);
+               duplicate([0, 1, 0]) {
+                    duplicate([1, 0, 0]) {
+                         translate([kBevelGearBoxOuterLength/2 - kBevelGearBoxPillarLength/2,
+                                    kBevelGearBoxOuterWidth/2 - kBevelGearBoxPillarWidth/2]){
+                              circle(d=kM3ScrewDiameter);
+                         }
+                    }
+               }
+          }
+     }
+     linear_extrude(height=kBevelGearBoxOuterHeight) {
+          difference() {
+               duplicate([0, 1, 0]) {
+                    duplicate([1, 0, 0]) {
+                         translate([kBevelGearBoxOuterLength/2 - kBevelGearBoxPillarLength/2,
+                                    kBevelGearBoxOuterWidth/2 - kBevelGearBoxPillarWidth/2]){
+                              difference() {
+                                   square([kBevelGearBoxPillarLength, kBevelGearBoxPillarWidth], center=true);
+                                   circle(d=kM3ScrewDiameter);
+                              }
+                         }
+                    }
+               }
+               projection() {
+                    duplicate([0, 1, 0]) {
+                         translate([0, kBevelGearBoxInnerWidth/2 + kBevelGearBoxPillowSlotThickness,
+                                    kBevelGearBoxInnerHeight/2 + kBevelGearBoxCaseThickness]) {
+                              rotate([0, 90, 90]) mBevelGearBoxPillowBase();
+                         }
+                    }
+                    translate([-kBevelGearBoxInnerLength/2 - kBevelGearBoxPillowSlotThickness,
+                               0, kBevelGearBoxInnerHeight/2 + kBevelGearBoxCaseThickness]) {
+                         rotate([0, -90, 0]) mBevelGearBoxDriveMount();
+                    }
+               }
+          }
+     }
+}
+
+kBevelGearBoxDriveMountFinThickness = (kDCMotorShaftLength - kM15BevelGearLength -
+                                       kBevelGearBoxPillowSlotThickness -
+                                       kM8WasherThickness + kBevelGearBoxOffset/2);
+kBevelGearBoxDriveMountFinWidth = kBevelGearBoxPillowFinWidth;
+kBevelGearBoxDriveMountHeight = kBevelGearBoxPillowHeight;
+
+module mBevelGearBoxDriveMount() {
+     linear_extrude(height=kBevelGearBoxDriveMountFinThickness) {
+          difference() {
+               square([kBevelGearBoxInnerHeight,
+                       kBevelGearBoxInnerWidth + 2 * kBevelGearBoxDriveMountFinWidth], center=true);
+               translate([0, kBevelGearBoxOffset/2]) {
+                    circle(d=kDCMotorBearingDiameter);
+                    for(angle = kDCMotorFasteningAngles) {
+                         rotate([0, 0, angle]) {
+                              translate([kDCMotorFasteningDiameter/2, 0]) {
+                                   circle(d=kM3ScrewDiameter);
+                              }
+                         }
+                    }
+               }
+          }
+     }
+     linear_extrude(height=kBevelGearBoxDriveMountHeight) {
+          difference() {
+               square([kBevelGearBoxInnerHeight, kBevelGearBoxInnerWidth], center=true);
+               translate([0, kBevelGearBoxOffset/2]) circle(d=kDCMotorGearBoxDiameter);
+          }
+     }
+}
+
+
+module mBevelGearBox() {
+     mBevelGearBoxCase();
+     duplicate([0, 1, 0]) {
+          translate([0, kBevelGearBoxInnerWidth/2 + kBevelGearBoxPillowSlotThickness,
+                     kBevelGearBoxInnerHeight/2 + kBevelGearBoxCaseThickness]) {
+               rotate([0, 90, 90]) mBevelGearBoxPillow();
+          }
+     }
+     translate([-kBevelGearBoxInnerLength/2 - kBevelGearBoxPillowSlotThickness,
+                0, kBevelGearBoxInnerHeight/2 + kBevelGearBoxCaseThickness]) {
+          rotate([0, -90, 0]) mBevelGearBoxDriveMount();
+     }
+
+}
+
+kBeltDriveToClampDistance = kBevelGearBoxOuterWidth/2 + kClampingHubWidth/2 + kM8WasherThickness;
+kBeltDriveToPulleyDistance = kBeltDriveToClampDistance + kClampingHubWidth/2 + kRoundBeltPulleyWidth/2;
+
+module mBeltDrive() {
+     translate([-kBevelGearBoxOffset/2, 0, 0]) {
+          mBevelGearBox();
+          translate([-(kM15BevelGearMountingDistance - kM15BevelGearLength) + kBevelGearBoxOffset/2,
+                     0, kBevelGearBoxInnerHeight/2 + kBevelGearBoxCaseThickness]) {
+               translate([0, kBevelGearBoxOffset/2, 0]) {
+                    rotate([9, 0, 0]) mM15BevelGear();
+                    translate([kM15BevelGearMountingDistance - kM15BevelGearLength,
+                               -(kM15BevelGearMountingDistance - kM15BevelGearLength), 0]) {
+                         rotate([0, 0, 90]) mM15BevelGear();
+                    }
+               }
+               translate([kM15BevelGearMountingDistance - kM15BevelGearLength, 0, 0]) {
+                    translate([0, -(kBevelGearBoxOuterWidth/2 + kClampingCollarWidth/2 + kM8WasherThickness), 0]) {
+                         mClampingCollar();
+                    }
+                    translate([0, kBeltDriveToClampDistance, 0]) {
+                         rotate([0, 0, 90]) mMountedRoundBeltPulley();
+                    }
+                    mRoundShaftL100();
+               }
+          }
+          translate([-kBevelGearBoxInnerLength/2 - kBevelGearBoxPillowSlotThickness - kBevelGearBoxDriveMountFinThickness,
+                     kBevelGearBoxOffset/2, kBevelGearBoxInnerHeight/2 + kBevelGearBoxCaseThickness]) {
+               mDCMotor();
+          }
+     }
+}
+
+
+//color([0, 1, 0])
+//cylinder(d=425, h=110);
+/* duplicate([0, 1, 0]) { */
+/*      translate([120, 102.5, 0]) { */
+/*           translate([0, -kBeltDriveToPulleyDistance, 0]) mBeltDrive(); */
+/*           translate([-120, kWheelBlockCenterToPulleyDistance, 0]) mWheelBlock(); */
+/*      } */
+/* } */
+
+
+/* translate([-130, 50, 0]) */
+/* rotate([0, 0, 60]) */
+/* translate([-kBatteryLength/2, -kBatteryWidth/2, 0]) */
+/* mBattery(); */
+
+/* translate([-110, -50, 0]) */
+/* rotate([0, 0, -120]) */
+/* translate([-kBatteryLength/2, -kBatteryWidth/2, 0]) */
+/* mBattery(); */
+

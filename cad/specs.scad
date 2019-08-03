@@ -2,12 +2,10 @@ include <oem.scad>;
 
 $fn = 32;
 
-kCaseRadius = 200;
-kCaseHeight = 70;
+kCaseDiameter = 420;
+kCaseHeight = 110;
 kCaseThickness = 2;
 kCaseFillet = 5;
-
-kGrowthFactor = 1.1;
 
 kCaseWirewayRadius = 120;
 kCaseWirewayDepth = 10;

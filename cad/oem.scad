@@ -66,16 +66,17 @@ module mComputer() {
      import("oem/Jetson-Nano-DK.stl");
 }
 
-kSTM32F407DISCOWidth = 66;
-kSTM32F407DISCOLength = 97;
-kSTM32F407DISCOThickness = 1.6;
+kControllerWidth = 66;
+kControllerLength = 97;
+kControllerThickness = 1.6;
 
 module mController() {
+     translate([-kControllerWidth/2, -kControllerLength/2])
      difference() {
-          linear_extrude(height=kSTM32F407DISCOThickness, center=true) {
-               square([kSTM32F407DISCOWidth, kSTM32F407DISCOLength]);
+          linear_extrude(height=kControllerThickness, center=true) {
+               square([kControllerWidth, kControllerLength]);
           }
-          linear_extrude(height=1.1 * kSTM32F407DISCOThickness, center=true) {
+          linear_extrude(height=1.1 * kControllerThickness, center=true) {
                for(x = [6.33, 66 - 6.33]) {
                     for(y = [97 - 3.34 - 2.54, 97 - 3.34]) {
                          translate([x, y]) {
@@ -117,6 +118,7 @@ module mClampingHub() {
 
 kBearingHeight = 7;
 kBearingOuterDiameter = 22;
+kBearingOuterRingDiameter = 19.1;
 kBearingInnerDiameter = 8;
 
 module mBearing() {
@@ -171,9 +173,22 @@ module mRoundShaftL100() {
      import("oem/2100-0008-0100.stl");
 }
 
+kClampingCollarWidth = 8;
+
+module mClampingCollar() {
+     translate([6.99622047,  4.8345592 , -6.97633803])
+     import("oem/2910-0818-0008.stl");
+}
+
 kDCMotorShaftLength = 28;
+kDCMotorShaftDiameter = 8;
+kDCMotorBearingDiameter = 16;
+kDCMotorGearBoxDiameter = 34;
+kDCMotorFasteningAngles = [-135, -45, 45, 135];
+kDCMotorFasteningDiameter = 24;
 
 module mDCMotor() {
+     rotate([-19, 0, 0])
      rotate([0, 90, 0])
      // TODO(hidmic): revisar!
      translate([0.02841282, 0, 28-144.04437256])
@@ -218,36 +233,10 @@ module mM15BevelGear() {
 
 
 module mMountedRoundBeltPulley() {
-     translate([-kRoundBeltPulleyWidth/2 - kClampingHubWidth/2, 0, 0]) {
-          mClampingHub();
+     mClampingHub();
+     translate([kRoundBeltPulleyWidth/2 + kClampingHubWidth/2, 0, 0]) {
+          mRoundBeltPulley();
      }
-     mRoundBeltPulley();
-}
-
-module mTransmission() {
-     rotate([9, 0, 0])
-     mM15BevelGear();
-     translate([kM15BevelGearMountingDistance - kM15BevelGearLength,
-                -(kM15BevelGearMountingDistance - kM15BevelGearLength), 0])
-     union() {
-          rotate([0, 0, 90])
-          mM15BevelGear();
-          translate([0, -50, 0])
-          mRoundShaftL100();
-          for (y = [-kM15BevelGearLength - 10, -80]) {
-               translate([0, y, 0]) {
-                    rotate([-90, 0, 0]) {
-                         translate([0, 0, -kBearingHeight/2]) {
-                              mBearing();
-                         }
-                    }
-               }
-
-          }
-          translate([0, -100, 0])
-          rotate([0, 0, -90])
-          mMountedRoundBeltPulley();
-     };
 }
 
 module mBallCaster() {
@@ -269,3 +258,17 @@ module mEncoder() {
      rotate([90, 0, 0])
      import("oem/CUI_AMT112S-4096-8000-S.STL");
 }
+
+kBatteryLength = 150;
+kBatteryWidth = 60;
+kBatteryHeight = 90;
+
+module mBattery() {
+     import("oem/Batterie.stl");
+}
+
+
+kM8WasherThickness = 1.6;
+kM8WasherInnerDiameter = 8.4;
+kM8WasherOuterDiameter = 16;
+

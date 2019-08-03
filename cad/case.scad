@@ -46,6 +46,8 @@ module mCaseBottomHalf() {
      };
 };
 
+
+
 //mCase();
 
 
@@ -76,13 +78,15 @@ module mCaseBottomHalf() {
 module mCaseHull() {
      translate([0, 0, kCaseHeight/2]) {
           minkowski() {
-               cylinder(r=(kCaseRadius - kCaseFillet),
+               cylinder(d=(kCaseDiameter - 2 * kCaseFillet),
                         h=(kCaseHeight - 2 * kCaseFillet),
                         center=true);
                sphere(r=kCaseFillet);
           }
      }
 }
+
+mCaseHull();
 
 module mCase() {
      difference() {
@@ -98,7 +102,7 @@ module mCase() {
                     translate([kCaseRadius - kGrowthFactor * kHCSR04Width/2 * cos(kSonarPolarAngle),
                                0., kSonarWedgeHeight]) {
                     rotate([0, kSonarPolarAngle, 0]) {
-                         mHCSR04Cone();
+                         mSonarCone();
                     }
                }
           }
@@ -113,7 +117,7 @@ module mCase() {
 }
 
 
-
+//mCase();
 
 
 /* translate([0, 0, kCaseSlitHeight]) { */
