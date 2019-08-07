@@ -73,7 +73,10 @@ module mController() {
      }
 }
 
-module mRubberWheel() {
+kWheelDiameter = 96;
+kWheelWidth = 32;
+
+module mWheel() {
      translate([0, 16, 0])
      rotate([-90, 0, 0])
      import("oem/3601-0014-0096.stl");
@@ -228,6 +231,8 @@ module mMountedRoundBeltPulley() {
           mRoundBeltPulley();
      }
 }
+
+kBallCasterHeight = 15.5;
 
 module mBallCaster() {
      rotate([180, 0, 0])

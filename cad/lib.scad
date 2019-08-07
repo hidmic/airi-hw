@@ -137,3 +137,40 @@ module sigmoid_profile(length, width, order=10, fn = $fn) {
      polygon(points=points);
 }
 
+module exp_nerve_xsection(height, length, decay_rate = 5, fn = $fn) {
+     step = length / fn;
+     points = concat(
+          [[0, 0]],
+          [for (x = [0:step:length-step]) [x, height * exp(-x/decay_rate)]],
+          [[length, 0]]
+          );
+     polygon(points=points);
+}
+
+module exp_nerve(height, length, thickness, decay_rate = 3, fn = $fn) {
+     rotate([90, 0, 0])
+     linear_extrude(height=thickness, center=true) {
+          exp_nerve_xsection(height, length, decay_rate, fn);
+     }
+}
+
+$fn = 64;
+
+
+module exp_corner_nerve(height, radius, angles, corner_radius = 0, decay_rate = 3, fn = $fn) {
+     difference() {
+          rotate_extrude() {
+               if (corner_radius > 0) {
+                    translate([corner_radius, 0, 0])
+                    exp_nerve_xsection(height=height, length=radius, decay_rate=decay_rate, fn=fn);
+               } else {
+                    translate([-corner_radius, 0, 0])
+                    mirror([1, 0, 0])
+                    exp_nerve_xsection(height=height, length=radius, decay_rate=decay_rate, fn=fn);
+               }
+          }
+          linear_extrude(height=2 * height, center=true) {
+               sector(radius=radius + abs(corner_radius), angles=[angles[1], angles[0] + 360], fn=fn);
+          }
+     }
+}
