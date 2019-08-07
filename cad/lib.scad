@@ -105,6 +105,18 @@ module window(side, position=[0, 0, 0], order=1000) {
 }
 
 
+module rounded_cylinder(diameter, height, fillet_radius, center) {
+     translate([0, 0, ! center ? height/2 : 0]) {
+          minkowski() {
+               cylinder(d=(diameter - 2 * fillet_radius),
+                        h=(height - 2 * fillet_radius),
+                        center=true);
+               sphere(r=fillet_radius);
+          }
+     }
+}
+
+
 module duplicate(v) {
      children();
      mirror(v) children();

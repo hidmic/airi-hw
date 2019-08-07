@@ -9,41 +9,19 @@ module mLidar() {
      import("oem/RPLIDAR-A1M8-R1.stl");
 }
 
-kHCSR04FOV = 30;
-kHCSR04Range = 4000;
-kHCSR04Width = 20;
-kHCSR04Length = 40;
+kSonarFOV = 30;
+kSonarRange = 4000;
+kSonarWidth = 43;
+kSonarHoleToHoleWidth = 40;
+kSonarLength = 20;
+kSonarHoleToHoleLength = 17;
+kSonarHeight = 15;
 
-module mSonarCone() {
-     linear_extrude(height=kHCSR04Range, scale=kHCSR04Range * tan(kHCSR04FOV)/kHCSR04Length) {
-          square([kHCSR04Width, kHCSR04Length], center=true);
-     }
-     /* polyhedron(points=[[-kHCSR04Width/2, -kHCSR04Length/2, 0],  //0 */
-     /*                    [-kHCSR04Width/2, kHCSR04Length/2, 0],  //1 */
-     /*                    [kHCSR04Width/2, kHCSR04Length/2, 0],  //2 */
-     /*                    [kHCSR04Width/2, -kHCSR04Length/2, 0],  //3 */
-     /*                    [-coneRadius/2, -coneRadius/2, kHCSR04Range],  //4 */
-     /*                    [-coneRadius/2, coneRadius/2, kHCSR04Range],  //5 */
-     /*                    [coneRadius/2, coneRadius/2, kHCSR04Range],  //6 */
-     /*                    [coneRadius/2, -coneRadius/2, kHCSR04Range]], //7 */
-     /*            faces=[[0,1,2,3],  // bottom */
-     /*                   [4,5,1,0],  // front */
-     /*                   [7,6,5,4],  // top */
-     /*                   [5,6,2,1],  // right */
-     /*                   [6,7,3,2],  // back */
-     /*                   [7,4,0,3]]); // left */
-     /* rotate_extrude() { */
-     /*      hull() { */
-     /*           sector(kHCSR04Range, [90-kHCSR04FOV/2, 90]); */
-     /*           square(kHCSR04Length/2); */
-     /*      } */
-     /* } */
-}
 
 module mSonar() {
+     rotate([0, 0, 90])
      import("oem/HC-SR04.stl");
 }
-
 
 
 kGY521Width = 15.24;
@@ -180,12 +158,24 @@ module mClampingCollar() {
      import("oem/2910-0818-0008.stl");
 }
 
+kDCMotorTerminalHoleDiameter = 1.6;
+kDCMotorTerminalThickness = 0.45;
+kDCMotorTerminalLength = 5.7;
+kDCMotorTerminalWidth = 3.75;
+kDCMotorPlusGearBoxLength = 100.5;
+kDCMotorDiameter = 37;
+kDCMotorAirwayToBottom = 16.7;
+kDCMotorShaftHoleDiameter = 3;
+kDCMotorShaftToShaftHole = 10.7;
 kDCMotorShaftLength = 28;
 kDCMotorShaftDiameter = 8;
 kDCMotorBearingDiameter = 16;
+kDCMotorGearBoxLength = 42;
 kDCMotorGearBoxDiameter = 34;
+
 kDCMotorFasteningAngles = [-135, -45, 45, 135];
 kDCMotorFasteningDiameter = 24;
+kDCMotorFasteningHoleDiameter = 4;
 
 module mDCMotor() {
      rotate([-19, 0, 0])
@@ -272,3 +262,6 @@ kM8WasherThickness = 1.6;
 kM8WasherInnerDiameter = 8.4;
 kM8WasherOuterDiameter = 16;
 
+
+kM3ScrewDiameter = 3;
+kM2ScrewDiameter = 2;

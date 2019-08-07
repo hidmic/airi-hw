@@ -15,6 +15,11 @@ kCaseWirewayAngle = 20;
 kCaseSlitHeight = kCaseHeight - 9;
 kCaseSlitWidth = kA1M8r1WorkingWidth + 2;
 
-kSonarCount = 5;
-kSonarPolarAngle = 65;
-kSonarWedgeHeight = kCaseHeight/2;
+kSonarMountingAngles = [-45, 0, 45];
+kSonarCount = len(kSonarMountingAngles);
+
+kSonarPolarAngle = 75;
+kSonarBracketDistanceToCase = 2 * kSonarHeight;
+kSonarBracketPinWidth = 10;
+
+

@@ -182,7 +182,7 @@ kPivotJointHeight = kBushingHeight;
 kAxleJointDiameter = 30;
 kPivotJointDiameter = 15;
 
-kM3ScrewDiameter = 3;
+
 
 
 kAxleJointFasteningAngles = kEncoderMountingAngles;
@@ -630,23 +630,23 @@ module mBeltDrive() {
 }
 
 
-//color([0, 1, 0])
-//cylinder(d=425, h=110);
-/* duplicate([0, 1, 0]) { */
-/*      translate([120, 102.5, 0]) { */
-/*           translate([0, -kBeltDriveToPulleyDistance, 0]) mBeltDrive(); */
-/*           translate([-120, kWheelBlockCenterToPulleyDistance, 0]) mWheelBlock(); */
-/*      } */
-/* } */
+color([0, 1, 0])
+circle(d=425); //, h=110);
+duplicate([0, 1, 0]) {
+     translate([120, 102.5, 0]) {
+          translate([0, -kBeltDriveToPulleyDistance, 0]) mBeltDrive();
+          translate([-120, kWheelBlockCenterToPulleyDistance, 0]) mWheelBlock();
+     }
+}
 
 
-/* translate([-130, 50, 0]) */
-/* rotate([0, 0, 60]) */
-/* translate([-kBatteryLength/2, -kBatteryWidth/2, 0]) */
-/* mBattery(); */
+translate([-130, 50, 0])
+rotate([0, 0, 60])
+translate([-kBatteryLength/2, -kBatteryWidth/2, 0])
+mBattery();
 
-/* translate([-110, -50, 0]) */
-/* rotate([0, 0, -120]) */
-/* translate([-kBatteryLength/2, -kBatteryWidth/2, 0]) */
-/* mBattery(); */
+translate([-110, -50, 0])
+rotate([0, 0, -120])
+translate([-kBatteryLength/2, -kBatteryWidth/2, 0])
+mBattery();
 
