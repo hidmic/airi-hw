@@ -328,7 +328,7 @@ module mSuspensionArm() {
 
 
 
-kWheelAxleZOffset = 48 - 15.5 - 3;
+
 
 kWheelCaseWidth = 40;
 kWheelCaseDiameter = 140;
@@ -341,30 +341,11 @@ kCurvedLinkSupportBaseWidth = 16;
 kCurvedLinkSupportFilletRadius = 4;
 
 module mCurvedLinkSupportXSection() {
-     rotate([0, 0, 180]) {
-          difference() {
-               window(4*kCurvedLinkSupportDiameter) {
-                    curved_bench_fillet(kCurvedLinkSupportFilletRadius, bench_radius=kWheelCaseDiameter/2) {
-                         hull() {
-                              translate([(kCurvedLinkSupportDiameter + kWheelCaseThickness)/2, 0]) {
-                                   circle(d=kCurvedLinkSupportDiameter);
-                              }
-                              translate([kWheelCaseDiameter/2 + kWheelCaseThickness/2, 0])
-                                   ring(inner_radius=kWheelCaseDiameter/2,
-                                        outer_radius=kWheelCaseDiameter/2 + kWheelCaseThickness,
-                                        angles=[170, 190]);
-                         }
-                         translate([kWheelCaseDiameter/2 + kWheelCaseThickness/2, 0])
-                              ring(inner_radius=kWheelCaseDiameter/2,
-                                   outer_radius=kWheelCaseDiameter/2 + kWheelCaseThickness,
-                                   angles=[150, 210]);
-                    }
-               }
-               translate([kCurvedLinkSupportDiameter/2 + kWheelCaseThickness, 0]) {
-                    circle(d=kCurvedLinkSupportHoleDiameter);
-               }
-          }
-     }
+     curved_support_xsection(support_radius=kCurvedLinkSupportDiameter/2,
+                             hole_radius=kCurvedLinkSupportHoleDiameter/2,
+                             fillet_radius=kCurvedLinkSupportFilletRadius,
+                             wall_inner_radius=kWheelCaseDiameter/2,
+                             wall_outer_radius=kWheelCaseDiameter/2+kWheelCaseThickness);
 }
 
 
@@ -410,7 +391,7 @@ module mWheelBlock() {
                rotate([0, 0, -90]) mMountedRoundBeltPulley();
           }
           mRoundShaftL100();
-          mRubberWheel();
+          mWheel();
      }
      mWheelCase();
 
@@ -630,23 +611,28 @@ module mBeltDrive() {
 }
 
 
-color([0, 1, 0])
-circle(d=425); //, h=110);
-duplicate([0, 1, 0]) {
-     translate([120, 102.5, 0]) {
-          translate([0, -kBeltDriveToPulleyDistance, 0]) mBeltDrive();
-          translate([-120, kWheelBlockCenterToPulleyDistance, 0]) mWheelBlock();
-     }
-}
+//color([0, 1, 0])
+//circle(d=425); //, h=110);
+/* duplicate([0, 1, 0]) { */
+/*      translate([120, 102.5, 0]) { */
+/*           translate([0, -kBeltDriveToPulleyDistance, 0]) mBeltDrive(); */
+/*           translate([-120, kWheelBlockCenterToPulleyDistance, 0]) mWheelBlock(); */
+/*      } */
+/* } */
 
 
-translate([-130, 50, 0])
-rotate([0, 0, 60])
-translate([-kBatteryLength/2, -kBatteryWidth/2, 0])
-mBattery();
+/* translate([-130, 50, 0]) */
+/* rotate([0, 0, 60]) */
+/* translate([-kBatteryLength/2, -kBatteryWidth/2, 0]) */
+/* mBattery(); */
 
-translate([-110, -50, 0])
-rotate([0, 0, -120])
-translate([-kBatteryLength/2, -kBatteryWidth/2, 0])
-mBattery();
+/* translate([-110, -50, 0]) */
+/* rotate([0, 0, -120]) */
+/* translate([-kBatteryLength/2, -kBatteryWidth/2, 0]) */
+/* mBattery(); */
+
+
+//mCurvedLinkSupportXSection();
+
+
 

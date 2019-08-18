@@ -1,7 +1,7 @@
 kEpsilon = 1e-1;
 
-kA1M8r1WorkingWidth = 6;
-kA1M8r1Range = 6000;
+kLidarWorkingWidth = 6;
+kLidarRange = 6000;
 
 module mLidar() {
      translate([-35.14, 35, 0])
@@ -262,6 +262,21 @@ module mBattery() {
      import("oem/Batterie.stl");
 }
 
+kCliffSensorWidth = 5.5;
+kCliffSensorLength = 10;
+
+kCliffSensorBoardWidth = 14;
+kCliffSensorBoardLength = 31.18;
+kCliffSensorBoardThickness = 1.6;
+kCliffSensorDistanceToBoard = 11.5 - kCliffSensorBoardThickness;
+kCliffSensorAssemblyHeight = kCliffSensorDistanceToBoard + 6.3 - kCliffSensorBoardThickness;
+
+module mCliffSensor() {
+
+}
+
+kLedDiameter = 5;
+
 
 kM8WasherThickness = 1.6;
 kM8WasherInnerDiameter = 8.4;
@@ -270,3 +285,6 @@ kM8WasherOuterDiameter = 16;
 
 kM3ScrewDiameter = 3;
 kM2ScrewDiameter = 2;
+
+
+

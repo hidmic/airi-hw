@@ -116,6 +116,59 @@ module rounded_cylinder(diameter, height, fillet_radius, center) {
      }
 }
 
+module curved_support_xsection(support_radius, fillet_radius,
+                               wall_inner_radius, wall_outer_radius,
+                               hole_radius = 0) {
+     support_angular_width = (4 * support_radius / wall_outer_radius) * 180 / PI;
+     wall_thickness = wall_outer_radius - wall_inner_radius;
+     rotate([0, 0, 180]) {
+          difference() {
+               window(6*support_radius) {
+                    curved_bench_fillet(fillet_radius, bench_radius=wall_inner_radius) {
+                         hull() {
+                              translate([support_radius + wall_thickness/2, 0]) {
+                                   circle(r=support_radius);
+                              }
+                              translate([wall_inner_radius + wall_thickness/2, 0])
+                                   ring(inner_radius=wall_inner_radius,
+                                        outer_radius=wall_outer_radius,
+                                        angles=[180 - support_angular_width/2,
+                                                180 + support_angular_width/2]);
+                         }
+                         translate([wall_inner_radius + wall_thickness/2, 0])
+                              ring(inner_radius=wall_inner_radius,
+                                   outer_radius=wall_outer_radius,
+                                   angles=[180 - support_angular_width,
+                                           180 + support_angular_width]);
+                    }
+               }
+               if (hole_radius > 0) {
+                    translate([support_radius + wall_thickness, 0]) {
+                         circle(r=hole_radius);
+                    }
+               }
+          }
+     }
+}
+
+
+module outline(delta) {
+     if (delta > 0) {
+          difference() {
+               offset(delta=delta) {
+                    children();
+               }
+               children();
+          }
+     } else {
+          difference() {
+               children();
+               offset(delta=delta) {
+                    children();
+               }
+          }
+     }
+}
 
 module duplicate(v) {
      children();
