@@ -283,8 +283,50 @@ kM8WasherInnerDiameter = 8.4;
 kM8WasherOuterDiameter = 16;
 
 
+kM4WasherThickness = 1;
+
+kM4ScrewHeadHeight = 2.2;
+
+kM3ScrewHeadHeight = 1.7;
+kM3ScrewHeadDiameter = 5.7;
+
+kM3WasherThickness = 0.8;
+
 kM3ScrewDiameter = 3;
 kM2ScrewDiameter = 2;
 
+kM8NutHeight = 6.5;
+kM8NutInscribedDiameter = 13;
+
+module mM8Nut() {
+     import("oem/m8-nut.stl");
+}
+
+module mM8NutXSection() {
+     offset(delta=kEpsilon) {
+          hull() {
+               projection() {
+                    mM8Nut();
+               }
+          }
+     }
+}
+
+kMagneticM3WasherThickness = 3;
+kMagneticM3WasherOuterDiameter = 10;
+kMagneticM3WasherInnerDiameter = 4;
+
+module mMagneticM3Washer() {
+     linear_extrude(height=kMagneticM3WasherThickness) {
+          difference() {
+               circle(d=kMagneticM3WasherOuterDiameter);
+               circle(d=kMagneticM3WasherInnerDiameter);
+          }
+     }
+}
 
 
+module mM8x50ThreadedStud() {
+     resize([50, 0, 0], auto=true)
+     import("oem/m8x50-threaded-stud.stl");
+}
