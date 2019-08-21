@@ -143,15 +143,13 @@ module curved_support_xsection(support_radius, fillet_radius,
                     }
                }
                if (hole_radius > 0) {
-                    translate([support_radius + wall_thickness, 0]) {
+                    translate([support_radius + wall_thickness/2, 0]) {
                          circle(r=hole_radius);
                     }
                }
           }
      }
 }
-
-
 
 module outline(delta) {
      if (delta > 0) {

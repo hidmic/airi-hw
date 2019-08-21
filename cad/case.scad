@@ -5,12 +5,12 @@ use <lib.scad>;
 $fn = 64;
 
 
-kChassisDiameter = 440;
-kChassisHeight = 110;
+kChassisDiameter = 450;
+kChassisHeight = 120;
 kChassisThickness = 2;
 kChassisFilletRadius = 5;
 
-kChassisBaseHeight = 90;
+kChassisBaseHeight = 100;
 
 
 
@@ -22,16 +22,6 @@ kSonarBracketDistanceToChassis = 2 * kSonarHeight;
 kSonarBracketPinWidth = 10;
 
 kCliffSensorMountingAngles = [-30, 30];
-
-
-module mChassisBottomHalf() {
-     difference() {
-          mChassis();
-          translate([0., 0., kChassisHeight * 0.7]) {
-               mChassisBB();
-          };
-     };
-};
 
 module mChassisOuterVolume() {
      rounded_cylinder(diameter=kChassisDiameter,
@@ -74,35 +64,21 @@ module mChassisBBox() {
 
 kWheelBase = 305;
 
+kCasterXOffset = -(kChassisDiameter/2 - kBallCasterDiameter);
 
 kWheelAxleZOffset = kWheelDiameter/2 - kBallCasterHeight - kChassisThickness;
 
-kWheelSlotLength = 2 * sqrt(pow(kWheelDiameter/2 + 4, 2)
-                            - pow(kWheelAxleZOffset, 2));
-kWheelSlotWidth = kWheelWidth + 6;
+kWheelAxleMinZOffset = kWheelAxleZOffset - 10;
 
-module mMotorSupport() {
-     exp_nerve(10, 10, 3);
-     rotate([0, -90, 0])
-          linear_extrude(height=kChassisThickness)
-          difference() {
-          duplicate([0, 1, 0]) {
-               translate([0, -kDCMotorDiameter/2, 0]) {
-                    rotate([0, 0,  -90])
-                         exp_nerve_xsection(kDCMotorDiameter * 0.75, kDCMotorDiameter/2, decay_rate = 6);
-                    square([kDCMotorDiameter * 0.75, kDCMotorDiameter/2]);
-               }
-          }
-          translate([kDCMotorDiameter, 0])
-               circle(d=kDCMotorDiameter);
-     }
-}
+kWheelSlotLength = 2 * sqrt(pow(kWheelDiameter/2 + 8, 2) - pow(kWheelAxleZOffset, 2));
+kWheelSlotWidth = kWheelWidth + 8;
 
-kBatteryAPosition = [-125, 50, 0];
+
+kBatteryAPosition = [-120, 50, 0];
 kBatteryAOrientation = [0, 0, 60];
 kBatteryAPose = [kBatteryAPosition, kBatteryAOrientation];
 
-kBatteryBPosition = [-100, -50, 0];
+kBatteryBPosition = [-95, -50, 0];
 kBatteryBOrientation = [0, 0, -120];
 kBatteryBPose = [kBatteryBPosition, kBatteryBOrientation];
 
@@ -139,7 +115,11 @@ module mChassisBase() {
                     translate([0, kWheelBase/2, 0]) {
                          square([kWheelSlotLength, kWheelSlotWidth], center=true);
                     }
+                    translate([kCasterXOffset, kBallCasterCenterToHole, 0]) {
+                         circle(d=kM4ScrewDiameter);
+                    }
                }
+
           }
      }
      mChassisOuterVolumeConstrain() {
@@ -152,6 +132,14 @@ module mChassisBase() {
           }
      }
 }
+
+/* for (angle = [-30, 30]) { */
+/*      rotate([0, 0, angle]) */
+/*           translate([kChassisDiameter/2 - kChassisThickness - kBumperRadialWidth/2, 0, kChassisThickness]) { */
+/*           cube([kCliffSensorLength, kCliffSensorWidth, 2 * kChassisThickness], center=true); */
+/*      } */
+/* } */
+
 
 module mChassis() {
      mChassisBase();
@@ -167,6 +155,22 @@ module mChassis() {
           }
      }
      mChassisOuterVolumeConstrain() {
+          translate([0, 0, kChassisThickness]) {
+               linear_extrude(height=kChassisBaseHeight - kChassisThickness) {
+                    for(angle = kChassisCoverFasteningAngles) {
+                         rotate(angle) {
+                              translate([kChassisDiameter/2 - kChassisThickness/2 + kEpsilon, 0]) {
+                                   curved_support_xsection(
+                                        support_radius=kChassisSupportDiameter/2,
+                                        fillet_radius=kChassisFilletRadius,
+                                        hole_radius=kM3ScrewDiameter/2,
+                                        wall_outer_radius=kChassisDiameter/2,
+                                        wall_inner_radius=kChassisDiameter/2 - kChassisThickness);
+                              }
+                         }
+                    }
+               }
+          }
           duplicate([0, 1, 0]) {
                translate([kChassisDiameter/2 * cos(kBumperAngularDelta/2),
                           -kChassisDiameter/2 * sin(kBumperAngularDelta/2),
@@ -245,13 +249,13 @@ module mSonarFrustum() {
      }
 }
 
-kBumperAngularDelta = 135;
+kBumperAngularDelta = 130;
 kBumperTravelDistance = 5;
 kBumperHeight = kChassisBaseHeight - kChassisFilletRadius;
 
-kChassisSupportDiameter = 8;
-kChassisSupportAngles = [-62.5, -22.5, 22.5, 62.5];
+kChassisSupportDiameter = 10;
 
+kBumperSupportAngles = [-kBumperAngularDelta/2+5, -22.5, 22.5, kBumperAngularDelta/2-5];
 
 module mBumperBase() {
      difference() {
@@ -311,14 +315,14 @@ kBumperSpringBlockHeight = 20;
 kBumperSpringBlockWidth = 20;
 kBumperSpringBlockDepth = 35;
 
-kBumperSpringLength = 30;
+
 kBumperSpringInnerDiameter = 8;
 kBumperSpringOuterDiameter = 12;
 kBumperSpringLockSize = 2 * kChassisThickness;
 
 kBumperSpringSlotWidth = 5;
 kBumperSpringSeatThickness = 3 * kChassisThickness;
-
+kBumperSpringLength = kBumperTravelDistance + kBumperSpringSlotWidth + 2 * kBumperSpringSeatThickness;
 
 module mBumperSpringBlockXSection() {
      difference() {
@@ -330,7 +334,7 @@ module mBumperSpringBlockXSection() {
                translate([kBumperSpringSlotWidth + kBumperSpringSeatThickness, 0]) {
                     square([kBumperSpringBlockDepth - kBumperSpringSlotWidth - kBumperSpringSeatThickness, kChassisDiameter/2]);
                }
-               translate([-(kBumperSpringLength - 2 * (kBumperSpringSeatThickness + kBumperSpringSlotWidth)), 0]) {
+               translate([-(kBumperSpringLength - kBumperSpringSlotWidth - 2 * kBumperSpringSeatThickness ), 0]) {
                     translate([-kBumperSpringSeatThickness, 0]) {
                          square([kBumperSpringSeatThickness, kChassisDiameter/2]);
                     }
@@ -363,17 +367,17 @@ module mBumperSpringBlockBSideXSection() {
 module mBumperSpringSeatComplement() {
      translate([kBumperSpringSeatThickness - kBumperSpringLockSize, kBumperSpringBlockWidth/2, kBumperSpringBlockHeight/2]) {
           rotate([0, 90, 0]) {
-               translate([0, 0, -(kBumperSpringLength - 2 * kBumperSpringSlotWidth) - kEpsilon]) {
-                    cylinder(d=kBumperSpringInnerDiameter, h=kBumperSpringLength - 2 * kBumperSpringSlotWidth + 2 * kEpsilon);
+               translate([0, 0, -(kBumperSpringLength - kBumperSpringSlotWidth) - kEpsilon]) {
+                    cylinder(d=kBumperSpringInnerDiameter, h=kBumperSpringLength - kBumperSpringSlotWidth + 2 * kEpsilon);
                     translate([-(kChassisBaseHeight - kBumperSpringBlockHeight/2) - kEpsilon, -kBumperSpringInnerDiameter/2, 0]) {
                          cube([kChassisBaseHeight - kBumperSpringBlockHeight/2 + kEpsilon, kBumperSpringInnerDiameter,
-                               kBumperSpringLength - 2 * kBumperSpringSlotWidth  + 2 * kEpsilon]);
+                               kBumperSpringLength - kBumperSpringSlotWidth + 2 * kEpsilon]);
                     }
                     translate([0, 0, kBumperSpringSeatThickness - kBumperSpringLockSize - kEpsilon]) {
-                         cylinder(d=kBumperSpringOuterDiameter, h=kBumperSpringLength - 2 * kBumperSpringSlotWidth - 2 * (kBumperSpringSeatThickness - kBumperSpringLockSize) + 2 * kEpsilon);
+                         cylinder(d=kBumperSpringOuterDiameter, h=kBumperSpringLength - kBumperSpringSlotWidth - 2 * (kBumperSpringSeatThickness - kBumperSpringLockSize) + 2 * kEpsilon);
                          translate([-(kChassisBaseHeight - kBumperSpringBlockHeight/2) - kEpsilon, -kBumperSpringOuterDiameter/2, 0]) {
                               cube([kChassisBaseHeight - kBumperSpringBlockHeight/2 + kEpsilon, kBumperSpringOuterDiameter,
-                                    kBumperSpringLength - 2 * kBumperSpringSlotWidth - 2 * (kBumperSpringSeatThickness - kBumperSpringLockSize)]);
+                                    kBumperSpringLength - kBumperSpringSlotWidth - 2 * (kBumperSpringSeatThickness - kBumperSpringLockSize)]);
                          }
                     }
                }
@@ -422,7 +426,7 @@ module mBumperBottomHalf() {
      }
      translate([0, 0, kEpsilon]) {
           linear_extrude(height=kBumperHeight/2 - kEpsilon) {
-               for(angle = kChassisSupportAngles) {
+               for(angle = kBumperSupportAngles) {
                     rotate(angle) {
                          translate([(kChassisDiameter - kChassisThickness)/2 + kEpsilon, 0, 0]) {
                               curved_support_xsection(
@@ -435,7 +439,7 @@ module mBumperBottomHalf() {
                }
           }
      }
-     for(angle = kChassisSupportAngles) {
+     for(angle = kBumperSupportAngles) {
           rotate(angle) {
                translate([(kChassisDiameter - kChassisThickness)/2 - kChassisSupportDiameter/2 + kEpsilon,
                           0, kBumperHeight/2]) {
@@ -452,7 +456,7 @@ module mBumperUpperHalf() {
      }
      translate([0, 0, kBumperHeight/2]) {
           linear_extrude(height=kBumperHeight/2 - kEpsilon) {
-               for(angle = kChassisSupportAngles) {
+               for(angle = kBumperSupportAngles) {
                     rotate(angle) {
                          translate([(kChassisDiameter - kChassisThickness)/2 + kEpsilon, 0]) {
                               difference() {
@@ -476,7 +480,7 @@ module mBumper() {
      mBumperBase();
      translate([0, 0, kChassisFilletRadius + kEpsilon]) {
           linear_extrude(height=kBumperHeight - 2 * kEpsilon) {
-               for(angle = kChassisSupportAngles) {
+               for(angle = kBumperSupportAngles) {
                     rotate(angle) {
                          translate([(kChassisDiameter - kChassisThickness)/2 + kEpsilon, 0, 0]) {
                               curved_support_xsection(
@@ -501,51 +505,43 @@ module mBumper() {
      }
 }
 
-//mChassis();
-
-//mBumper();
-
-/* include <links.scad>; */
-
-/* duplicate([0, 1, 0]) { */
-/*      translate([120, kWheelBase/2 - kWheelBlockCenterToPulleyDistance, 0]) { */
-/*           translate([0, -kBeltDriveToPulleyDistance, 0]) mBeltDrive(); */
-/*           translate([-120, kWheelBlockCenterToPulleyDistance, 0]) mWheelBlock(); */
-/*      } */
-/* } */
-
-
-/* for (angle = [-30, 30]) { */
-/*      rotate([0, 0, angle]) */
-/*           translate([kChassisDiameter/2 - kChassisThickness - kBumperRadialWidth/2, 0, kChassisThickness]) { */
-/*           cube([kCliffSensorLength, kCliffSensorWidth, 2 * kChassisThickness], center=true); */
-/*      } */
-/* } */
 
 
 
-
-kChassisBayWidth = 15;
+kChassisBayWidth = 20;
 kChassisBayHeight = kLidarWorkingWidth + 2;
 kChassisBayOuterRadius = kChassisDiameter/2;
 kChassisBayInnerRadius = kChassisBayOuterRadius - kChassisBayWidth;
 
-kChassisBayLightningSourceAngles = [22.5:45:337.5];
-kChassisBayFasteningAngles = [-135, -45, 45, 135];
+kChassisBayLightningSourceAngles = [30:60:360-30];
+kChassisBayLightningRadius = kChassisBayOuterRadius - kChassisBayWidth/2;
+
+kChassisCoverFasteningAngles = [-135, -105, -75, 75, 105, 135];
+kChassisCoverFasteningRadius = kChassisDiameter/2 - kChassisSupportDiameter/2 - kChassisThickness;
+
+kChassisBayFasteningAngles = [-45, 45, 180];
+kChassisBayFasteningRadius = kChassisBayInnerRadius + (kChassisBayOuterRadius - kChassisCoverFasteningRadius);
 
 module mChassisBayXSection() {
      difference() {
           ring(inner_radius=kChassisBayInnerRadius, outer_radius=kChassisBayOuterRadius);
           for (angle = kChassisBayLightningSourceAngles) {
                rotate(angle) {
-                    translate([kChassisBayOuterRadius - kChassisBayWidth/2, 0]) {
+                    translate([kChassisBayLightningRadius, 0]) {
                          circle(d=kLedDiameter);
                     }
                }
           }
           for (angle = kChassisBayFasteningAngles) {
                rotate(angle) {
-                    translate([kChassisBayOuterRadius - kChassisBayWidth/2, 0]) {
+                    translate([kChassisBayFasteningRadius, 0]) {
+                         circle(d=kM3ScrewDiameter);
+                    }
+               }
+          }
+          for (angle = kChassisCoverFasteningAngles) {
+               rotate(angle) {
+                    translate([kChassisCoverFasteningRadius, 0]) {
                          circle(d=kM3ScrewDiameter);
                     }
                }
@@ -560,20 +556,21 @@ module mChassisBay() {
      }
 }
 
-//mChassisBay();
-
 kChassisCoverHeight = kChassisHeight - kChassisBaseHeight - kChassisBayHeight;
 kChassisCoverPanelDepth = kChassisCoverHeight - kChassisThickness;
 
+
+kChassisCoverPanelLength = 30;
+kChassisCoverPanelWidth = 100;
+kChassisCoverPanelAngle = -30;
+
 kChassisWirewayDepth = kChassisCoverHeight - kChassisThickness;
-kChassisInnerWirewayRadius = kChassisDiameter * 1/6;
-kChassisOuterWirewayRadius = kChassisDiameter * 3/8;
-kChassisWirewaysConduitAngles = [-90, 0, 90];
+kChassisInnerWirewayRadius = 50;
+kChassisOuterWirewayRadius = 190;
+kChassisWirewaysConduitAngles = [-90, 0, 90, 180];
+kChassisWirewayConduitWidth = 25;
 kChassisWirewayWidth = 15;
-kChassisWirewayAngle = 45;
-
-
-//rotate_extrude()
+kChassisWirewayAngle = 30;
 
 kChassisPoleSocketDiameter = 50;
 kChassisPoleSocketDepth = kChassisCoverHeight - kChassisThickness;
@@ -584,59 +581,126 @@ kChassisPolePlugChamferAngle = 45;
 kChassisPoleFasteningAngles = [0, 90, 180, 270];
 kChassisPoleFasteningRadius = 15;
 
-echo(kChassisPoleSocketDepth + kChassisThickness);
+kChassisSMAConnectorFasteningAngles = [-135, 135];
 
-module mChassisCover() {
-     translate([0, 0, kChassisCoverHeight - kChassisWirewayDepth]) {
-          difference() {
-               union() {
-                    difference() {
-                         union() {
-                              difference() {
-                                   translate([0, 0, kChassisWirewayDepth - kChassisHeight]) {
-                                        difference() {
-                                             mChassisOuterVolume();
-                                             translate([0, 0, -kChassisCoverHeight]) mChassisBBox();
+module mChassisCoverBase() {
+     difference() {
+          translate([0, 0, kChassisCoverHeight - kChassisWirewayDepth]) {
+               difference() {
+                    union() {
+                         difference() {
+                              union() {
+                                   difference() {
+                                        translate([0, 0, kChassisWirewayDepth - kChassisHeight]) {
+                                             difference() {
+                                                  mChassisOuterVolume();
+                                                  translate([0, 0, -kChassisCoverHeight]) mChassisBBox();
+                                             }
                                         }
+                                        cylinder(r1=(kChassisOuterWirewayRadius + kChassisWirewayWidth/2),
+                                                 r2=(kChassisOuterWirewayRadius + kChassisWirewayWidth/2 +
+                                                     (kChassisWirewayDepth + kEpsilon) * tan(kChassisWirewayAngle)),
+                                                 h=kChassisWirewayDepth + kEpsilon);
                                    }
-                                   cylinder(r1=(kChassisOuterWirewayRadius + kChassisWirewayWidth/2),
-                                            r2=(kChassisOuterWirewayRadius + kChassisWirewayWidth/2 +
+                                   cylinder(r1=(kChassisOuterWirewayRadius - kChassisWirewayWidth/2),
+                                            r2=(kChassisOuterWirewayRadius - kChassisWirewayWidth/2 -
                                                 (kChassisWirewayDepth + kEpsilon) * tan(kChassisWirewayAngle)),
-                                            h=kChassisWirewayDepth + kEpsilon);
+                                            h=kChassisWirewayDepth);
                               }
-                              cylinder(r1=(kChassisOuterWirewayRadius - kChassisWirewayWidth/2),
-                                       r2=(kChassisOuterWirewayRadius - kChassisWirewayWidth/2 -
+                              cylinder(r1=(kChassisInnerWirewayRadius + kChassisWirewayWidth/2),
+                                       r2=(kChassisInnerWirewayRadius + kChassisWirewayWidth/2 +
                                            (kChassisWirewayDepth + kEpsilon) * tan(kChassisWirewayAngle)),
-                                       h=kChassisWirewayDepth);
+                                       h=kChassisWirewayDepth + kEpsilon);
                          }
-                         cylinder(r1=(kChassisInnerWirewayRadius + kChassisWirewayWidth/2),
-                                  r2=(kChassisInnerWirewayRadius + kChassisWirewayWidth/2 +
+                         cylinder(r1=(kChassisInnerWirewayRadius - kChassisWirewayWidth/2),
+                                  r2=(kChassisInnerWirewayRadius - kChassisWirewayWidth/2 -
                                       (kChassisWirewayDepth + kEpsilon) * tan(kChassisWirewayAngle)),
-                                  h=kChassisWirewayDepth + kEpsilon);
+                                  h=kChassisWirewayDepth);
                     }
-                    cylinder(r1=(kChassisInnerWirewayRadius - kChassisWirewayWidth/2),
-                             r2=(kChassisInnerWirewayRadius - kChassisWirewayWidth/2 -
-                                 (kChassisWirewayDepth + kEpsilon) * tan(kChassisWirewayAngle)),
-                             h=kChassisWirewayDepth);
+                    for(angle = kChassisWirewaysConduitAngles) {
+                         rotate([0, 0, angle]) {
+                              rotate([0, 0, -90])
+                                   translate([-kChassisWirewayConduitWidth/2, kChassisInnerWirewayRadius, 0]) {
+                                   cube([kChassisWirewayConduitWidth,
+                                         kChassisOuterWirewayRadius-kChassisInnerWirewayRadius,
+                                         kChassisWirewayDepth + kEpsilon]);
+                              }
+                         }
+                    }
                }
-               translate([0, 0, kChassisCoverHeight - kChassisPoleSocketDepth]) {
-                    cylinder(r1=kChassisPolePlugInnerDiameter/2 - kChassisPoleSocketDepth * tan(kChassisPolePlugChamferAngle),
-                             r2=kChassisPolePlugInnerDiameter/2, h=kChassisPoleSocketDepth + kEpsilon);
+          }
+          translate([0, 0, kChassisCoverHeight - kChassisPoleSocketDepth]) {
+               cylinder(r1=kChassisPolePlugInnerDiameter/2 - kChassisPoleSocketDepth * tan(kChassisPolePlugChamferAngle),
+                        r2=kChassisPolePlugInnerDiameter/2, h=kChassisPoleSocketDepth + kEpsilon);
+          }
+          cylinder(d=kM3ScrewDiameter, h=2 * kChassisThickness + kEpsilon, center=true);
+          rotate([0, 0, kChassisCoverPanelAngle])
+          translate([0, -(kChassisInnerWirewayRadius + kChassisOuterWirewayRadius)/2, 0]) {
+               translate([0, 0, kChassisCoverHeight - kChassisCoverPanelDepth]) {
+                    linear_extrude(height=kChassisCoverPanelDepth + kEpsilon, scale=1.05) {
+                         fillet(kChassisFilletRadius) square([kChassisCoverPanelLength, kChassisCoverPanelWidth], center=true);
+                    }
+
                }
-               cylinder(d=kM3ScrewDiameter, h=2 * kChassisThickness + kEpsilon, center=true);
-               for(angle = kChassisWirewaysConduitAngles) {
+               translate([0, 0, -kEpsilon]) {
+                    cylinder(d=kPushButtonCutoutDiameter, h=kChassisThickness + 2 * kEpsilon);
+               }
+               duplicate([0, 1, 0]) {
+                    translate([0, (kChassisCoverPanelWidth + kPushButtonCutoutDiameter)/4, 0]) {
+                         cube([kUSBPanelConnectorCutoutLength, kUSBPanelConnectorCutoutWidth, 2 * kChassisThickness + kEpsilon], center=true);
+                    }
+               }
+          }
+          linear_extrude(height=2 * (kChassisThickness + kEpsilon), center=true) {
+               for(angle = kChassisSMAConnectorFasteningAngles) {
                     rotate([0, 0, angle]) {
-                         rotate([0, 0, -90])
-                         translate([-kChassisWirewayWidth/2, kChassisInnerWirewayRadius, 0]) {
-                              cube([kChassisWirewayWidth,
-                                    kChassisOuterWirewayRadius-kChassisInnerWirewayRadius,
-                                    kChassisWirewayDepth + kEpsilon]);
+                         translate([kChassisInnerWirewayRadius, 0, 0]) mSMAConnectorCutuotSection();
+                    }
+               }
+          }
+          for (angle = kChassisBayFasteningAngles) {
+               rotate([0, 0, angle]) {
+                    translate([kChassisBayFasteningRadius, 0, 0]) {
+                         cylinder(d=kM3ScrewDiameter, h=2 * (kChassisCoverHeight + kEpsilon), center=true);
+                         translate([0, 0, kChassisThickness]) {
+                              cylinder(d=kM3ScrewHeadDiameter, h=kChassisCoverHeight - kChassisThickness + kEpsilon);
+                         }
+                    }
+               }
+          }
+          for (angle = kChassisCoverFasteningAngles) {
+               rotate([0, 0, angle]) {
+                    translate([kChassisCoverFasteningRadius, 0, 0]) {
+                         cylinder(d=kM3ScrewDiameter, h=2 * (kChassisCoverHeight + kEpsilon), center=true);
+                         translate([0, 0, kChassisThickness]) {
+                              cylinder(d=kM3ScrewHeadDiameter, h=kChassisCoverHeight - kChassisThickness + kEpsilon);
                          }
                     }
                }
           }
      }
+}
 
+module mChassisCover() {
+     translate([0, 0, kChassisHeight - kChassisCoverHeight]) {
+          color("gray")
+          mChassisCoverBase();
+          rotate([0, 0, kChassisCoverPanelAngle]) {
+               translate([0, -(kChassisInnerWirewayRadius + kChassisOuterWirewayRadius)/2, kChassisCoverHeight - kChassisCoverPanelDepth]) {
+                    duplicate([0, 1, 0]) {
+                         translate([0, (kChassisCoverPanelWidth + kPushButtonCutoutDiameter)/4, 0]) {
+                              mUSBPanelConnector();
+                         }
+                    }
+                    m16mmPushbutton();
+               }
+          }
+          for(angle = kChassisSMAConnectorFasteningAngles) {
+               rotate([0, 0, angle]) {
+                    translate([kChassisInnerWirewayRadius, 0, kChassisThickness]) mSMAConnector();
+               }
+          }
+     }
 }
 
 kChassisPoleBlockGap = 1;
@@ -716,5 +780,23 @@ module mChassisPoleBlock() {
 
 //mChassisPoleBlock();
 
+//mBumper();
+//mChassis();
+//translate([0, 0, kChassisBaseHeight]) mChassisBay();
+//translate([0, 0, 150]) {
+//color("white", 0.2)
+//mChassisCover();
 
-mChassisCover();
+//}
+
+/* translate([kCasterXOffset, 0, 0]) { */
+/*      mBallCaster(); */
+/* } */
+include <links.scad>;
+
+duplicate([0, 1, 0]) {
+     translate([120, kWheelBase/2 - kWheelBlockCenterToPulleyDistance, 0]) {
+          translate([0, -kBeltDriveToPulleyDistance, 0]) mBeltDrive();
+          translate([-120, kWheelBlockCenterToPulleyDistance, 0]) mWheelBlock();
+     }
+}

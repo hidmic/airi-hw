@@ -578,8 +578,40 @@ module mBevelGearBox() {
 
 }
 
+module mDCMotorSupport() {
+     for (v = [[-kDCMotorPlusGearBoxLength/2, kDCMotorDiameter-kEpsilon],
+               [-kDCMotorPlusGearBoxLength, kDCMotorBottomDiameter-kEpsilon]]) {
+          let(x_offset = v[0], cut_diameter = v[1]) {
+               translate([x_offset, 0, 0]) {
+                    rotate([0, -90, 0]) {
+                         linear_extrude(height=kChassisThickness) {
+                              difference() {
+                                   duplicate([0, 1, 0]) {
+                                        translate([0, -kDCMotorDiameter/2 , 0]) {
+                                             rotate([0, 0,  -90]) {
+                                                  exp_nerve_xsection(kBeltDriveMotorAxleHeight/2, kDCMotorDiameter/4, decay_rate = 4);
+                                             }
+                                             square([kBeltDriveMotorAxleHeight/2, kDCMotorDiameter/2]);
+                                        }
+                                   }
+                                   translate([kBeltDriveMotorAxleHeight, 0]) circle(d=cut_diameter);
+                              }
+                         }
+                    }
+               }
+          }
+     }
+     duplicate([0, 1, 0]) {
+          translate([-kDCMotorPlusGearBoxLength, kDCMotorDiameter/4, 0]) {
+               cube([kDCMotorPlusGearBoxLength/2, kChassisThickness, kChassisThickness]);
+          }
+     }
+}
+
+
 kBeltDriveToClampDistance = kBevelGearBoxOuterWidth/2 + kClampingHubWidth/2 + kM8WasherThickness;
 kBeltDriveToPulleyDistance = kBeltDriveToClampDistance + kClampingHubWidth/2 + kRoundBeltPulleyWidth/2;
+kBeltDriveMotorAxleHeight = kBevelGearBoxInnerHeight/2 + kBevelGearBoxCaseThickness;
 
 module mBeltDrive() {
      translate([-kBevelGearBoxOffset/2, 0, 0]) {
@@ -604,8 +636,9 @@ module mBeltDrive() {
                }
           }
           translate([-kBevelGearBoxInnerLength/2 - kBevelGearBoxPillowSlotThickness - kBevelGearBoxDriveMountFinThickness,
-                     kBevelGearBoxOffset/2, kBevelGearBoxInnerHeight/2 + kBevelGearBoxCaseThickness]) {
-               mDCMotor();
+                     kBevelGearBoxOffset/2, 0]) {
+               translate([0, 0, kBevelGearBoxInnerHeight/2 + kBevelGearBoxCaseThickness]) mDCMotor();
+               mDCMotorSupport();
           }
      }
 }

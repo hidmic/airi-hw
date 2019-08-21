@@ -175,6 +175,7 @@ kDCMotorShaftDiameter = 8;
 kDCMotorBearingDiameter = 16;
 kDCMotorGearBoxLength = 42;
 kDCMotorGearBoxDiameter = 34;
+kDCMotorBottomDiameter = 36;
 
 kDCMotorFasteningAngles = [-135, -45, 45, 135];
 kDCMotorFasteningDiameter = 24;
@@ -233,9 +234,12 @@ module mMountedRoundBeltPulley() {
 }
 
 kBallCasterHeight = 15.5;
+kBallCasterCenterToHole = 35/2;
+kBallCasterDiameter = 28;
 
 module mBallCaster() {
-     rotate([180, 0, 0])
+     resize([0, 47, 15.5], auto=true)
+     rotate([180, 0, 90])
      import("oem/cy-15a.stl");
 }
 
@@ -278,6 +282,8 @@ module mCliffSensor() {
 kLedDiameter = 5;
 
 
+
+
 kM8WasherThickness = 1.6;
 kM8WasherInnerDiameter = 8.4;
 kM8WasherOuterDiameter = 16;
@@ -285,6 +291,7 @@ kM8WasherOuterDiameter = 16;
 
 kM4WasherThickness = 1;
 
+kM4ScrewDiameter = 4;
 kM4ScrewHeadHeight = 2.2;
 
 kM3ScrewHeadHeight = 1.7;
@@ -329,4 +336,55 @@ module mMagneticM3Washer() {
 module mM8x50ThreadedStud() {
      resize([50, 0, 0], auto=true)
      import("oem/m8x50-threaded-stud.stl");
+}
+
+kPushButtonCutoutDiameter = 16;
+
+
+module m16mmPushbutton() {
+     rotate([0, 0, -90])
+     import("oem/16mm_pushbutton.stl");
+}
+
+
+kUSBFemaleConnectorHeight = 16.8;
+
+module mUSBFemaleConnector() {
+     rotate([0, 0, 90])
+     translate([-53.92913818, 0.57096958, 0.19999933])
+     import("oem/usb_a_female_connector.stl");
+}
+
+kUSBPanelConnectorFlareLength = 18;
+kUSBPanelConnectorFlareWidth = 30.31;
+kUSBPanelConnectorFlareHeight = 4.5;
+kUSBPanelConnectorCutoutLength = 12.3;
+kUSBPanelConnectorCutoutWidth = 26.5;
+
+module mUSBPanelConnector() {
+     linear_extrude(height=kUSBPanelConnectorFlareHeight)
+     difference() {
+          square([kUSBPanelConnectorFlareLength, kUSBPanelConnectorFlareWidth], center=true);
+          hull() {
+               projection() mUSBFemaleConnector();
+          }
+     }
+     translate([0, 0, kUSBPanelConnectorFlareHeight-kUSBFemaleConnectorHeight/2]) mUSBFemaleConnector();
+}
+
+module mSMAConnector() {
+     rotate([0, 0, 90]) {
+          translate ([0, 0, -12.5]) {
+               rotate([0, -90, 0]) {
+                    scale([25.4, 25.4, 25.4]) import("oem/sma_female_bulkhead_connector.stl");
+               }
+          }
+     }
+}
+
+module mSMAConnectorCutuotSection() {
+     difference() {
+          circle(d=6.4);
+          translate([0, -6.0, 0]) square(6.4, center=true);
+     }
 }
