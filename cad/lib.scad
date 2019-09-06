@@ -75,19 +75,27 @@ module bench_fillet(r, order=1000) {
      }
 }
 
-module curved_bench_fillet(r, bench_radius, order=1000) {
+module curved_bench_fillet(r, bench_radius, order=1000, internal=true) {
      difference() {
           fillet(r) {
-               translate([bench_radius, 0]) {
-                    ring(inner_radius=bench_radius,
-                         outer_radius=bench_radius * order);
+               if (internal) {
+                    translate([bench_radius, 0]) {
+                         ring(inner_radius=bench_radius + kEpsilon, outer_radius=bench_radius * order);
+                    }
+               } else {
+                    translate([-bench_radius, 0]) circle(r=bench_radius - kEpsilon);
                }
                children();
           }
-          translate([bench_radius, 0]) {
-               ring(inner_radius=bench_radius - kEpsilon,
-                    outer_radius=bench_radius * order - kEpsilon);
+          if (internal) {
+               translate([bench_radius, 0]) {
+                    ring(inner_radius=bench_radius,
+                         outer_radius=bench_radius * order - kEpsilon);
+               }
+          } else {
+               translate([-bench_radius, 0]) circle(r=bench_radius);
           }
+
      }
 }
 
@@ -116,30 +124,35 @@ module rounded_cylinder(diameter, height, fillet_radius, center) {
      }
 }
 
+
 module curved_support_xsection(support_radius, fillet_radius,
                                wall_inner_radius, wall_outer_radius,
-                               hole_radius = 0) {
+                               hole_radius = 0, internal=true) {
      support_angular_width = (4 * support_radius / wall_outer_radius) * 180 / PI;
      wall_thickness = wall_outer_radius - wall_inner_radius;
-     rotate([0, 0, 180]) {
+     rotate([0, 0, internal ? 180 : 0]) {
           difference() {
                window(6*support_radius) {
-                    curved_bench_fillet(fillet_radius, bench_radius=wall_inner_radius) {
+                    curved_bench_fillet(fillet_radius, bench_radius=wall_inner_radius, internal=internal) {
                          hull() {
                               translate([support_radius + wall_thickness/2, 0]) {
                                    circle(r=support_radius);
                               }
-                              translate([wall_inner_radius + wall_thickness/2, 0])
+                              rotate([0, 0, ! internal ? 180 : 0])
+                              translate([wall_inner_radius + wall_thickness/2, 0]) {
                                    ring(inner_radius=wall_inner_radius,
                                         outer_radius=wall_outer_radius,
                                         angles=[180 - support_angular_width/2,
                                                 180 + support_angular_width/2]);
+                              }
                          }
-                         translate([wall_inner_radius + wall_thickness/2, 0])
+                         rotate([0, 0, ! internal ? 180 : 0])
+                         translate([wall_inner_radius + wall_thickness/2, 0]) {
                               ring(inner_radius=wall_inner_radius,
                                    outer_radius=wall_outer_radius,
                                    angles=[180 - support_angular_width,
                                            180 + support_angular_width]);
+                         }
                     }
                }
                if (hole_radius > 0) {
@@ -147,6 +160,14 @@ module curved_support_xsection(support_radius, fillet_radius,
                          circle(r=hole_radius);
                     }
                }
+          }
+     }
+}
+
+module fill(upto=1000) {
+     offset(delta=-upto) {
+          offset(delta=upto) {
+               children();
           }
      }
 }
@@ -173,6 +194,8 @@ module duplicate(v) {
      children();
      mirror(v) children();
 }
+
+
 
 function steps(start, end, n) = [start:(end - start)/(n - 1):end];
 
