@@ -1,0 +1,98 @@
+* PSpice Model Editor - Version 16.6.0
+*$
+* BA8391
+*
+* Rev.002 2016.Feb
+*
+* Ground Sense Comparator 'Macromodel' Subcircuit
+* All Rights Reserved Copyright (c) ROHM CO., LTD.
+*
+.subckt BA8391 +IN -IN VCC VEE OUT
+X_U1 +IN -IN VCC VEE OUT  ba8391_sub
+.ends
+*$
+.SUBCKT ba8391_sub +IN -IN VCC VEE OUT  
+Q_Q9         N165977 N165977 VEE QN1 2
+Q_Q8         -IN -IN N165380 QN1 
+Q_Q15         N164947 N168656 VCC QP1 2.4
+Q_Q11         N166538 N165981 VEE QN1 7
+Q_Q12         OUT N166538 VEE QN2 3.4
+Q_Q6         N165380 N165342 N165342 QN1 
+Q_Q16         N165342 N168656 VCC QP2 1.22
+Q_Q17         N166538 N172400 VCC QP1 3
+Q_Q3         N165130 N164943 N164943 QN1 
+Q_Q5         +IN +IN N165130 QN1 
+Q_Q14         N164943 N168656 VCC QP2 1.22
+Q_Q4         VEE +IN N165130 QP3 
+Q_Q2         N165981 N165380 N164947 QP1 1.01 
+Q_Q1         N165977 N165130 N164947 QP1 1
+Q_Q7         VEE -IN N165380 QP4 
+Q_Q10         N165981 N165977 VEE QN1 2
+Q_Q18         N168656 N168656 VCC QP1 0.7
+Q_Q19         N172400 N172400 VCC QP1 0.7
+G_G1         N168656 VEE N215271 VEE 1
+I_I5         VEE N215271 DC 1uAdc  
+R_R20         VEE N215271  20 TC=-0.0035,0  
+I_I6         VEE N216410 DC 1uAdc  
+G_G2         N172400 VEE N216410 VEE 1 
+R_R21         VEE N216410  18 TC=-0.0045,0 
+Q_Q13         VEE N168656 VCC QP1 7.5
+*
+*
+*
+.model QN1 npn
++ is=5e-017
++ bf=400
++ nf=1
++ vaf=150
++ ikf=0.003
++tr=5e-10
++tf=5e-10
++cjc=1.8e-12
++xtb=2.5
+*
+.model QN2 npn
++ is=3e-017
++ bf=500
++ nf=0.947
++ vaf=4
++ ikf=0.0026
++tr=5e-10
++tf=5e-10
++cjc=2e-12
++xtb=0.5
+*
+.model QP1 pnp
++ is=1e-016
++ bf=1400
++ nf=1
++ vaf=60
++ ikf=3e-005
++ xti=10
+*
+.model QP2 pnp
++ is=1e-016
++ bf=500
++ nf=1
++ vaf=90
++ ikf=3e-005
++ xti=10.5
+*
+.model QP3 pnp
++ is=1e-016
++ bf=1400
++ nf=1
++ vaf=60
++ ikf=3e-005
++ xti=9.03
+*
+.model QP4 pnp
++ is=1e-016
++ bf=1400
++ nf=1
++ vaf=60
++ ikf=3e-005
++ xti=9
+*
+.ENDS
+*$
