@@ -15,15 +15,14 @@ if __name__ == '__main__':
     # Use IFX20002MBV50HT as UREG
 
     Pe_max = 40 * units.W
-    Vi_min = 7.5 * units.V
+    Vi_min = 9 * units.V
     Pm_max = 100 * units.W
     Vm_min = 24 * units.V
     Id_max = max(
         Pe_max / Vi_min, (Pe_max + Pm_max) / Vm_min
     ).to(units.A)
 
-
-    Vbat_max = 2 * 14.5 * units.V
+    Vbat_max = 2 * 14.9 * units.V
     # Use IRF7470 as M
     Rds_on = 15 * units.mΩ
     Coss = 690 * units.pF

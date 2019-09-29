@@ -6,11 +6,18 @@ from scipy import signal
 if __name__ == '__main__':
     units = pint.UnitRegistry()
 
-    Ta_max = 50 * units.delta_degC
+    Ta_max = 70 * units.delta_degC
 
-    Vi_min = 12 * units.V
-    Vi_max = 18 * units.V
-    Io_min = 100 * units.mA
+    Vbat_min = 2 * 9.6 * units.V
+    Vbat_max = 2 * 14.9 * units.V
+
+    Vo_min = Vbat_min + 0.45 * units.V
+    Vo_max = Vbat_max + 0.45 * units.V
+
+    Vi_min = 9 * units.V
+    Vi_max = Vo_min
+
+    Io_min = 150 * units.mA
     Ii_max = 10 * units.A
 
     R_bat = 2 * 28 * units.mΩ
@@ -24,10 +31,7 @@ if __name__ == '__main__':
     V_uvlo = V_en - 3 * units.uA * R1
     R2_min = R1 / (V_uvlo / (1.22 * units.V) - 1)
     R2 = 5.6 * units.kΩ
-
-    Vo_min = 2 * 9.6 * units.V
-    Vo_max = 2 * 14.5 * units.V
-
+    
     Rt = 19.6 * units.kΩ
     fsw = 400 * units.kHz
 
@@ -49,11 +53,14 @@ if __name__ == '__main__':
     Rsns = 8.2 * units.mΩ
     Rcs = 8.2 * units.mΩ
     Rcsin = 1.8 * units.kΩ
-    Rcsout = round((1.25 * units.V * Rcsin / (Rcs * Ii_max)).to(units.kΩ))
+    Vfb = 1.25 * units.V
+    Rcsout = round((Vfb * Rcsin / (Rcs * Ii_max)).to(units.kΩ))
 
-    R3 = 100 * units.kΩ
-    R4 = round(R3 / ((Vo_max) / (1.25/2 * units.V) - 1), 1)
-    R5 = R6 = 27 * units.kΩ
+    R3 = 27 * units.kΩ
+    R4 = R3 / (Vi_max / Vfb - 1)
+    R5 = 100 * units.kΩ
+    R6 = round(R5 / (2 * Vo_max / Vfb - 1), 1)
+    R7 = R8 = 27 * units.kΩ
 
     # Compute L
 
@@ -61,13 +68,13 @@ if __name__ == '__main__':
 
     ## Use 74437529203680
     L = 68 * units.uH
-    L_tol = 0.2
+    L_tol = 0.20
     L_min = L * (1 - L_tol)
     L_max = L * (1 + L_tol)
-    L_I_rms_max = 17 * units.A
-    L_I_sat = 10.6 * units.A
-    ESR_L = 10.3 * units.mΩ
-    assert L_min > L_budget
+    L_I_rms_max = 11.2 * units.A
+    L_I_sat = 10.7 * units.A
+    ESR_L = 22.2 * units.mΩ
+    assert L_min > L_budget, '{} > {}'.format(L_min, L_budget)
 
     L_dI_max = (D_max * (1 - D_max) * Vo_max / (L_min * fsw)).to(units.A)
     L_I_rms = np.sqrt(Ii_max**2 + (L_dI_max**2) / 12)
@@ -114,7 +121,7 @@ if __name__ == '__main__':
 
     # Compute Cout
 
-    Vo_rpp_mid = 400 * units.mV
+    Vo_rpp_mid = 500 * units.mV
 
     Cout_ripple_budget = (Io_max * D_max / (fsw * Vo_rpp_mid/2)).to(units.uF)
     ESR_Cout_ripple_cap = (Vo_rpp_mid / (Ii_max + L_dI_max/2)).to(units.mΩ)
@@ -134,12 +141,12 @@ if __name__ == '__main__':
     ESR_Cout = 32 * units.mΩ / 2
     V_Cout_max = 35 * units.V
     I_Cout_rms = 2 * 3.25 * units.A
-    assert Cout_min > Cout_budget
+    assert Cout_min > Cout_budget, Cout_budget
 
     ESR_Cout_min = (1 / (2 * np.pi * RHPZ_min * Cout_min)).to(units.mΩ)
-    Rs = 33 * units.mΩ
-    assert ESR_Cout + Rs / 2 > ESR_Cout_min
-    assert (ESR_Cout + Rs / 2) * (
+    Rs = 56 * units.mΩ / 2
+    assert ESR_Cout + Rs > ESR_Cout_min, ESR_Cout_min
+    assert (ESR_Cout + Rs) * (
         Io_max / (1 - D_max) + L_dI_max/2
     ) + Io_max * D_max / (fsw * Cout_min) < Vo_rpp_mid
     assert I_Cout_rms > I_Cout_rms_max
@@ -147,20 +154,20 @@ if __name__ == '__main__':
 
     # Compute Lf & Cf
 
-    ζf_min = 2.
-    Lf_budget = (((ESR_Cout + Rs/2) / (2 * ζf_min))**2 * Cout_max).to(units.uH)
+    ζf_min = 3.
+    Lf_budget = (((ESR_Cout + Rs) / (2 * ζf_min))**2 * Cout_max).to(units.uH)
     # Use XC2399CT-ND
     Lf = 0.82 * units.uH
     Lf_tol = 0.2
     Lf_min = Lf * (1 - Lf_tol)
     Lf_max = Lf * (1 + Lf_tol)
-    assert Lf_min > Lf_budget
+    assert Lf_min > Lf_budget, Lf_budget
 
     Af_min = Vo_rpp_mid / Vo_rpp_max
     Cf_budget = ((Af_min**2 - 1) / ((2 * np.pi * fsw)**2 * Lf_min)).to(units.uF)
 
-    # Use
-    Cf = 220 * units.uF
+    # Use 1 x EEH-ZK1V331P
+    Cf = 330 * units.uF
     Cf_tol = 0.2
     Cf_min = Cf * (1 - Cf_tol)
     Cf_max = Cf * (1 + Cf_tol)
@@ -235,35 +242,35 @@ if __name__ == '__main__':
     Tjdp = Ta_max + Pdp * Rdja_th
     assert Tjdp < Tjdp_max
 
-    # Compute load switch
+    # # Compute load switch
 
-    ## Use IRF9317
-    Rds_on_sw = 10.2 * units.mΩ
-    gfs_sw = 36 * units.S
-    Vth_sw_min = 1.9 * units.V
-    Qg_sw = 50 * units.nC
-    BVdss_sw = 30 * units.V
-    Tj_sw_max = 150 * units.delta_degC
-    Rja_th_sw = 10 * units.delta_degC / units.W
-    tp_sw_max = 200 * units.ms
-    Psw_sw = Io_max**2 * Rds_on_sw
-    Tj_sw = Ta_max + Psw_sw * Rja_th_sw
-    Vds_sw_max = Vo_max - Vo_min
-    assert Tj_sw < Tj_sw_max
-    assert Vds_sw_max < BVdss_sw
+    # ## Use IRF9317
+    # Rds_on_sw = 10.2 * units.mΩ
+    # gfs_sw = 36 * units.S
+    # Vth_sw_min = 1.9 * units.V
+    # Qg_sw = 50 * units.nC
+    # BVdss_sw = 30 * units.V
+    # Tj_sw_max = 150 * units.delta_degC
+    # Rja_th_sw = 10 * units.delta_degC / units.W
+    # tp_sw_max = 200 * units.ms
+    # Psw_sw = Io_max**2 * Rds_on_sw
+    # Tj_sw = Ta_max + Psw_sw * Rja_th_sw
+    # Vds_sw_max = Vo_max - Vo_min
+    # assert Tj_sw < Tj_sw_max
+    # assert Vds_sw_max < BVdss_sw
 
-    Csw = 0.22 * units.uF
-    Csw_tol = 0.2
-    Csw_min = Csw * (1 - Csw_tol)
-    Cload_max = Cin_max + Cout_max
-    Irush_max = (Cload_max * Vi_max / tp_sw_max).to(units.A)
-    Vpl_sw = -Vth_sw_min - (Irush_max / gfs_sw)
-    Rsw_budget = (
-        ((Vi_max + Vpl_sw)/Csw_min) * Cload_max / Irush_max
-    ).to(units.kΩ)
-    Cpull_budget = Csw * 20
-    Rsw = 1000 * units.kΩ
-    Cpull = 4.7 * units.uF
+    # Csw = 0.22 * units.uF
+    # Csw_tol = 0.2
+    # Csw_min = Csw * (1 - Csw_tol)
+    # Cload_max = Cin_max + Cout_max
+    # Irush_max = (Cload_max * Vi_max / tp_sw_max).to(units.A)
+    # Vpl_sw = -Vth_sw_min - (Irush_max / gfs_sw)
+    # Rsw_budget = (
+    #     ((Vi_max + Vpl_sw)/Csw_min) * Cload_max / Irush_max
+    # ).to(units.kΩ)
+    # Cpull_budget = Csw * 20
+    # Rsw = 1000 * units.kΩ
+    # Cpull = 4.7 * units.uF
 
     print('\n'.join(
         '{} = {}'.format(name, value)

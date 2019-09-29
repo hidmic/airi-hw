@@ -1,4 +1,4 @@
-kEpsilon = 1e-1;
+include <constants.scad>;
 
 module sector(radius, angles, fn = $fn) {
      r = radius / cos(180 / fn);

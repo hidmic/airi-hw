@@ -1,4 +1,7 @@
-include <lib.scad>;
+include <constants.scad>;
+use <lib.scad>;
+
+use <libs/springs.scad>;
 
 kCasterBallDiameter = 8;
 kCasterBallProtrusion = 2;
@@ -39,7 +42,7 @@ module spring_loaded_ball_support(ball_diameter, ball_protrusion, ball_gap, wall
      }
 }
 
-use <threads.scad>;
+use <libs/threads.scad>;
 
 module metric_hex_standoff(diameter, pitch, length, width) {
      difference() {
@@ -59,7 +62,7 @@ kSpringLoadedBallCasterSupportHoleDiameter = 3;
 
 
 module spring_loaded_ball_caster_yoke(ball_diameter, ball_protrusion, ball_travel,
-                                      spring_diameter, spring_seat_height, wall_gap,
+                                      spring_seat_diameter, spring_seat_height, wall_gap,
                                       base_thickness, wall_thickness) {
      wall_inner_radius=ball_diameter/2 + wall_thickness + kSpringLoadedBallCasterGap;
      wall_outer_radius=wall_inner_radius + wall_thickness;
@@ -74,7 +77,7 @@ module spring_loaded_ball_caster_yoke(ball_diameter, ball_protrusion, ball_trave
                ring(outer_radius=wall_outer_radius, inner_radius=wall_inner_radius);
           }
           linear_extrude(height=spring_seat_height) {
-               ring(outer_radius=spring_diameter/2 + wall_thickness, inner_radius=spring_diameter/2);
+               ring(outer_radius=spring_seat_diameter/2 + wall_thickness, inner_radius=spring_seat_diameter/2);
           }
      }
      linear_extrude(height=base_thickness) {
@@ -98,6 +101,7 @@ module spring_loaded_ball_caster_yoke(ball_diameter, ball_protrusion, ball_trave
      }
 }
 
+kSpringWireDiameter = 1;
 
 module spring_loaded_ball_caster(ball_diameter, ball_protrusion, ball_travel, ball_gap,
                                  spring_diameter, spring_seat_height, wall_gap,
@@ -106,26 +110,29 @@ module spring_loaded_ball_caster(ball_diameter, ball_protrusion, ball_travel, ba
      standoff_mounting_radius = ball_diameter/2 + wall_thickness * 3/2 + kSpringLoadedBallCasterGap + kSpringLoadedBallCasterSupportRadius;
 
      spring_loaded_ball_caster_yoke(ball_diameter, ball_protrusion, ball_travel,
-                                    spring_diameter, spring_seat_height, wall_gap,
-                                    base_thickness, wall_thickness);
-     translate([0, 0, wall_thickness + spring_seat_height + ball_travel]) {
-          rotate([0, 0, 90]) {
-               spring_loaded_ball_support(ball_diameter, ball_protrusion, ball_gap, wall_gap, wall_thickness);
+                                    spring_diameter + 2 * kEpsilon, spring_seat_height,
+                                    wall_gap, base_thickness, wall_thickness);
+     translate([0, 0, wall_thickness]) {
+          translate([0, 0, spring_seat_height + ball_travel]) {
+               rotate([0, 0, 90]) {
+                    spring_loaded_ball_support(ball_diameter, ball_protrusion, ball_gap, wall_gap, wall_thickness);
+               }
+               translate([0, 0, -guide_length]) metric_hex_standoff(3, 0.5, guide_length, 5.5);
+               translate([0, 0, wall_thickness + ball_gap + ball_diameter/2]) sphere(d=ball_diameter);
           }
-          translate([0, 0, -guide_length]) metric_hex_standoff(3, 0.5, guide_length, 5.5);
-          translate([0, 0, wall_thickness + ball_gap + ball_diameter/2]) sphere(d=ball_diameter);
+          spring(Windings=10, R=(spring_diameter-kSpringWireDiameter)/2, r=kSpringWireDiameter/2, h=spring_seat_height+ball_travel, slices=50);
      }
      duplicate([1, 0, 0]) {
           translate([standoff_mounting_radius, 0, wall_thickness]) {
                metric_hex_standoff(3, 0.5, 50, 5.5);
           }
      }
-
 }
 
 spring_loaded_ball_caster(ball_diameter=50, ball_protrusion=20, ball_travel=10, ball_gap=3,
                           spring_diameter=15, spring_seat_height=3, wall_gap=10,
                           base_thickness=3, wall_thickness=2);
+
 //mainShape();
 
 //cutout();

@@ -5,6 +5,7 @@ import numpy as np
 
 if __name__ == '__main__':
     units = pint.UnitRegistry()
+
     Vi_min = 9 * units.V
     Vi = 12 * units.V
     Vi_max = 29.4 * units.V
@@ -18,7 +19,7 @@ if __name__ == '__main__':
 
     Vo_rpp_max = 10 * units.mV
     Vo_tran = 200 * units.mV
-    Vi_rpp_max = 200 * units.mV
+    Vi_rpp_max = 250 * units.mV
     Vi_tran = 400 * units.mV
 
     Vsense_thres = 100 * units.mV
@@ -27,8 +28,8 @@ if __name__ == '__main__':
     Vd = 0.45 * units.V
     neff = 0.85
 
-    Rsense = (Vsense_thres / Io_max).to(units.mΩ)
-
+    Rsense_budget = (Vsense_thres / Io_max).to(units.mΩ)
+    Rsense = 12 * units.mΩ
     M_max = (Vo + Vd)/(Vi_min + Vd)
     M_min = (Vo + Vd)/(Vi_max + Vd)
 
@@ -59,7 +60,7 @@ if __name__ == '__main__':
 
     I_CoutR_rms_max = (dI_max / np.sqrt(12)).to(units.mA)
 
-    # Use P16476CT-ND
+    # Use 16SVPE180M
     CoutR = 180 * units.uF
     CoutR_tol = 0.2
     CoutR_min = CoutR * (1 - CoutR_tol)
@@ -70,7 +71,7 @@ if __name__ == '__main__':
     assert I_CoutR_rms > I_CoutR_rms_max
     assert V_CoutR_max > Vo
 
-    # Use 2 x P15087CT-ND
+    # Use 2 x EEE-FT1C102AP
     CoutB = 2 * 1000 * units.uF
     CoutB_tol = 0.20
     CoutB_min = CoutB * (1 - CoutB_tol)
@@ -98,6 +99,7 @@ if __name__ == '__main__':
     fcross_max = (1 / (2 * np.pi * ESR_Cout * Cout_min)).to(units.Hz)
 
     CinR_budget = ((D_max * (1 - D_max) * Io_max) / (Vi_rpp_max * fsw_min)).to(units.uF)
+    ESR_CinR_budget = (Vi_rpp_max / Io_max).to(units.mΩ)
     I_CinR_rms_max = Io_max * np.sqrt(
         D_max * (1 - D_max) + 1/12 * (Vo / (L_min * fsw_min * Io_max))**2 * D_max * (1 - D_max)**2
     )
@@ -106,13 +108,13 @@ if __name__ == '__main__':
     CinB_budget = (0.5 * ts_in * (Io_max - Io_min) * D_max / Vi_tran).to(units.uF)
     ESR_CinB_max = (Vi_tran / ((Io_max - Io_min) * D_max)).to(units.mΩ)
 
-    # Use 2 x P124103CT-ND
-    Cin = 2 * 470 * units.uF
+    # Use 2 x EEH-ZK1V331P
+    Cin = 2 * 330 * units.uF
     Cin_tol = 0.2
     Cin_min = Cin * (1 - Cin_tol)
     Cin_max = Cin * (1 + Cin_tol)
-    I_Cin_rms = 4. * units.A * 2
-    ESR_Cin = 11 * units.mΩ / 2
+    I_Cin_rms = 2.8 * units.A * 2
+    ESR_Cin = 20 * units.mΩ / 2
     V_Cin_max = 35 * units.V
     assert Cin_min > max(CinR_budget, CinB_budget)
     assert ESR_Cin * Io_max  + D_max * (1 - D_max) * Io_max / (Cin_min * fsw_min) < Vi_rpp_max
@@ -148,11 +150,14 @@ if __name__ == '__main__':
     Tjic = Ta_max + Pg * Ricja_th
     assert Tjic < Tjic_max
 
-    Cboost_min = (50 * Ciss).to(units.uF)
-    # Use 1276-1007
-    Cboost = (2 * 0.1) * units.uF
+    Cboost_budget = (50 * Ciss).to(units.uF)
+    # Use 3 x GCD21BR71H104KA01
+    Cboost = 3 * 0.1 * units.uF
+    Cboost_tol = 0.1
+    Cboost_dc_bias = 0.8
+    Cboost_min = Cboost * (1 - Cboost_tol) * Cboost_dc_bias
     V_Cboost_max = 50 * units.V
-    assert Cboost > Cboost_min
+    assert Cboost_min > Cboost_budget
 
     # Use MBRB1645G
     Rdja_th = 23.3 * units.delta_degC / units.W  # Pad area = 1in²
