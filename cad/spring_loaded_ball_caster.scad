@@ -1,6 +1,6 @@
 include <constants.scad>;
-use <lib.scad>;
 
+use <lib.scad>;
 use <libs/springs.scad>;
 
 kCasterBallDiameter = 8;
@@ -19,10 +19,7 @@ kSpringLoadedGuideFasteningHoleDiameter = 3;
 
 kSpringLoadedBallCasterGap = 0.5;
 
-
-$fn=40;
-
-module spring_loaded_ball_support(ball_diameter, ball_protrusion, ball_gap, wall_gap, wall_thickness) {
+module spring_loaded_ball_caster_support(ball_diameter, ball_protrusion, ball_gap, wall_gap, wall_thickness) {
      support_height = wall_thickness + ball_gap + ball_diameter - ball_protrusion;
      support_diameter = ball_diameter + 2 * wall_thickness;
      ball_zoffset = wall_thickness + ball_gap + ball_diameter/2;
@@ -42,24 +39,10 @@ module spring_loaded_ball_support(ball_diameter, ball_protrusion, ball_gap, wall
      }
 }
 
-use <libs/threads.scad>;
-
-module metric_hex_standoff(diameter, pitch, length, width) {
-     difference() {
-          cylinder(d=width / cos(30), h=length, $fn=6);
-          translate([0, 0, -kEpsilon]) {
-               if (pitch > 0) {
-                    metric_thread(diameter=diameter, pitch=pitch, length=length + 2 * kEpsilon, internal=true);
-               } else {
-                    cylinder(d=diameter, h=length + 2 * kEpsilon);
-               }
-          }
-     }
-}
+spring_loaded_ball_caster_support(50, 25, 5, 10, 3);
 
 kSpringLoadedBallCasterSupportRadius = 5;
 kSpringLoadedBallCasterSupportHoleDiameter = 3;
-
 
 module spring_loaded_ball_caster_yoke(ball_diameter, ball_protrusion, ball_travel,
                                       spring_seat_diameter, spring_seat_height, wall_gap,
@@ -129,13 +112,8 @@ module spring_loaded_ball_caster(ball_diameter, ball_protrusion, ball_travel, ba
      }
 }
 
-spring_loaded_ball_caster(ball_diameter=50, ball_protrusion=20, ball_travel=10, ball_gap=3,
-                          spring_diameter=15, spring_seat_height=3, wall_gap=10,
-                          base_thickness=3, wall_thickness=2);
 
-//mainShape();
 
-//cutout();
-//mountingHoles();
-//mBallCasterSupport();
-//translate([0, 0, kCasterBallZOffset]) sphere(d=kCasterBallDiameter);
+/* spring_loaded_ball_caster_yoke(ball_diameter=50, ball_protrusion=20, ball_travel=10, ball_gap=3, */
+/*                                spring_seat_diameter=15, spring_seat_height=3, wall_gap=10, */
+/*                                base_thickness=3, wall_thickness=2); */

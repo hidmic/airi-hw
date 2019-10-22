@@ -53,7 +53,7 @@ if __name__ == '__main__':
     ) / -d_rear_caster_to_wheel
     f_wheel = (P_batt1 * d_rear_caster_to_batt1 + P_batt2 * d_rear_caster_to_batt2) / d_rear_caster_to_wheel
 
-    # Use F2276 SAE 10170
+    # Use F2276 SAE 1070
     D = 18.1 * units.mm
     d = 1 * units.mm
     p = 8 * units.mm
@@ -69,10 +69,10 @@ if __name__ == '__main__':
     k_rear_caster = (1 / (
         n * np.pi * D**3 / (4 * G * J * np.cos(𝛾)) * ((1 + d**2/(2 * D**2)) * np.cos(𝛾)**2 + (1 + d**2 /(4 * D**2)) * np.sin(𝛾)**2/(1 + ν))
     )).to(units.kgf / units.mm)
-
+    
     e_rear_caster = f_rear_caster / k_rear_caster
 
-    # Use F051 SAE 10170
+    # Use F051 SAE 1070
     D = 6.8 * units.mm
     d = 1.25 * units.mm
     p = 2.6 * units.mm
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
     e_wheel = f_wheel / k_wheel
 
-    # Use F174 SAE 10170
+    # Use F174 SAE 1070
     D = 8.8 * units.mm
     d = 2 * units.mm
     p = 3.3 * units.mm
