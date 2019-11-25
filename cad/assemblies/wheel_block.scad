@@ -1,11 +1,14 @@
 include <generic/lib.scad>;
 
 use <parts/oem/100mm_rhino_rubber_wheel.scad>;
+use <parts/oem/70mm_shock_absorber.scad>;
+use <parts/oem/8mm_clamping_hub.scad>;
+use <parts/oem/amt112s_encoder.scad>;
+use <parts/oem/gt2_20t_8mm_bore_6mm_wide_pulley.scad>;
 
-use <parts/wheel_suspension_frame.scad>;
 use <parts/wheel_block_frame.scad>;
-
 use <wheel_suspension_arm.scad>;
+use <wheel_suspension_frame.scad>;
 
 kWheelBlockFrameDatasheet = vWheelBlockFrameDatasheet();
 BlockFrameDatasheet = vWheelBlockFrameDatasheet();

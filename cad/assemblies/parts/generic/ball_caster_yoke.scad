@@ -37,8 +37,6 @@ module pmBallCasterYoke(datasheet) {
      }
 }
 
-$fn = 40;
-
 pmBallCasterYoke(
      datasheet=pvBallCasterYokeDatasheet(
           main_diameter=12, base_thickness=2, mount_offset=10, mount_diameter=4, mount_height=5
