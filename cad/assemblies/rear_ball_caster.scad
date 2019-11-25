@@ -21,7 +21,7 @@ module mRearBallCaster() {
          main_height = property(v50mmBallCasterYokeDatasheet(), "main_height")) {
           translate([0, 0, base_thickness + mount_height + 30]) {
                rotate([0, 180, 0]) {
-                    let(spring_length=10 - $t) {
+                    let(spring_length=15 - $t) {
                          translate([0, 0, base_thickness]) {
                               mF2276SAE1070Spring(length=spring_length);
                               translate([0, 0, property(v50mmBallCasterSpringSeatDatasheet(), "base_thickness") + spring_length]) {

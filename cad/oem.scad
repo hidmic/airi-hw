@@ -340,7 +340,6 @@ module mM8x50ThreadedStud() {
 
 kPushButtonCutoutDiameter = 16;
 
-
 module m16mmPushbutton() {
      rotate([0, 0, -90])
      import("oem/16mm_pushbutton.stl");

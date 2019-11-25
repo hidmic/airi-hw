@@ -4,6 +4,15 @@ kEpsilon = 1e-1;
 
 function property(table, key) = table[search([key], table)[0]][1];
 
+module hull_complement() {
+     difference() {
+          hull() {
+               children();
+          }
+          children();
+     }
+}
+
 module sector(radius, angles, fn = $fn) {
      r = radius / cos(180 / fn);
      step = -360 / fn;
@@ -18,6 +27,25 @@ module sector(radius, angles, fn = $fn) {
      difference() {
           circle(radius, $fn = fn);
           polygon(points);
+     }
+}
+
+module contour(delta) {
+     assert(delta != 0);
+     if (delta > 0) {
+          difference() {
+               offset(delta=delta) {
+                    children();
+               }
+               children();
+          }
+     } else {
+          difference() {
+               children();
+               offset(delta=delta) {
+                    children();
+               }
+          }
      }
 }
 
@@ -48,20 +76,23 @@ module rounded_ring(inner_radius, outer_radius, angles = [0, 360], fn = $fn) {
 module fillet(r) {
      difference() {
           difference() {
-               offset(r=-r - kEpsilon)
+               offset(r=-r - kEpsilon) {
                     offset(delta=r) {
-                    children();
+                         children();
+                    }
                }
-               offset(r=r)
+               offset(r=r) {
                     offset(delta=-r) {
-                    children();
+                         children();
+                    }
                }
           }
           children();
      }
-     offset(r=r)
+     offset(r=r) {
           offset(delta=-r) {
-          children();
+               children();
+          }
      }
 }
 
@@ -128,7 +159,6 @@ module rounded_cylinder(diameter, height, fillet_radius, center) {
      }
 }
 
-
 module curved_support_xsection(support_radius, fillet_radius,
                                wall_inner_radius, wall_outer_radius,
                                hole_radius = 0, internal=true) {
@@ -167,6 +197,7 @@ module curved_support_xsection(support_radius, fillet_radius,
           }
      }
 }
+
 
 module fill(upto=1000) {
      offset(delta=-upto) {
@@ -248,3 +279,7 @@ module exp_corner_nerve(height, radius, angles, corner_radius = 0, decay_rate = 
           }
      }
 }
+
+function slice(v, i) = [for (j = i) v[j]];
+
+function all(v) = len(v) == 0 ? true : ( len(v) == 1 || ! v[0] ? v[0] : all(slice(v, [1:len(v)-1])));
