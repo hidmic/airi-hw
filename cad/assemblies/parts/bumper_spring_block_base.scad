@@ -8,7 +8,7 @@ function vBumperSpringBlockBaseDatasheet() =
      let(thickness=property(kChassisBaseDatasheet, "thickness"),
          seat_thickness=3 * thickness, slot_width=5, spring_travel_distance=5,
          spring_max_length=spring_travel_distance + slot_width + 2 * seat_thickness)
-     [["height", 20], ["width", 20], ["depth", 35], ["thickness", thickness], ["angular_offset", 70],
+     [["height", 20], ["width", 25], ["depth", 40], ["thickness", thickness], ["angular_offset", 70],
       ["spring_outer_diameter", 12], ["spring_inner_diameter", 8], ["spring_lock_size", 2 * thickness],
       ["spring_seat_thickness", seat_thickness], ["spring_slot_width", slot_width],
       ["spring_travel_distance", spring_travel_distance],

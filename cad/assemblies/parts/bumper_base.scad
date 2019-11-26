@@ -13,11 +13,13 @@ kHCS04SonarBracketDatasheet = vHCS04SonarBracketDatasheet();
 function vBumperBaseDatasheet() =
      let(base_chassis_height=property(kChassisBaseDatasheet, "base_height"),
          chassis_fillet_radius=property(kChassisBaseDatasheet, "fillet_radius"),
+         chassis_support_diameter=property(kChassisBaseDatasheet, "support_diameter"),
          angular_width=2 * property(kBumperSpringBlock_PartA_Datasheet, "angular_offset"),
          travel_distance=property(kBumperSpringBlock_PartA_Datasheet, "spring_travel_distance"))
      [["height", base_chassis_height - chassis_fillet_radius], ["angular_width", angular_width],
-      ["travel_distance", travel_distance], ["sonar_mounting_angles", [-40, 0, 40]]];
-
+      ["travel_distance", travel_distance], ["sonar_mounting_angles", [-40, 0, 40]],
+      ["support_diameter", chassis_support_diameter], ["support_pin_diameter", 4], ["support_pin_height", 4],
+      ["support_angles", [-angular_width/2+7.5, -22.5, 22.5, angular_width/2-7.5]]];
 
 module mBumperBase() {
      datasheet = vBumperBaseDatasheet();
@@ -35,9 +37,10 @@ module mBumperBase() {
 
      render()
      difference() {
-          translate([0, 0, chassis_height/2]) {
+          // TBD
+          translate([0, 0, height/2]) { // chassis_height/2 - chassis_fillet_radius]) {
                difference() {
-                    translate([0, 0, chassis_fillet_radius + height/2 - chassis_height/2]) {
+                    translate([0, 0, 0]) { //chassis_fillet_radius + height/2 - chassis_height/2]) {
                          difference() {
                               translate([0, 0, -chassis_fillet_radius - height/2]) {
                                    mChassisShell();
@@ -61,7 +64,8 @@ module mBumperBase() {
                     }
                     for (angle = sonar_mounting_angles) {
                          rotate([0, 0, angle]) {
-                              translate([chassis_outer_diameter/2 - sonar_distance_to_wall, 0, 0])  {
+                              translate([chassis_outer_diameter/2 - sonar_distance_to_wall, 0,
+                                         -sonar_distance_to_wall * sin(90 - sonar_mounting_polar_angle)])  {
                                    rotate([0, sonar_mounting_polar_angle, 0]) {
                                         mHCS04SonarBracket();
                                         translate([0, 0, chassis_thickness]) {

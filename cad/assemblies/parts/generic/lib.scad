@@ -76,7 +76,7 @@ module rounded_ring(inner_radius, outer_radius, angles = [0, 360], fn = $fn) {
 module fillet(r) {
      difference() {
           difference() {
-               offset(r=-r - kEpsilon) {
+               offset(r=-r - kEpsilon / 100) {
                     offset(delta=r) {
                          children();
                     }
@@ -124,13 +124,11 @@ module curved_bench_fillet(r, bench_radius, order=1000, internal=true) {
           }
           if (internal) {
                translate([bench_radius, 0]) {
-                    ring(inner_radius=bench_radius,
-                         outer_radius=bench_radius * order - kEpsilon);
+                    ring(inner_radius=bench_radius, outer_radius=bench_radius * order + kEpsilon);
                }
           } else {
                translate([-bench_radius, 0]) circle(r=bench_radius);
           }
-
      }
 }
 
@@ -166,7 +164,7 @@ module curved_support_xsection(support_radius, fillet_radius,
      wall_thickness = wall_outer_radius - wall_inner_radius;
      rotate([0, 0, internal ? 180 : 0]) {
           difference() {
-               window(6*support_radius) {
+               window(6*support_radius, order=10*support_radius) {
                     curved_bench_fillet(fillet_radius, bench_radius=wall_inner_radius, internal=internal) {
                          hull() {
                               translate([support_radius + wall_thickness/2, 0]) {
