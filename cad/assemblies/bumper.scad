@@ -11,26 +11,27 @@ use <parts/bumper.partB.scad>;
 function vBumperDatasheet() = vBumperBaseDatasheet();
 
 module mBumper() {
-     mBumper_PartA();
-     mBumper_PartB();
+     datasheet = vBumperDatasheet();
+     bumper_height = property(datasheet, "height");
+     bumper_z_offset = property(datasheet, "z_offset");
+     sonar_mounting_angles = property(datasheet, "sonar_mounting_angles");
+     sonar_mounting_radius = property(datasheet, "sonar_mounting_radius");
+     sonar_mounting_z_offset = property(datasheet, "sonar_mounting_z_offset");
 
-     bumper_height = property(vBumperDatasheet(), "height");
-     sonar_mounting_angles = property(vBumperDatasheet(), "sonar_mounting_angles");
-     sonar_distance_to_wall = property(vHCS04SonarBracketDatasheet(), "distance_to_wall");
      sonar_mounting_polar_angle = property(vHCS04SonarBracketDatasheet(), "mounting_polar_angle");
-     chassis_outer_diameter = property(vChassisBaseDatasheet(), "outer_diameter");
-     chassis_fillet_radius = property(vChassisBaseDatasheet(), "fillet_radius");
 
-     for (angle = sonar_mounting_angles) {
-          rotate([0, 0, angle]) {
-               translate([chassis_outer_diameter/2 - sonar_distance_to_wall, 0,
-                          -sonar_distance_to_wall * sin(90 - sonar_mounting_polar_angle) +
-                          bumper_height/2])  {
-                    rotate([0, sonar_mounting_polar_angle, 0]) {
-                         mHCS04SonarBracket();
+     translate([0, 0, bumper_z_offset]) {
+          mBumper_PartA();
+          for (angle = sonar_mounting_angles) {
+               rotate([0, 0, angle]) {
+                    translate([sonar_mounting_radius, 0, sonar_mounting_z_offset])  {
+                         rotate([0, sonar_mounting_polar_angle, 0]) {
+                              mHCS04SonarBracket();
+                         }
                     }
                }
           }
+          mBumper_PartB();
      }
 }
 

@@ -30,25 +30,6 @@ module sector(radius, angles, fn = $fn) {
      }
 }
 
-module contour(delta) {
-     assert(delta != 0);
-     if (delta > 0) {
-          difference() {
-               offset(delta=delta) {
-                    children();
-               }
-               children();
-          }
-     } else {
-          difference() {
-               children();
-               offset(delta=delta) {
-                    children();
-               }
-          }
-     }
-}
-
 module ring(inner_radius, outer_radius, angles = [0, 360], fn = $fn) {
      difference() {
           sector(radius=outer_radius, angles=angles, fn=fn);
@@ -160,11 +141,17 @@ module rounded_cylinder(diameter, height, fillet_radius, center) {
 module curved_support_xsection(support_radius, fillet_radius,
                                wall_inner_radius, wall_outer_radius,
                                hole_radius = 0, internal=true) {
+     assert(support_radius > 0);
+     assert(fillet_radius > 0);
+     assert(wall_inner_radius > 0);
+     assert(support_radius >= fillet_radius);
+     assert(wall_outer_radius > wall_inner_radius);
+     assert(support_radius > hole_radius);
      support_angular_width = (4 * support_radius / wall_outer_radius) * 180 / PI;
      wall_thickness = wall_outer_radius - wall_inner_radius;
      rotate([0, 0, internal ? 180 : 0]) {
           difference() {
-               window(6*support_radius, order=10*support_radius) {
+               window(6*support_radius, order=30*support_radius) {
                     curved_bench_fillet(fillet_radius, bench_radius=wall_inner_radius, internal=internal) {
                          hull() {
                               translate([support_radius + wall_thickness/2, 0]) {
@@ -196,16 +183,8 @@ module curved_support_xsection(support_radius, fillet_radius,
      }
 }
 
-
-module fill(upto=1000) {
-     offset(delta=-upto) {
-          offset(delta=upto) {
-               children();
-          }
-     }
-}
-
 module outline(delta) {
+     assert(delta != 0);
      if (delta > 0) {
           difference() {
                offset(delta=delta) {
@@ -214,11 +193,14 @@ module outline(delta) {
                children();
           }
      } else {
-          difference() {
-               children();
-               offset(delta=delta) {
+          intersection() {
+               difference() {
                     children();
+                    offset(delta=delta) {
+                         children();
+                    }
                }
+               children();
           }
      }
 }

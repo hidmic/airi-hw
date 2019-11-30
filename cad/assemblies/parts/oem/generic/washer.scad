@@ -7,7 +7,7 @@ function pvWasherDatasheet(outer_diameter, inner_diameter, thickness) =
 
 module pmWasher(datasheet) {
      linear_extrude(height=property(datasheet, "thickness")) {
-          ring(outer_radius=property(datasheet, "outer_diameter")/2
+          ring(outer_radius=property(datasheet, "outer_diameter")/2,
                inner_radius=property(datasheet, "inner_diameter")/2);
      }
 }

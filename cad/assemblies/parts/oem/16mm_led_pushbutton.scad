@@ -1,5 +1,5 @@
 
-function v16mmLEDPushbutton() = [["cutout_diameter", 16]];
+function v16mmLEDPushbuttonDatasheet() = [["cutout_diameter", 16]];
 
 
 module m16mmLEDPushbutton() {

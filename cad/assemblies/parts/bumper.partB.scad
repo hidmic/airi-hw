@@ -25,7 +25,7 @@ module mBumper_PartB() {
 
      render(convexity=10) {
           difference() {
-               translate([0, 0, -chassis_fillet_radius]) mBumperBase();
+               mBumperBase();
                translate([0, 0, -chassis_height + bumper_height/2]) mChassisBBox();
           }
           translate([0, 0, bumper_height/2]) {

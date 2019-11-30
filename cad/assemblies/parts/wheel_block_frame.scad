@@ -3,12 +3,11 @@ include <generic/lib.scad>;
 use <oem/100mm_rhino_rubber_wheel.scad>;
 use <oem/m3x5mm_threaded_insert.scad>;
 
-use <chassis.scad>
+use <chassis_base.scad>
 use <wheel_suspension_frame_base.scad>;
 
-kChassisDatasheet = vChassisDatasheet();
+kChassisBaseDatasheet = vChassisBaseDatasheet();
 kWheelSuspensionFrameBaseDatasheet = vWheelSuspensionFrameBaseDatasheet();
-
 k100mmRhinoRubberWheelDatasheet = v100mmRhinoRubberWheelDatasheet();
 kM3x5mmThreadedInsertDatasheet = vM3x5mmThreadedInsertDatasheet();
 
@@ -18,9 +17,11 @@ function vWheelBlockFrameDatasheet() =
           thickness=property(kWheelSuspensionFrameBaseDatasheet, "thickness"))
      [["outer_radius", outer_radius], ["inner_radius", outer_radius - thickness],
       ["thickness", thickness], ["width", 40], ["toe_width", 15], ["toe_hole_diameter", 3],
+      ["wheel_diameter", property(k100mmRhinoRubberWheelDatasheet, "diameter")],
+      ["wheel_width", property(k100mmRhinoRubberWheelDatasheet, "width")],
       ["wheel_axle_z_offset", (property(k100mmRhinoRubberWheelDatasheet, "diameter") / 2 -
-                               property(kChassisDatasheet, "z_offset") -
-                               property(kChassisDatasheet, "thickness"))]];
+                               property(kChassisBaseDatasheet, "z_offset") -
+                               property(kChassisBaseDatasheet, "thickness"))]];
 
 module mWheelBlockFrame() {
      datasheet = vWheelBlockFrameDatasheet();

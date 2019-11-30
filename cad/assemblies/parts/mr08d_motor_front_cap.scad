@@ -3,31 +3,40 @@ include <generic/lib.scad>;
 use <oem/mr08d_024022_motor.scad>;
 
 function vMR08DMotorFrontCapDatasheet() =
-     [["main_diameter", property(vMR08D024022MotorDatasheet(), "gear_box_diameter") + 2],
+     let (motor_datasheet=vMR08D024022MotorDatasheet())
+     [["main_diameter", property(motor_datasheet, "gear_box_diameter") + 2],
       ["main_height", 10], ["wall_thickness", 1]];
 
 
 module mMR08DMotorFrontCap() {
+     datasheet = vMR08DMotorFrontCapDatasheet();
+     main_diameter = property(datasheet, "main_diameter");
+     main_height = property(datasheet, "main_height");
+     wall_thickness = property(datasheet, "wall_thickness");
+
      module front_view_section() {
-          main_diameter = property(vMR08DMotorFrontCapDatasheet(), "main_diameter");
-          translate([main_diameter / 4, 0]) {
-               square([main_diameter / 2, main_diameter * 0.8], center=true);
+          union() {
+               translate([main_diameter / 4, 0]) {
+                    square([main_diameter / 2, main_diameter * 0.8], center=true);
+               }
+               circle(d=main_diameter);
           }
-          circle(d=main_diameter);
      }
-     linear_extrude(height=property(vMR08DMotorFrontCapDatasheet(), "main_height")) {
-          contour(delta=-property(vMR08DMotorFrontCapDatasheet(), "wall_thickness")) {
+     linear_extrude(height=main_height) {
+          outline(delta=-wall_thickness) {
                front_view_section();
           }
      }
-     linear_extrude(height=property(vMR08DMotorFrontCapDatasheet(), "wall_thickness")) {
+     linear_extrude(height=wall_thickness) {
           difference() {
                front_view_section();
-               circle(d=property(vMR08D024022MotorDatasheet(), "bearing_diameter"));
-               for(angle = property(vMR08D024022MotorDatasheet(), "mount_angles")) {
-                    rotate([0, 0, angle]) {
-                         translate([property(vMR08D024022MotorDatasheet(), "mount_diameter")/2, 0]) {
-                              circle(d=property(vMR08D024022MotorDatasheet(), "mount_hole_diameter"));
+               let (motor_datasheet=vMR08D024022MotorDatasheet()) {
+                    circle(d=property(motor_datasheet, "bearing_diameter"));
+                    for(angle = property(motor_datasheet, "mount_angles")) {
+                         rotate([0, 0, angle]) {
+                              translate([property(motor_datasheet, "mount_diameter")/2, 0]) {
+                                   circle(d=property(motor_datasheet, "mount_hole_diameter"));
+                              }
                          }
                     }
                }

@@ -2,12 +2,10 @@ include <generic/lib.scad>;
 
 function vChassisBaseDatasheet() =
      let(outer_diameter=350, thickness=2, inner_diameter=outer_diameter - 2 * thickness,
-         base_height=100, cover_height=20, outer_height=base_height + cover_height,
-         inner_height=outer_height - 2 * thickness)
+         base_height=100, height=120, inner_height=height - 2 * thickness)
      [["outer_diameter", outer_diameter], ["inner_diameter", inner_diameter],
-      ["base_height", base_height], ["height", outer_height],
-      ["inner_height", inner_height], ["thickness", thickness],
-      ["support_diameter", 10], ["z_offset", 20], ["fillet_radius", 5]];
+      ["base_height", base_height], ["height", height], ["inner_height", inner_height],
+      ["thickness", thickness], ["support_diameter", 10], ["z_offset", 20], ["fillet_radius", 8]];
 
 module mChassisOuterVolume() {
      datasheet = vChassisBaseDatasheet();
@@ -41,9 +39,23 @@ module mChassisShell() {
      }
 }
 
-
-module mChassisBase() {
-
+module mChassisVolumeConstrain() {
+     datasheet = vChassisBaseDatasheet();
+     height = property(datasheet, "height");
+     outer_diameter = property(datasheet, "outer_diameter");
+     fillet_radius = property(datasheet, "fillet_radius");
+     difference() {
+          rounded_cylinder(diameter=outer_diameter,
+                           height=height,
+                           fillet_radius=fillet_radius);
+          difference() {
+               translate([0, 0, -kEpsilon]) {
+                    rounded_cylinder(diameter=outer_diameter + kEpsilon,
+                                     height=height + 2 * kEpsilon,
+                                     fillet_radius=fillet_radius);
+               }
+               children();
+          }
+     }
 }
 
-mChassisBase();

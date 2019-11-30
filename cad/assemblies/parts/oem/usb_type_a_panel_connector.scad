@@ -1,7 +1,7 @@
 include <generic/lib.scad>;
 
 
-function vUSBTypeAPanelConnector() =
+function vUSBTypeAPanelConnectorDatasheet() =
      [["conn_height", 16.8], ["cutout_length", 12.3], ["cutout_width", 26.5],
       ["flare_height", 4.5], ["flare_length", 18], ["flare_width", 30.31]];
 
@@ -15,7 +15,7 @@ module mUSBTypeAPanelConnector() {
           }
      }
 
-     datasheet = vUSBTypeAPanelConnector();
+     datasheet = vUSBTypeAPanelConnectorDatasheet();
      flare_height = property(datasheet, "flare_height");
      flare_length = property(datasheet, "flare_length");
      flare_width = property(datasheet, "flare_width");
