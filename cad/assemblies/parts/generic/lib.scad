@@ -263,3 +263,27 @@ module exp_corner_nerve(height, radius, angles, corner_radius = 0, decay_rate = 
 function slice(v, i) = [for (j = i) v[j]];
 
 function all(v) = len(v) == 0 ? true : ( len(v) == 1 || ! v[0] ? v[0] : all(slice(v, [1:len(v)-1])));
+
+module square_frame(length, width, link_width) {
+     difference() {
+          square([length, width], center=true);
+          duplicate([1, 0, 0]) {
+               let(corner_angle=atan(length/width), triangle_base_x_offset=length/2 - link_width,
+                   triangle_base_y_offset=width/2 - link_width * width / length - link_width/2 / sin(corner_angle),
+                   triangle_tip_x_offset=link_width/2 / cos(corner_angle)) {
+                    polygon([[triangle_base_x_offset, triangle_base_y_offset],
+                             [triangle_base_x_offset, -triangle_base_y_offset],
+                             [triangle_tip_x_offset, 0]]);
+               }
+          }
+          duplicate([0, 1, 0]) {
+               let(corner_angle=atan(width/length), triangle_base_y_offset=width/2 - link_width,
+                   triangle_base_x_offset=length/2 - link_width * length / width - link_width/2 / sin(corner_angle),
+                   triangle_tip_y_offset=link_width/2 / cos(corner_angle)) {
+                    polygon([[triangle_base_x_offset, triangle_base_y_offset],
+                             [-triangle_base_x_offset, triangle_base_y_offset],
+                             [0, triangle_tip_y_offset]]);
+               }
+          }
+     }
+}

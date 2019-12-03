@@ -8,12 +8,11 @@ function vMR08D024022MotorDatasheet() =
       ["shaft_diameter", 8], ["bearing_diameter", 16],
       ["gear_box_length", 42], ["gear_box_diameter", 34],
       ["mount_angles", [-135, -45, 45, 135]],
-      ["mount_diameter", 24], ["mount_hole_diameter", 3]];
+      ["mount_r_offset", 24], ["mount_hole_diameter", 3]];
 
 module mMR08D024022Motor() {
      rotate([-19, 0, 0]) {
           rotate([0, 90, 0]) {
-               // TODO(hidmic): revisar!
                translate([0.02841282, 0, 28-144.04437256]) {
                     import("stl/MR08D-024022.stl");
                }
