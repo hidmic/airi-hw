@@ -18,6 +18,11 @@ module mMR08DMotorFrontCapNut() {
      mM2Nut();
 }
 
+module mMR08DMotorFrontCapScrew() {
+     mM2x10mmPhillipsScrew();
+}
+
+
 module mMR08DMotorFrontCap() {
      datasheet = vMR08DMotorFrontCapDatasheet();
      wall_thickness = property(datasheet, "wall_thickness");

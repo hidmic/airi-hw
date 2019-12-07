@@ -23,7 +23,7 @@ function vBaseChassisDatasheet() =
       ["fillet_radius", property(kChassisBaseDatasheet, "fillet_radius")],
       ["wheel_slot_length", 2 * sqrt(pow(wheel_diameter/2 + 8, 2) - pow(wheel_axle_z_offset, 2))],
       ["wheel_slot_width", property(kWheelBlockFrameDatasheet, "wheel_width") + 8],
-      ["wheel_base", 250], ["nerve_angles", [80:20:280]], ["nerve_height", 50], ["nerve_length", 20]];
+      ["wheel_base", 265], ["nerve_angles", [80:20:280]], ["nerve_height", 50], ["nerve_length", 20]];
 
 module mBaseChassis() {
      datasheet = vBaseChassisDatasheet();
@@ -65,18 +65,18 @@ module mBaseChassis() {
                     duplicate([0, 1, 0]) {
                          mBumperLockXSection();
                     }
-                    for(angle = cover_support_angles) {
-                         rotate(angle) {
-                              translate([inner_diameter/2, 0]) {
-                                   curved_support_xsection(
-                                        support_radius=cover_support_diameter/2,
-                                        fillet_radius=fillet_radius,
-                                        hole_radius=cover_support_screw_diameter/2,
-                                        wall_outer_radius=outer_diameter/2,
-                                        wall_inner_radius=inner_diameter/2);
-                              }
-                         }
-                    }
+                    /* for(angle = cover_support_angles) { */
+                    /*      rotate(angle) { */
+                    /*           translate([inner_diameter/2, 0]) { */
+                    /*                curved_support_xsection( */
+                    /*                     support_radius=cover_support_diameter/2, */
+                    /*                     fillet_radius=fillet_radius, */
+                    /*                     hole_radius=cover_support_screw_diameter/2, */
+                    /*                     wall_outer_radius=outer_diameter/2, */
+                    /*                     wall_inner_radius=inner_diameter/2); */
+                    /*           } */
+                    /*      } */
+                    /* } */
                }
                duplicate([0, 1, 0]) {
                     let(angular_width=property(kBumperBaseDatasheet, "angular_width")) {
@@ -88,16 +88,16 @@ module mBaseChassis() {
                     }
                }
           }
-          translate([0, 0, thickness]) {
-               for(angle = nerve_angles) {
-                    rotate([0, 0, angle]) {
-                         exp_corner_nerve(height=nerve_height, radius=nerve_length,
-                                          angles=[-180 * thickness/(PI * outer_diameter/2),
-                                                   180 * thickness/(PI * outer_diameter/2)],
-                                          corner_radius=-inner_diameter/2);
-                    }
-               }
-          }
+          /* translate([0, 0, thickness]) { */
+          /*      for(angle = nerve_angles) { */
+          /*           rotate([0, 0, angle]) { */
+          /*                exp_corner_nerve(height=nerve_height, radius=nerve_length, */
+          /*                                 angles=[-180 * thickness/(PI * outer_diameter/2), */
+          /*                                          180 * thickness/(PI * outer_diameter/2)], */
+          /*                                 corner_radius=-inner_diameter/2); */
+          /*           } */
+          /*      } */
+          /* } */
      }
 }
 

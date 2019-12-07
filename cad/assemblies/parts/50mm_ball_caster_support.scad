@@ -2,7 +2,7 @@ include <generic/lib.scad>;
 
 use <generic/ball_caster_support.scad>;
 
-use <oem/m3x30mm_hex_standoff.scad>;
+use <oem/m3_hex_standoff.scad>;
 
 function v50mmBallCasterSupportDatasheet() =
      pvBallCasterSupportDatasheet(ball_diameter=50.8, ball_protrusion=20, ball_gap=3,
@@ -19,11 +19,12 @@ module m50mmBallCasterSupport() {
                duplicate([0, 1, 0]) {
                     translate([0, mount_offset, 0]) {
                          linear_extrude(height=base_thickness + 2 * kEpsilon) {
-                              hull() projection() mM3x30mmHexStandoff();
+                              offset(delta=kEpsilon) {
+                                   hull() projection() mM3x40mmHexStandoff();
+                              }
                          }
                     }
                }
-               cylinder(h=base_thickness + 2 * kEpsilon, d=3);
           }
      }
 }

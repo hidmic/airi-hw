@@ -1,7 +1,7 @@
 include <generic/lib.scad>;
 
 use <oem/16mm_led_pushbutton.scad>;
-use <oem/m3x12mm_phillips_screw.scad>;
+use <oem/m3_phillips_screw.scad>;
 use <oem/rplidar_a1m8_r1.scad>;
 use <oem/sma_female_bulkhead_connector.scad>;
 use <oem/usb_type_a_panel_connector.scad>;
@@ -30,7 +30,7 @@ function vChassisBaseCoverDatasheet() =
       ["min_thickness", min_thickness]];
 
 
-function vChassisCoverSupportScrewDatasheet() = vM3x12mmPhillipsScrewDatasheet();
+function vChassisCoverSupportScrewDatasheet() = vM3PhillipsScrewDatasheet();
 
 
 module mChassisBaseCover() {

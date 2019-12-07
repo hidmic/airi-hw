@@ -8,7 +8,7 @@ function vAMT112SEncoderDatasheet() =
 
 
 module mAMT112SEncoder() {
-     datasheet = vAMT112EncoderDatasheet();
+     datasheet = vAMT112SEncoderDatasheet();
      width = property(datasheet, "width");
      length = property(datasheet, "length");
      axle_to_top_offset = property(datasheet, "axle_to_top_offset");

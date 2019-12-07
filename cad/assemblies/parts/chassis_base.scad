@@ -1,11 +1,11 @@
 include <generic/lib.scad>;
 
 function vChassisBaseDatasheet() =
-     let(outer_diameter=350, thickness=2, inner_diameter=outer_diameter - 2 * thickness,
+     let(outer_diameter=420, thickness=2, inner_diameter=outer_diameter - 2 * thickness,
          base_height=100, height=120, inner_height=height - 2 * thickness)
      [["outer_diameter", outer_diameter], ["inner_diameter", inner_diameter],
       ["base_height", base_height], ["height", height], ["inner_height", inner_height],
-      ["thickness", thickness], ["support_diameter", 10], ["z_offset", 20], ["fillet_radius", 8]];
+      ["thickness", thickness], ["support_diameter", 10], ["z_offset", 20], ["fillet_radius", 4]];
 
 module mChassisOuterVolume() {
      datasheet = vChassisBaseDatasheet();

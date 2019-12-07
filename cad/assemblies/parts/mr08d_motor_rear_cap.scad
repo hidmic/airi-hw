@@ -22,6 +22,11 @@ module mMR08DMotorRearCapNut() {
      mM2Nut();
 }
 
+module mMR08DMotorRearCapScrew() {
+     mM2x10mmPhillipsScrew();
+}
+
+
 module mMR08DMotorRearCap() {
      pmMotorCap(vMR08DMotorRearCapDatasheet());
 }

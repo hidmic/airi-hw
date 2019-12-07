@@ -3,7 +3,15 @@ include <generic/lib.scad>;
 use <generic/third_party/springs.scad>
 
 function vF2276SAE1070SpringDatasheet() =
-     [["outer_diameter", 18.1], ["n_windings", 8], ["wire_diameter", 1], ["free_length", 43]];
+     let(wire_diameter=1, outer_diameter=18.1,
+         inner_diameter=outer_diameter-2*wire_diameter,
+         n_windings=8, free_length=43)
+     [["outer_diameter", outer_diameter],
+      ["inner_diameter", inner_diameter],
+      ["wire_diameter", wire_diameter],
+      ["pitch", free_length/n_windings],
+      ["n_windings", n_windings],
+      ["free_length", free_length]];
 
 kF2276SAE1070SpringLength = property(vF2276SAE1070SpringDatasheet(), "free_length");
 
@@ -13,10 +21,12 @@ module mF2276SAE1070Spring(length=kF2276SAE1070SpringLength) {
 
      datasheet = vF2276SAE1070SpringDatasheet();
      n_windings = property(datasheet, "n_windings");
-     outer_radius = property(datasheet, "outer_diameter") / 2;
+     main_radius = (property(datasheet, "outer_diameter") +
+                    property(datasheet, "inner_diameter")) / 4;
      wire_radius = property(datasheet, "wire_diameter") / 2;
 
-     spring(Windings=n_windings, R=outer_radius, r=wire_radius, h=length, slices=50);
+     translate([0, 0, wire_radius])
+     spring(Windings=n_windings, R=main_radius, r=wire_radius, h=length - 2 * wire_radius, slices=50);
 }
 
 mF2276SAE1070Spring();

@@ -4,35 +4,39 @@ use <oem/f2276_sae1070_spring.scad>;
 use <oem/m3x5mm_threaded_insert.scad>;
 use <oem/m3_nut.scad>;
 
-use <50mm_ball_caster_yoke.scad>;
-
-k50mmBallCasterYokeDatasheet = v50mmBallCasterYokeDatasheet();
-kM3x5mmThreadedInsertDatasheet = vM3x5mmThreadedInsertDatasheet();
 
 function v50mmBallCasterSpringSeatDatasheet() =
-     [["seat_height", property(kM3x5mmThreadedInsertDatasheet, "length")],
-      ["seat_diameter", property(k50mmBallCasterYokeDatasheet, "seat_diameter")],
-      ["seat_thickness", property(k50mmBallCasterYokeDatasheet, "seat_thickness")],
-      ["main_diameter", property(k50mmBallCasterYokeDatasheet, "seat_diameter") + 10],
-      ["main_height", property(k50mmBallCasterYokeDatasheet, "base_thickness") +
-                      property(kM3x5mmThreadedInsertDatasheet, "length")],
-      ["base_thickness", property(k50mmBallCasterYokeDatasheet, "base_thickness")]];
+     let(nut_datasheet = vM3NutDatasheet(),
+         spring_datasheet=vF2276SAE1070SpringDatasheet(),
+         nut_m_max=property(nut_datasheet, "m_max"),
+         threaded_insert_datasheet=vM3x5mmThreadedInsertDatasheet(),
+         threaded_insert_length=property(threaded_insert_datasheet, "length"),
+         spring_outer_diameter=property(spring_datasheet, "outer_diameter"),
+         spring_inner_diameter=property(spring_datasheet, "inner_diameter"),
+         spring_wire_diameter=property(spring_datasheet, "wire_diameter"),
+         spring_pitch=property(spring_datasheet, "pitch"), base_thickness=2)
+     [["base_thickness", base_thickness],
+      ["inner_diameter", spring_inner_diameter],
+      ["outer_diameter", spring_outer_diameter + 2 * spring_wire_diameter],
+      ["height", base_thickness + max(threaded_insert_length + nut_m_max, spring_pitch)]];
 
 
 module m50mmBallCasterSpringSeat() {
      datasheet = v50mmBallCasterSpringSeatDatasheet();
-     main_diameter = property(datasheet, "main_diameter");
-     seat_height = property(datasheet, "seat_height");
-     seat_diameter = property(datasheet, "seat_diameter");
-     seat_thickness = property(datasheet, "seat_thickness");
      base_thickness = property(datasheet, "base_thickness");
-     linear_extrude(height=base_thickness) {
-          ring(outer_radius=main_diameter/2, inner_radius=3 / 2);
-     }
-     translate([0, 0, base_thickness]) {
-          linear_extrude(height=seat_height) {
-               outer_threaded_insert_diameter = property(kM3x5mmThreadedInsertDatasheet, "outer_diameter");
-               ring(outer_radius=seat_diameter / 2 - kEpsilon, inner_radius=outer_threaded_insert_diameter / 2);
+     outer_diameter = property(datasheet, "outer_diameter");
+     inner_diameter = property(datasheet, "inner_diameter");
+     height = property(datasheet, "height");
+
+     difference() {
+          union() {
+               cylinder(d=outer_diameter, h=base_thickness);
+               cylinder(d=inner_diameter, h=height);
+          }
+          let(hole_diameter=property(vM3x5mmThreadedInsertDatasheet(), "nominal_diameter")) {
+               translate([0, 0, -kEpsilon]) {
+                    cylinder(d=hole_diameter, h=height + 2 * kEpsilon);
+               }
           }
      }
 }

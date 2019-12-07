@@ -27,10 +27,12 @@ module mMotorBracket() {
                                         translate([0, 0, property(cap_datasheet, "height") - property(nut_datasheet, "m_max")]) {
                                              mMR08DMotorBracketRearCapNut();
                                         }
+                                        translate([0, 0, -property(cap_datasheet, "wall_thickness")]) {
+                                             mMR08DMotorBracketRearCapScrew();
+                                        }
                                    }
                               }
                          }
-
                     }
                }
           }
@@ -47,10 +49,12 @@ module mMotorBracket() {
                                         translate([0, 0, property(cap_datasheet, "height") - property(nut_datasheet, "m_max")]) {
                                              mMR08DMotorBracketFrontCapNut();
                                         }
+                                        translate([0, 0, -property(cap_datasheet, "wall_thickness")]) {
+                                             mMR08DMotorBracketFrontCapScrew();
+                                        }
                                    }
                               }
                          }
-
                     }
                }
           }
@@ -66,6 +70,8 @@ module mMotorBracket() {
                }
           }
      }
+
+     translate([property(datasheet, "inner_length")/2, 0, property(datasheet, "motor_z_offset")]) mMR08D024022Motor();
 }
 
 mMotorBracket();

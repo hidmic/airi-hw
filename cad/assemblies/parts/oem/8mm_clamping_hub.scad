@@ -1,4 +1,6 @@
 
+function v8mmClampingHubDatasheet() =
+     [["height", 8]];
 
 module m8mmClampingHub() {
      translate([0.5, 0, 3.3303027798233593])

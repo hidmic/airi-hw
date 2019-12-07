@@ -6,4 +6,12 @@ module mM2x6mmPhillipsScrew() {
      import("stl/m2x6mm_phillips_screw.stl");
 }
 
+module mM2x10mmPhillipsScrew() {
+     import("stl/m2x10mm_phillips_screw.stl");
+}
+
+
+translate([10, 0, 0])
 mM2x6mmPhillipsScrew();
+
+mM2x10mmPhillipsScrew();

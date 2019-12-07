@@ -6,6 +6,12 @@ use <parts/wheel_suspension_frame.partB.scad>;
 kWheelSuspensionFrame_PartA_Datasheet = vWheelSuspensionFrame_PartA_Datasheet();
 kWheelSuspensionFrame_PartB_Datasheet = vWheelSuspensionFrame_PartB_Datasheet();
 
+function vWheelSuspensionFrameDatasheet() =
+     [["height", (property(kWheelSuspensionFrame_PartA_Datasheet, "thickness") +
+                  property(kWheelSuspensionFrame_PartA_Datasheet, "female_snap_fit_height")/2 +
+                  property(kWheelSuspensionFrame_PartB_Datasheet, "male_snap_fit_height")/2 +
+                  property(kWheelSuspensionFrame_PartB_Datasheet, "thickness") + 0.4)]];
+
 module mWheelSuspensionFrame() {
      let(z_offset=-(property(kWheelSuspensionFrame_PartA_Datasheet, "thickness") +
                     property(kWheelSuspensionFrame_PartA_Datasheet, "female_snap_fit_height")/2)) {

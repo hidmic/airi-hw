@@ -65,12 +65,12 @@ if __name__ == '__main__':
     G = 0.5 * E / (1 + ν)
     J = np.pi * d**4 / 32
     𝛾 = np.arctan(p / (np.pi * D))
-
     k_rear_caster = (1 / (
         n * np.pi * D**3 / (4 * G * J * np.cos(𝛾)) * ((1 + d**2/(2 * D**2)) * np.cos(𝛾)**2 + (1 + d**2 /(4 * D**2)) * np.sin(𝛾)**2/(1 + ν))
     )).to(units.kgf / units.mm)
-    
+
     e_rear_caster = f_rear_caster / k_rear_caster
+    assert e_rear_caster < L, e_rear_caster
 
     # Use F051 SAE 1070
     D = 6.8 * units.mm
@@ -90,6 +90,7 @@ if __name__ == '__main__':
     )).to(units.kgf / units.mm)
 
     e_wheel = f_wheel / k_wheel
+    assert e_wheel < L
 
     # Use F174 SAE 1070
     D = 8.8 * units.mm
@@ -114,6 +115,7 @@ if __name__ == '__main__':
     e_front_caster = (
         N * r_wheel * np.sin(alpha) / np.sqrt(k_front_caster / m)
     ).to(units.mm)
+    assert e_front_caster < L
 
     print('\n'.join('{} = {}'.format(name, value)
                     for name, value in locals().items()

@@ -29,18 +29,19 @@ function vMR08DMotorBaseBracketDatasheet() =
               height=property(rear_cap_support_datasheet, "height") + rear_cap_z_offset - front_cap_z_offset
          ))
      [["base_thickness", base_thickness], ["outer_length", outer_length], ["inner_length", inner_length],
-      ["main_width", property(rear_cap_support_datasheet, "width")],
+      ["main_width", property(rear_cap_support_datasheet, "width")], ["link_width", 4],
       ["outer_width", property(rear_cap_support_datasheet, "outer_width")],
-      ["hole_to_hole_y_distance", hole_to_hole_y_distance], ["link_width", 4],
+      ["hole_to_hole_y_distance", hole_to_hole_y_distance],
       ["hole_to_hole_x_distance", (outer_length - property(rear_cap_support_datasheet, "depth")/2 -
                                    property(front_cap_support_datasheet, "depth")/2)],
-      ["motor_z_offset", base_thickness + property(rear_cap_datasheet, "outer_diameter")/2],
+      ["motor_z_offset", base_thickness + wall_thickness + property(rear_cap_datasheet, "outer_diameter")/2],
       ["front_cap_datasheet", front_cap_datasheet],
       ["front_cap_support_datasheet", front_cap_support_datasheet],
       ["front_cap_x_offset", (outer_length - property(front_cap_support_datasheet, "depth"))/2],
       ["front_cap_z_offset", front_cap_z_offset],
       ["rear_cap_datasheet", rear_cap_datasheet],
       ["rear_cap_support_datasheet", rear_cap_support_datasheet],
+      ["rear_cap_support_height", rear_cap_z_offset - wall_thickness + property(rear_cap_support_datasheet, "height")],
       ["rear_cap_x_offset", (-outer_length + property(rear_cap_support_datasheet, "depth"))/2],
       ["rear_cap_z_offset", rear_cap_z_offset],
       ["fastening_screw_datasheet", property(rear_cap_datasheet, "fastening_screw_datasheet")]];
@@ -53,6 +54,10 @@ module mMR08DMotorBracketFrontCapNut() {
      mMR08DMotorFrontCapNut();
 }
 
+module mMR08DMotorBracketFrontCapScrew() {
+     mMR08DMotorFrontCapScrew();
+}
+
 module mMR08DMotorBracketRearCap() {
      mMR08DMotorRearCap();
 }
@@ -60,6 +65,11 @@ module mMR08DMotorBracketRearCap() {
 module mMR08DMotorBracketRearCapNut() {
      mMR08DMotorRearCapNut();
 }
+
+module mMR08DMotorBracketRearCapScrew() {
+     mMR08DMotorRearCapScrew();
+}
+
 
 module mMR08DMotorBracketThreadInsert() {
      translate([0, 0, -property(vM3x5mmThreadedInsertDatasheet(), "length")]) {

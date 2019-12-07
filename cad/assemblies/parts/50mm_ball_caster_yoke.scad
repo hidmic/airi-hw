@@ -2,53 +2,46 @@ include <generic/lib.scad>;
 
 use <generic/ball_caster_yoke.scad>;
 
-use <oem/f2276_sae1070_spring.scad>;
-use <oem/m3x30mm_hex_standoff.scad>;
+use <oem/m3x5mm_threaded_insert.scad>
+use <oem/m3_hex_standoff.scad>;
 
 use <50mm_ball_caster_support.scad>;
-
-k50mmBallCasterSupportDatasheet = v50mmBallCasterSupportDatasheet();
-kF2276SAE1070SpringDatasheet = vF2276SAE1070SpringDatasheet();
+use <50mm_ball_caster_spring_seat.scad>;
 
 function v50mmBallCasterYokeDatasheet() =
-     concat(
-          pvBallCasterYokeDatasheet(main_diameter=property(k50mmBallCasterSupportDatasheet, "main_diameter"),
-                                    base_thickness=property(k50mmBallCasterSupportDatasheet, "base_thickness"),
-                                    mount_offset=property(k50mmBallCasterSupportDatasheet, "mount_offset"),
-                                    mount_diameter=property(k50mmBallCasterSupportDatasheet, "mount_diameter"),
-                                    mount_height=8),
-          [["main_height", property(k50mmBallCasterSupportDatasheet, "base_thickness") + 5],
-           ["seat_diameter", property(kF2276SAE1070SpringDatasheet, "outer_diameter")],
-           ["seat_height", 5], ["seat_thickness", 2]]
-     );
-
+     let(caster_support_datasheet=v50mmBallCasterSupportDatasheet(),
+         caster_spring_seat_datasheet=v50mmBallCasterSpringSeatDatasheet())
+     pvBallCasterYokeDatasheet(main_diameter=property(caster_support_datasheet, "main_diameter"),
+                               base_thickness=property(caster_support_datasheet, "base_thickness"),
+                               mount_offset=property(caster_support_datasheet, "mount_offset"),
+                               mount_diameter=property(caster_support_datasheet, "mount_diameter"),
+                               mount_height=property(caster_spring_seat_datasheet, "height"));
 
 module m50mmBallCasterYoke() {
      datasheet = v50mmBallCasterYokeDatasheet();
      base_thickness = property(datasheet, "base_thickness");
      mount_offset = property(datasheet, "mount_offset");
      mount_height = property(datasheet, "mount_height");
-     seat_height = property(datasheet, "seat_height");
-     seat_thickness = property(datasheet, "seat_thickness");
-     seat_diameter = property(datasheet, "seat_diameter");
+
      difference() {
-          union() {
-               pmBallCasterYoke(datasheet);
-               translate([0, 0, base_thickness]) {
-                    linear_extrude(height=seat_height) {
-                         ring(outer_radius=seat_diameter / 2 - kEpsilon,
-                              inner_radius=seat_diameter / 2 - seat_thickness);
-                    }
-               }
-          }
-          duplicate([0, 1, 0]) {
-               translate([0, mount_offset, -kEpsilon]) {
-                    translate([0, 0, base_thickness]) {
-                         linear_extrude(height=mount_height + 2 * kEpsilon) {
-                              hull() projection() mM3x30mmHexStandoff();
+          pmBallCasterYoke(datasheet);
+          translate([0, 0, -kEpsilon]) {
+               duplicate([0, 1, 0]) {
+                    translate([0, mount_offset, 0]) {
+                         translate([0, 0, mount_height]) {
+                              linear_extrude(height=base_thickness + 2 * kEpsilon) {
+                                   offset(delta=kEpsilon) {
+                                        hull() projection() mM3x30mmHexStandoff();
+                                   }
+                              }
+                         }
+                         let(hole_diameter=property(vM3x30mmHexStandoffDatasheet(), "hole_diameter")) {
+                              cylinder(h=mount_height + base_thickness + 2 * kEpsilon, d=hole_diameter);
                          }
                     }
-                    cylinder(h=base_thickness + 2 * kEpsilon, d=3);
+               }
+               let(hole_diameter=property(vM3x5mmThreadedInsertDatasheet(), "nominal_diameter")) {
+                    cylinder(h=base_thickness + 2 * kEpsilon, d=hole_diameter);
                }
           }
      }

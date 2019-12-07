@@ -11,15 +11,15 @@ k10mmBallCasterSupportDatasheet = v10mmBallCasterSupportDatasheet();
 kF174SAE1070SpringDatasheet = vF174SAE1070SpringDatasheet();
 
 function v10mmBallCasterYokeDatasheet() =
+     let(mount_height=4)
      concat(
           pvBallCasterYokeDatasheet(main_diameter=property(k10mmBallCasterSupportDatasheet, "main_diameter"),
                                     base_thickness=property(k10mmBallCasterSupportDatasheet, "base_thickness"),
                                     mount_offset=property(k10mmBallCasterSupportDatasheet, "mount_offset"),
                                     mount_diameter=property(k10mmBallCasterSupportDatasheet, "mount_diameter"),
-                                    mount_height=4),
-          [["main_height", property(k10mmBallCasterSupportDatasheet, "base_thickness") + 5],
-           ["seat_diameter", property(kF174SAE1070SpringDatasheet, "outer_diameter")],
-           ["seat_height", 4], ["seat_thickness", 2]]
+                                    mount_height=mount_height),
+          [["seat_diameter", property(kF174SAE1070SpringDatasheet, "inner_diameter")],
+           ["seat_height", mount_height], ["seat_thickness", 2]]
      );
 
 
@@ -43,12 +43,14 @@ module m10mmBallCasterYoke() {
           }
           duplicate([0, 1, 0]) {
                translate([0, mount_offset, -kEpsilon]) {
-                    translate([0, 0, base_thickness]) {
-                         linear_extrude(height=mount_height + 2 * kEpsilon) {
+                    translate([0, 0, mount_height]) {
+                         linear_extrude(height=base_thickness + 2 * kEpsilon) {
                               hull() projection() mM3x15mmHexStandoff();
                          }
                     }
-                    cylinder(h=base_thickness + 2 * kEpsilon, d=3);
+                    let(hole_diameter=property(vM3x15mmHexStandoffDatasheet(), "hole_diameter")) {
+                         cylinder(h=base_thickness + 2 * kEpsilon, d=hole_diameter);
+                    }
                }
           }
      }

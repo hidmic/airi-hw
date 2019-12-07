@@ -13,8 +13,8 @@ function vMR08D024022MotorDatasheet() =
 module mMR08D024022Motor() {
      rotate([-19, 0, 0]) {
           rotate([0, 90, 0]) {
-               translate([0.02841282, 0, 28-144.04437256]) {
-                    import("stl/MR08D-024022.stl");
+               translate([0.02841282, 0, 9.5 + 28 - 144.04437256]) {
+                    import("stl/MR08D-024022-266RPM.stl");
                }
           }
      }

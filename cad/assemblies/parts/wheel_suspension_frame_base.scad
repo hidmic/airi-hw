@@ -12,7 +12,7 @@ kWheelSuspensionPivotJointDatasheet = vWheelSuspensionPivotJointDatasheet();
 kWheelSuspensionLinkDatasheet = vWheelSuspensionLinkDatasheet();
 
 function vWheelSuspensionFrameBaseDatasheet() =
-     let(main_radius=property(kWheelSuspensionLinkDatasheet, "length"), thickness=3, width=10,
+     let(main_radius=property(kWheelSuspensionLinkDatasheet, "length"), thickness=2, width=8,
          outer_radius=main_radius + width/2 + thickness, inner_radius=main_radius - width/2,
          support_hole_diameter=property(kM3x5mmThreadedInsertDatasheet, "nominal_diameter") + 4 * kEpsilon)
      [["main_radius", main_radius], ["outer_radius", outer_radius], ["inner_radius", inner_radius],
@@ -26,14 +26,14 @@ module mWheelSuspensionFrameBase() {
      frame_width = property(datasheet, "width");
      frame_thickness = property(datasheet, "thickness");
 
+     inner_radius = property(datasheet, "inner_radius");
+     outer_radius = property(datasheet, "outer_radius");
      main_radius = property(datasheet, "main_radius");
      angular_length = property(datasheet, "angular_length");
      linear_extrude(height=property(datasheet, "thickness")) {
           difference() {
                fillet(r=property(datasheet, "fillet_radius")) {
-                    rounded_ring(inner_radius=property(datasheet, "inner_radius"),
-                                 outer_radius=property(datasheet, "outer_radius"),
-                                 angles=[0, angular_length]);
+                    rounded_ring(inner_radius=inner_radius, outer_radius=outer_radius, angles=[0, angular_length]);
                     translate([main_radius, 0]) {
                          circle(d=property(kWheelSuspensionPivotJointDatasheet, "outer_diameter"));
                     }
