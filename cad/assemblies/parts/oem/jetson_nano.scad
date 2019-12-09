@@ -12,32 +12,3 @@ module mJetsonNano() {
 }
 
 mJetsonNano();
-
-kControllerWidth = 66;
-kControllerLength = 97;
-kControllerThickness = 1.6;
-
-module mController() {
-     translate([-kControllerWidth/2, -kControllerLength/2])
-     difference() {
-          linear_extrude(height=kControllerThickness, center=true) {
-               square([kControllerWidth, kControllerLength]);
-          }
-          linear_extrude(height=1.1 * kControllerThickness, center=true) {
-               for(x = [6.33, 66 - 6.33]) {
-                    for(y = [97 - 3.34 - 2.54, 97 - 3.34]) {
-                         translate([x, y]) {
-                              circle(d=1.5, $fn = 64);
-                         }
-                    }
-               }
-               for(x = [6.33, 6.33 + 2.54, 66 - 6.33 - 2.54, 66 - 6.33]) {
-                    for(y = [0:2.54:60.96]) {
-                         translate([x, y + 2.22]) {
-                              circle(d=1.5, $fn=64);
-                         }
-                    }
-               }
-          }
-     }
-}

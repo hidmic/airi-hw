@@ -1,5 +1,8 @@
 include <generic/lib.scad>;
 
+use <10mm_ball_caster_base.scad>;
+use <50mm_ball_caster_base.scad>;
+
 use <chassis_base.scad>;
 use <bumper_base.scad>;
 
@@ -13,17 +16,22 @@ kBumperBaseDatasheet = vBumperBaseDatasheet();
 kWheelBlockFrameDatasheet = vWheelBlockFrameDatasheet();
 
 function vBaseChassisDatasheet() =
-     let(inner_diameter=property(kChassisBaseDatasheet, "inner_diameter"),
+     let(outer_diameter=property(kChassisBaseDatasheet, "outer_diameter"),
+         inner_diameter=property(kChassisBaseDatasheet, "inner_diameter"),
          wheel_diameter=property(kWheelBlockFrameDatasheet, "wheel_diameter"),
-         wheel_axle_z_offset=property(kWheelBlockFrameDatasheet, "wheel_axle_z_offset"))
+         wheel_axle_z_offset=property(kWheelBlockFrameDatasheet, "wheel_axle_z_offset"),
+         front_caster_opening_diameter=property(v10mmBallCasterBaseDatasheet(), "support_opening_diameter"),
+         rear_caster_opening_diameter=property(v50mmBallCasterBaseDatasheet(), "support_opening_diameter"))
      [["height", property(kChassisBaseDatasheet, "base_height")],
-      ["outer_diameter", property(kChassisBaseDatasheet, "outer_diameter")],
-      ["inner_diameter", inner_diameter],
+      ["outer_diameter", outer_diameter], ["inner_diameter", inner_diameter],
       ["thickness", property(kChassisBaseDatasheet, "thickness")],
       ["fillet_radius", property(kChassisBaseDatasheet, "fillet_radius")],
       ["wheel_slot_length", 2 * sqrt(pow(wheel_diameter/2 + 8, 2) - pow(wheel_axle_z_offset, 2))],
       ["wheel_slot_width", property(kWheelBlockFrameDatasheet, "wheel_width") + 8],
-      ["wheel_base", 265], ["nerve_angles", [80:20:280]], ["nerve_height", 50], ["nerve_length", 20]];
+      ["wheel_base", 242], ["nerve_angles", [80:20:280]], ["nerve_height", 50], ["nerve_length", 20],
+      ["front_caster_x_offset", outer_diameter/2 - 2 * front_caster_opening_diameter],
+      ["rear_caster_x_offset", -outer_diameter/2 + 1.2 * rear_caster_opening_diameter]];
+
 
 module mBaseChassis() {
      datasheet = vBaseChassisDatasheet();
@@ -52,11 +60,28 @@ module mBaseChassis() {
                     mChassisBBox();
                }
                mBumperBaseComplement();
+
                duplicate([0, 1, 0]) {
                     translate([0, property(datasheet, "wheel_base")/2, 0]) {
                          cube([property(datasheet, "wheel_slot_length"),
                                property(datasheet, "wheel_slot_width"),
                                2 * thickness + 2 * kEpsilon], center=true);
+                    }
+               }
+               translate([0, 0, -kEpsilon]) {
+                    let(x_offset=property(datasheet, "front_caster_x_offset"),
+                        opening_diameter=property(v10mmBallCasterBaseDatasheet(),
+                                                  "support_opening_diameter")) {
+                         translate([x_offset, 0, 0]) {
+                              cylinder(d=opening_diameter, h=thickness + 2 * kEpsilon);
+                         }
+                    }
+                    let(x_offset=property(datasheet, "rear_caster_x_offset"),
+                        opening_diameter=property(v50mmBallCasterBaseDatasheet(),
+                                                  "support_opening_diameter")) {
+                         translate([x_offset, 0, 0]) {
+                              cylinder(d=opening_diameter, h=thickness + 2 * kEpsilon);
+                         }
                     }
                }
           }

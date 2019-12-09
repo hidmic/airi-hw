@@ -2,6 +2,7 @@ include <generic/lib.scad>;
 
 use <parts/oem/m2_nut.scad>;
 use <parts/oem/mr08d_024022_motor.scad>;
+use <parts/oem/gt2_pulley.scad>;
 
 use <parts/mr08d_motor_base_bracket.scad>;
 use <parts/mr08d_motor_front_cap.scad>;
@@ -9,7 +10,12 @@ use <parts/mr08d_motor_rear_cap.scad>;
 
 
 function vMotorBracketDatasheet() =
-     vMR08DMotorBaseBracketDatasheet();
+     let (motor_datasheet=vMR08D024022MotorDatasheet())
+     concat(
+          [["shaft_y_offset", (property(motor_datasheet, "length")/2 +
+                               property(motor_datasheet, "shaft_length"))]],
+          vMR08DMotorBaseBracketDatasheet()
+     );
 
 module mMotorBracket() {
      datasheet = vMotorBracketDatasheet();
@@ -70,8 +76,11 @@ module mMotorBracket() {
                }
           }
      }
-
-     translate([property(datasheet, "inner_length")/2, 0, property(datasheet, "motor_z_offset")]) mMR08D024022Motor();
+     translate([0, 0, property(datasheet, "motor_z_offset")]) {
+          translate([property(datasheet, "inner_length")/2, 0, 0]) {
+               mMR08D024022Motor();
+          }
+     }
 }
 
 mMotorBracket();

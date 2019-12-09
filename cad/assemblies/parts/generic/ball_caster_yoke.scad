@@ -7,7 +7,7 @@ function pvBallCasterYokeDatasheet(main_diameter, base_thickness, mount_offset, 
      assert(mount_diameter > 0)
      [["main_diameter", main_diameter], ["base_thickness", base_thickness],
       ["mount_offset", mount_offset], ["mount_diameter", mount_diameter],
-      ["mount_height", mount_height]];
+      ["mount_height", mount_height], ["main_height", mount_height + base_thickness]];
 
 module pmBallCasterYoke(datasheet) {
      main_diameter = property(datasheet, "main_diameter");

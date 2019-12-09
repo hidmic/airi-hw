@@ -23,9 +23,6 @@ module m10mmBallCasterSupport() {
                          }
                     }
                }
-               let(hole_diameter=property(vM3x15mmHexStandoffDatasheet(), "hole_diameter")) {
-                    cylinder(h=base_thickness + 2 * kEpsilon, d=hole_diameter);
-               }
           }
      }
 }
