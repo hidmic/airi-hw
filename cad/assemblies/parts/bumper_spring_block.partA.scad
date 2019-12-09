@@ -39,7 +39,7 @@ module mBumperSpringBlock_PartA() {
                }
                mBumperSpringBlockSeatComplement();
           }
-          linear_extrude(height=50) { // bumperHeight / 2
+          linear_extrude(height=55) { // bumperHeight / 2
                difference() {
                     translate([-spring_lock_size, 0]) {
                          square([spring_seat_thickness + spring_slot_width, width/2 - spring_outer_diameter/2]);

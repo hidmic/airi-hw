@@ -1,17 +1,22 @@
 include <generic/lib.scad>;
 
+use <oem/f066_sae1070_spring.scad>;
+
 use <chassis_base.scad>;
 
-kChassisBaseDatasheet = vChassisBaseDatasheet();
-
 function vBumperSpringBlockBaseDatasheet() =
-     let(thickness=property(kChassisBaseDatasheet, "thickness"),
-         seat_thickness=3 * thickness, slot_width=5, spring_travel_distance=5,
-         spring_max_length=spring_travel_distance + slot_width + 2 * seat_thickness)
-     [["height", 20], ["width", 25], ["depth", 40], ["thickness", thickness], ["angular_offset", 70],
-      ["spring_outer_diameter", 12], ["spring_inner_diameter", 8], ["spring_lock_size", 2 * thickness],
+     let(chassis_datasheet=vChassisBaseDatasheet(),
+         spring_datasheet=vF066SAE1070SpringDatasheet(),
+         thickness=property(chassis_datasheet, "thickness"),
+         slot_width=property(spring_datasheet, "pitch"),
+         seat_thickness=thickness, spring_travel_distance=2,
+         spring_max_length=spring_travel_distance + 2 * (slot_width + seat_thickness))
+     assert(spring_max_length < property(spring_datasheet, "free_length"))
+     [["height", 10], ["width", 22], ["depth", 50], ["thickness", thickness], ["angular_offset", 70],
+      ["spring_outer_diameter", property(spring_datasheet, "outer_diameter")],
+      ["spring_inner_diameter", property(spring_datasheet, "inner_diameter")],
       ["spring_seat_thickness", seat_thickness], ["spring_slot_width", slot_width],
-      ["spring_travel_distance", spring_travel_distance],
+      ["spring_lock_size", 0], ["spring_travel_distance", spring_travel_distance],
       ["spring_max_length", spring_max_length]];
 
 
@@ -31,7 +36,7 @@ module mBumperSpringBlockSeatComplement() {
      spring_travel_distance = property(datasheet, "spring_travel_distance");
      spring_max_length = property(datasheet, "spring_max_length");
 
-     base_chassis_height = property(kChassisBaseDatasheet, "base_height");
+     base_chassis_height = property(vChassisBaseDatasheet(), "base_height");
 
      translate([spring_seat_thickness - spring_lock_size, width/2, height/2]) {
           rotate([0, 90, 0]) {
@@ -41,13 +46,13 @@ module mBumperSpringBlockSeatComplement() {
                          cube([base_chassis_height - height/2 + kEpsilon, spring_inner_diameter,
                                spring_max_length - spring_slot_width + 2 * kEpsilon]);
                     }
-                    translate([0, 0, spring_seat_thickness - spring_lock_size - kEpsilon]) {
-                         cylinder(d=spring_outer_diameter, h=spring_max_length - spring_slot_width - 2 * (spring_seat_thickness - spring_lock_size) + 2 * kEpsilon);
-                         translate([-(base_chassis_height - height/2) - kEpsilon, -spring_outer_diameter/2, 0]) {
-                              cube([base_chassis_height - height/2 + kEpsilon, spring_outer_diameter,
-                                    spring_max_length - spring_slot_width - 2 * (spring_seat_thickness - spring_lock_size)]);
-                         }
-                    }
+                    /* translate([0, 0, spring_seat_thickness - spring_lock_size - kEpsilon]) { */
+                    /*      cylinder(d=spring_outer_diameter, h=spring_max_length - spring_slot_width - 2 * (spring_seat_thickness - spring_lock_size) + 2 * kEpsilon); */
+                    /*      translate([-(base_chassis_height - height/2) - kEpsilon, -spring_outer_diameter/2, 0]) { */
+                    /*           cube([base_chassis_height - height/2 + kEpsilon, spring_outer_diameter, */
+                    /*                 spring_max_length - spring_slot_width - 2 * (spring_seat_thickness - spring_lock_size) + 2 * kEpsilon]); */
+                    /*      } */
+                    /* } */
                }
           }
      }
@@ -69,7 +74,7 @@ module mBumperSpringBlockXSection() {
      spring_travel_distance = property(datasheet, "spring_travel_distance");
      spring_max_length = property(datasheet, "spring_max_length");
 
-     chassis_outer_diameter = property(kChassisBaseDatasheet, "outer_diameter");
+     chassis_outer_diameter = property(vChassisBaseDatasheet(), "outer_diameter");
      difference() {
           translate([-spring_lock_size, width - chassis_outer_diameter/2]) {
                outline(delta=-thickness) {
@@ -82,6 +87,9 @@ module mBumperSpringBlockXSection() {
                translate([-(spring_max_length - spring_slot_width - 2 * spring_seat_thickness), 0]) {
                     translate([-spring_seat_thickness, 0]) {
                          square([spring_seat_thickness, chassis_outer_diameter/2]);
+                         translate([-spring_seat_thickness-spring_slot_width, 0]) {
+                              square([spring_seat_thickness, chassis_outer_diameter/2]);
+                         }
                     }
                }
           }

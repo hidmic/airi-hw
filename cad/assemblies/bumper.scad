@@ -36,3 +36,7 @@ module mBumper() {
 }
 
 mBumper();
+
+use <parts/oem/micro_switch_spdt.scad>;
+
+mMicroSwitchSPDT();
