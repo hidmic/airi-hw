@@ -7,8 +7,9 @@ use <parts/oem/stm32_disco.scad>;
 use <parts/oem/gt2_pulley.scad>;
 use <parts/oem/gt2_belt.scad>;
 
-use <parts/base_chassis.scad>;
+use <parts/board_support.scad>;
 
+use <chassis.scad>;
 use <motor_block.scad>;
 use <left_wheel_block.scad>;
 use <right_wheel_block.scad>;
@@ -17,9 +18,9 @@ use <front_ball_caster.scad>;
 
 
 module mRobot() {
-     chassis_datasheet = vBaseChassisDatasheet();
+     chassis_datasheet = vChassisDatasheet();
 
-     mBaseChassis();
+     mChassis();
 
      motor_block_datasheet = vMotorBlockDatasheet();
      motor_z_offset = property(motor_block_datasheet, "motor_z_offset");
@@ -109,9 +110,8 @@ module mRobot() {
           }
      }
 
-
-
      translate([0, 0, property(vMotorBlockDatasheet(), "pillar_height")]) {
+          mBoardSupport();
           translate([0, 0, 8]) {
           rotate([0, 0, 180]) mRPLidarA1M8R1();
           translate([90, 0, 0])

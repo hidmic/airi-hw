@@ -10,7 +10,8 @@ kChassisBaseDatasheet = vChassisBaseDatasheet();
 function vHCS04SonarBracketDatasheet() =
      [["width", property(kHCS04SonarDatasheet, "width") + 5],
       ["length", property(kHCS04SonarDatasheet, "length") + 5],
-      ["pin_width", 10], ["thickness", 2], ["mounting_polar_angle", 75],
+      ["connector_width", 12], ["pin_width", 10],
+      ["thickness", 2], ["mounting_polar_angle", 75],
       ["distance_to_wall", 2 * property(kHCS04SonarDatasheet, "height")]];
 
 
@@ -46,6 +47,9 @@ module mHCS04SonarBracket() {
                                         for (y = [-sonar_hole_to_hole_width/2, sonar_hole_to_hole_width/2]) {
                                              translate([x, y, 0]) circle(d=sonar_hole_diameter);
                                         }
+                                   }
+                                   translate([length/2 - length/6, 0]) {
+                                        square([length/3, property(datasheet, "connector_width")], center=true);
                                    }
                               }
                          }

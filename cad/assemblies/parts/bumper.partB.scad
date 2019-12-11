@@ -1,27 +1,22 @@
 include <generic/lib.scad>;
 
-use <oem/hcs04_sonar.scad>;
-
 use <chassis_base.scad>;
 use <bumper_base.scad>
-use <bumper_spring_block.partA.scad>
-
-kChassisBaseDatasheet = vChassisBaseDatasheet();
-kBumper_PartB_Datasheet = vBumper_PartB_Datasheet();
-kBumperSpringBlock_PartA_Datasheet = vBumperSpringBlock_PartA_Datasheet();
 
 function vBumper_PartB_Datasheet() = vBumperBaseDatasheet();
 
 module mBumper_PartB() {
-     bumper_height = property(kBumper_PartB_Datasheet, "height");
-     bumper_support_diameter = property(kBumper_PartB_Datasheet, "support_diameter");
-     bumper_support_angles = property(kBumper_PartB_Datasheet, "support_angles");
-     bumper_support_pin_diameter = property(kBumper_PartB_Datasheet, "support_pin_diameter");
+     datasheet = vBumper_PartB_Datasheet();
+     bumper_height = property(datasheet, "height");
+     bumper_support_diameter = property(datasheet, "support_diameter");
+     bumper_support_angles = property(datasheet, "support_angles");
+     bumper_support_pin_diameter = property(datasheet, "support_pin_diameter");
 
-     chassis_height = property(kChassisBaseDatasheet, "height");
-     chassis_outer_diameter = property(kChassisBaseDatasheet, "outer_diameter");
-     chassis_inner_diameter = property(kChassisBaseDatasheet, "inner_diameter");
-     chassis_fillet_radius = property(kChassisBaseDatasheet, "fillet_radius");
+     chassis_datasheet = vChassisBaseDatasheet();
+     chassis_height = property(chassis_datasheet, "height");
+     chassis_outer_diameter = property(chassis_datasheet, "outer_diameter");
+     chassis_inner_diameter = property(chassis_datasheet, "inner_diameter");
+     chassis_fillet_radius = property(chassis_datasheet, "fillet_radius");
 
      render(convexity=10) {
           difference() {
@@ -52,4 +47,3 @@ module mBumper_PartB() {
 }
 
 mBumper_PartB();
-

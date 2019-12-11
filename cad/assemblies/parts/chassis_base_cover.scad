@@ -22,7 +22,7 @@ function vChassisBaseCoverDatasheet() =
       ["wireway_depth", height - min_thickness], ["inner_wireway_radius", 50],
       ["outer_wireway_radius", 140], ["wireway_conduit_angles", [-90, 0, 90, 180]],
       ["wireway_conduit_width", 25], ["wireway_width", 15], ["wireway_taper_angle", 30],
-      ["support_angles", [-165, -135, -105, -75, 75, 105, 135, 165]],
+      ["support_angles", [-165, -135, -105, 105, 135, 165]],
       ["bay_support_angles", [-90, 90, 180]], ["sma_conn_angles", [-45, 45]],
       ["support_r_offset", inner_diameter/2 - cover_support_diameter/2],
       ["support_diameter", cover_support_diameter], ["pole_socket_diameter", 50],

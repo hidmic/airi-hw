@@ -1,10 +1,15 @@
 include <generic/lib.scad>;
 
+use <parts/oem/hcs04_sonar.scad>;
+use <parts/oem/kw10_micro_switch.scad>;
+use <parts/oem/f066_sae1070_spring.scad>;
+
 use <parts/hcs04_sonar_bracket.scad>;
 
 use <parts/chassis_base.scad>;
 
 use <parts/bumper_base.scad>;
+use <parts/bumper_spring_block.scad>;
 use <parts/bumper.partA.scad>;
 use <parts/bumper.partB.scad>;
 
@@ -19,6 +24,7 @@ module mBumper() {
      sonar_mounting_z_offset = property(datasheet, "sonar_mounting_z_offset");
 
      sonar_mounting_polar_angle = property(vHCS04SonarBracketDatasheet(), "mounting_polar_angle");
+     bracket_thickness = property(vHCS04SonarBracketDatasheet(), "thickness");
 
      translate([0, 0, bumper_z_offset]) {
           mBumper_PartA();
@@ -27,6 +33,35 @@ module mBumper() {
                     translate([sonar_mounting_radius, 0, sonar_mounting_z_offset])  {
                          rotate([0, sonar_mounting_polar_angle, 0]) {
                               mHCS04SonarBracket();
+                              translate([0, 0, bracket_thickness + 2]) {
+                                   mHCS04Sonar();
+                              }
+                         }
+                    }
+               }
+          }
+          translate([0, 0, bumper_height/2]) {
+               duplicate([0, 1, 0]) {
+                    duplicate([0, 0, 1]) {
+                         translate([0, 0, -bumper_height/2]) {
+                              let (spring_block_datasheet=vBumperSpringBlockDatasheet()) {
+                                   translate([property(spring_block_datasheet, "x_offset"),
+                                              property(spring_block_datasheet, "y_offset"),
+                                              0]) {
+                                        translate([property(spring_block_datasheet, "switch_x_offset"),
+                                                   property(spring_block_datasheet, "switch_y_offset"),
+                                                   property(spring_block_datasheet, "switch_z_offset")]) {
+                                             rotate([0, 0, 90]) mKW10Z1PMicroSwitch();
+                                        }
+                                        translate([property(spring_block_datasheet, "spring_x_offset"),
+                                                   property(spring_block_datasheet, "spring_y_offset"),
+                                                   property(spring_block_datasheet, "spring_z_offset")]) {
+                                             rotate([0, -90, 0]) mF066SAE1070Spring(
+                                                  property(spring_block_datasheet, "spring_length")
+                                                  );
+                                        }
+                                   }
+                              }
                          }
                     }
                }
@@ -36,7 +71,3 @@ module mBumper() {
 }
 
 mBumper();
-
-use <parts/oem/micro_switch_spdt.scad>;
-
-mMicroSwitchSPDT();
