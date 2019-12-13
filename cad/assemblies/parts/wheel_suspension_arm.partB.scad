@@ -1,6 +1,6 @@
 include <generic/lib.scad>;
 
-use <oem/m3x8mm_countersunk_screw.scad>;
+use <oem/m3_countersunk_screw.scad>;
 
 use <wheel_suspension_axle_joint.scad>;
 use <wheel_suspension_pivot_joint.scad>;

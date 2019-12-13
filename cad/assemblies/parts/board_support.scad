@@ -31,10 +31,16 @@ module mBoardSupport() {
                          translate([property(datasheet, "x_offset"), 0, 0]) {
                               square([property(datasheet, "length"), property(datasheet, "width")], center=true);
                          }
-                         translate([property(datasheet, "lidar_x_offset"), property(datasheet, "lidar_y_offset"), 0]) {
-                              for (location = property(vRPLidarA1M8R1Datasheet(), "support_locations")) {
-                                   translate(location) {
-                                        circle(d=property(vM3PhillipsScrewDatasheet(), "nominal_diameter"));
+                         let(lidar_datasheet=vRPLidarA1M8R1Datasheet()) {
+                              translate([property(datasheet, "lidar_x_offset"), property(datasheet, "lidar_y_offset"), 0]) {
+                                   for (location = property(lidar_datasheet, "support_locations")) {
+                                        translate(location) {
+                                             circle(d=property(vM3PhillipsScrewDatasheet(), "nominal_diameter"));
+                                        }
+                                   }
+                                   translate([0, property(lidar_datasheet, "connector_y_offset")]) {
+                                        square([property(lidar_datasheet, "connector_length") + 4,
+                                                property(lidar_datasheet, "connector_width") + 4], center=true);
                                    }
                               }
                          }

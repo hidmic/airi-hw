@@ -25,7 +25,8 @@ function vMR08DMotorBaseSupportDatasheet() =
       ["guide_height", guide_height], ["min_thickness", min_thickness],
       ["pillar_hole_to_hole_distance", property(bracket_datasheet, "hole_to_hole_y_distance")],
       ["fastening_screw_datasheet", property(bracket_datasheet, "fastening_screw_datasheet")],
-      ["fastening_screw_x_offset", [(pillar_to_pillar_distance - wedge_width - guide_width)/2,
+      ["fastening_screw_x_offset
+", [(pillar_to_pillar_distance - wedge_width - guide_width)/2,
                                     -(pillar_to_pillar_distance - wedge_width - guide_width)/2]],
       ["fastening_screw_y_offset", [length/5, length * 4/5]]];
 

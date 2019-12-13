@@ -3,7 +3,7 @@ include <generic/lib.scad>;
 use <parts/oem/688_ball_bearing.scad>;
 use <parts/oem/m2_nut.scad>;
 use <parts/oem/m3x5mm_threaded_insert.scad>;
-use <parts/oem/m3x8mm_countersunk_screw.scad>;
+use <parts/oem/m3_countersunk_screw.scad>;
 
 use <parts/wheel_suspension_link.scad>;
 use <parts/wheel_suspension_axle_joint.scad>;

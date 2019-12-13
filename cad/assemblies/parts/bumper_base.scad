@@ -108,7 +108,7 @@ module mBumperBase() {
                          translate([0, 0, chassis_fillet_radius + height/2 - chassis_height/2]) {
                               difference() {
                                    translate([0, 0, -chassis_fillet_radius - height/2]) {
-                                        mChassisShell();
+                                             mChassisShell();
                                    }
                                    translate([-chassis_outer_diameter/2 * (1 - cos(angular_width/2)), 0, -chassis_height/2]) {
                                         mChassisBBox();

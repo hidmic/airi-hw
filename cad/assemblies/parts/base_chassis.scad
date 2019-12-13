@@ -80,7 +80,14 @@ function vBaseChassisDatasheet() =
       ["batery_stop_hole_diameter", property(vM3x5mmThreadedInsertDatasheet(), "nominal_diameter")],
       ["ir_sensor_x_offset", ir_sensor_x_offset], ["ir_sensor_r_offset", ir_sensor_r_offset], ["ir_sensor_angles", [-40, 40]],
       ["front_caster_x_offset", outer_diameter/2 - 2 * front_caster_opening_diameter],
-      ["rear_caster_x_offset", -outer_diameter/2 + rear_caster_opening_diameter + 10]];
+      ["rear_caster_x_offset", -outer_diameter/2 + rear_caster_opening_diameter + 10],
+      ["airway_width", 2], ["wall_airway_length", height * 0.70], ["wall_airway_z_offset", height * 0.25],
+      ["wall_airway_angles", concat([for (a = [-160:2.5:-145]) a], [for (a = [145:2.5:160]) a],
+                                    [for (a = [-175:2.5:-170]) a], [for (a = [170:2.5:175]) a])],
+      ["bottom_airway_length", property(motor_block_datasheet, "outer_width")],
+      ["bottom_airway_x_offset", [for (x = [-60:6:-14]) x]],
+      ["front_airway_r_offset", [for (r = [12:6:30]) (inner_diameter/2 - r)]],
+      ["front_airway_theta_offset", [-22.5, 22.5]], ["front_airway_angular_width", 25]];
 
 
 module mBaseChassis() {
@@ -91,9 +98,53 @@ module mBaseChassis() {
      outer_diameter = property(datasheet, "outer_diameter");
      fillet_radius = property(datasheet, "fillet_radius");
 
+     airway_width = property(datasheet, "airway_width");
+     wall_airway_angles = property(datasheet, "wall_airway_angles");
+     wall_airway_length = property(datasheet, "wall_airway_length");
+     wall_airway_z_offset = property(datasheet, "wall_airway_z_offset");
+     bottom_airway_x_offset = property(datasheet, "bottom_airway_x_offset");
+     bottom_airway_length = property(datasheet, "bottom_airway_length");
+     front_airway_r_offset = property(datasheet, "front_airway_r_offset");
+     front_airway_theta_offset = property(datasheet, "front_airway_theta_offset");
+     front_airway_angular_width = property(datasheet, "front_airway_angular_width");
+
      render() {
           difference() {
                mChassisShell();
+               for (angle = wall_airway_angles) {
+                    rotate([0, 0, angle]) {
+                         translate([(outer_diameter + inner_diameter)/4, 0, wall_airway_z_offset]) {
+                              duplicate([0, 0, 1]) {
+                                   translate([0, 0, wall_airway_length/2 - airway_width/2]) {
+                                        rotate([0, 90, 0]) {
+                                             cylinder(d=airway_width, h=2 * fillet_radius, center=true);
+                                        }
+                                   }
+                              }
+                              cube([2 * fillet_radius, airway_width, wall_airway_length - airway_width], center=true);
+                         }
+                    }
+               }
+               for (theta = front_airway_theta_offset) {
+                    rotate([0, 0, theta]) {
+                         for (r = front_airway_r_offset) {
+                              linear_extrude(height=2 * (thickness + kEpsilon), center=true) {
+                                   rounded_ring(outer_radius=r + airway_width/2, inner_radius=r - airway_width/2,
+                                                angles=[-front_airway_angular_width/2, front_airway_angular_width/2]);
+                              }
+                         }
+                    }
+               }
+               for (x = bottom_airway_x_offset) {
+                    translate([x, 0, 0]) {
+                         duplicate([0, 1, 0]) {
+                              translate([0, bottom_airway_length/2 - airway_width/2, 0]) {
+                                   cylinder(d=airway_width, h=2 * (thickness + kEpsilon), center=true);
+                              }
+                         }
+                         cube([airway_width, bottom_airway_length - airway_width, 2 * (thickness + kEpsilon)], center=true);
+                    }
+               }
                translate([0, 0, height]) {
                     mChassisBBox();
                }

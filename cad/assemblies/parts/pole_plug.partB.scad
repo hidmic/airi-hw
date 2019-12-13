@@ -13,7 +13,8 @@ function vPolePlug_PartB_Datasheet() =
          screw_datasheet=vPolePlugScrewDatasheet())
      [["height", (property(partA_datasheet, "base_thickness") +
                   property(cover_datasheet, "pole_socket_depth") -
-                  2 * property(screw_datasheet, "max_head_height"))],
+                  2 * property(screw_datasheet, "max_head_height") -
+                  property(washer_datasheet, "thickness") - 1)],
       ["base_thickness", property(partA_datasheet, "base_thickness")],
       ["outer_diameter", property(partA_datasheet, "outer_diameter")],
       ["inner_diameter", property(partA_datasheet, "inner_diameter")],

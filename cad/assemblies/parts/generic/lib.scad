@@ -205,6 +205,22 @@ module outline(delta) {
      }
 }
 
+module outline_extrude(height, thickness, keep) {
+     assert(thickness > 0);
+     assert(height > thickness);
+
+     linear_extrude(height=height - thickness) {
+          difference() {
+               outline(delta=thickness) {
+                    children();
+               }
+          }
+     }
+     linear_extrude(height=thickness) {
+          children(keep);
+     }
+}
+
 module duplicate(v) {
      children();
      mirror(v) children();
@@ -287,3 +303,4 @@ module square_frame(length, width, link_width) {
           }
      }
 }
+

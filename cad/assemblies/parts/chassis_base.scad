@@ -2,7 +2,7 @@ include <generic/lib.scad>;
 
 function vChassisBaseDatasheet() =
      let(outer_diameter=400, thickness=2, inner_diameter=outer_diameter - 2 * thickness,
-         base_height=108, height=130, inner_height=height - 2 * thickness)
+         base_height=109.5, height=136, inner_height=height - 2 * thickness)
      [["outer_diameter", outer_diameter], ["inner_diameter", inner_diameter],
       ["base_height", base_height], ["height", height], ["inner_height", inner_height],
       ["thickness", thickness], ["support_diameter", 10], ["z_offset", 20], ["fillet_radius", 4]];

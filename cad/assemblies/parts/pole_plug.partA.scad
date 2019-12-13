@@ -9,10 +9,7 @@ use <chassis_base_cover.scad>;
 
 function vPolePlug_PartA_Datasheet() =
      let(cover_datasheet=vChassisBaseCoverDatasheet(),
-         outer_diameter=2 * (property(cover_datasheet, "inner_wireway_radius") -
-                             property(cover_datasheet, "wireway_width")/2 -
-                             property(cover_datasheet, "wireway_depth") *
-                             tan(property(cover_datasheet, "wireway_taper_angle"))),
+         outer_diameter=property(cover_datasheet, "pole_block_diameter"),
          inner_diameter=property(cover_datasheet, "pole_socket_diameter"),
          base_thickness=2)
      [["outer_diameter", outer_diameter], ["inner_diameter", inner_diameter],

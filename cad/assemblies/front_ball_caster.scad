@@ -13,6 +13,7 @@ use <parts/10mm_ball_caster_base.scad>;
 use <parts/10mm_ball_caster_support.scad>;
 use <parts/10mm_ball_caster_yoke.scad>;
 
+function vFrontBallCasterDatasheet() = v10mmBallCasterSupportDatasheet();
 
 module mFrontBallCaster() {
      support_datasheet = v10mmBallCasterSupportDatasheet();

@@ -1,4 +1,7 @@
 
+function vSMAFemaleBulkheadConnectorDatasheet() =
+     [["thread_length", 11], ["thread_diameter", 6.4]];
+
 module mSMAFemaleBulkheadConnectorCutuotSection() {
      difference() {
           circle(d=6.4);
