@@ -9,7 +9,8 @@ function vKW10Z1PMicroSwitchDatasheet() =
       ["mounting_hole_diameter", 2]];
 
 module mKW10Z1PMicroSwitch() {
-     scale(10) import("stl/kw10_z1p_micro_switch.stl");
+     translate([kEpsilon/2, 0, 0])
+     rotate([0, 0, 90]) scale(10) import("stl/kw10_z1p_micro_switch.stl");
 }
 
 mKW10Z1PMicroSwitch();

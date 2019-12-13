@@ -117,13 +117,30 @@ if __name__ == '__main__':
     ).to(units.mm)
     assert e_front_caster < L
 
-    print('\n'.join('{} = {}'.format(name, value)
-                    for name, value in locals().items()
-                    if isinstance(value, units.Quantity)))
-
     # x = np.linspace(x0, x1, 100)
     # plt.plot(x, h(x))
     # plt.axvline(x=x_max, ymin=0, ymax=h(x_max))
     # plt.axhline(y=h_d(x_max), xmin=x0, xmax=x_max)
     # plt.grid()
     # plt.show()
+
+
+    D = 6.8 * units.mm
+    d = 0.8 * units.mm
+    p = 2.5 * units.mm
+    L = 12 * units.mm
+    n = 6
+
+    ν = 0.27
+    E = 201 * units.GPa
+    G = 0.5 * E / (1 + ν)
+    J = np.pi * d**4 / 32
+    𝛾 = np.arctan(p / (np.pi * D))
+
+    k_bumper = (1 / (
+        n * np.pi * D**3 / (4 * G * J * np.cos(𝛾)) * ((1 + d**2/(2 * D**2)) * np.cos(𝛾)**2 + (1 + d**2 /(4 * D**2)) * np.sin(𝛾)**2/(1 + ν))
+    )).to(units.kgf / units.mm)
+
+    print('\n'.join('{} = {}'.format(name, value)
+                    for name, value in locals().items()
+                    if isinstance(value, units.Quantity)))

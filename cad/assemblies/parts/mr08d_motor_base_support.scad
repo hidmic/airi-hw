@@ -12,20 +12,22 @@ function vMR08DMotorBaseSupportDatasheet() =
          bracket_outer_width=property(bracket_datasheet, "outer_width"),
          wedge_width=property(rear_cap_support_datasheet, "wedge_width"),
          wedge_height=property(rear_cap_support_datasheet, "wedge_height"),
-         guide_length=bracket_outer_width * 0.8,
-         min_thickness=2, motor_z_offset=bracket_outer_width/2 + 1,
+         guide_length=bracket_outer_width * 0.8, min_thickness=2, guide_height=wedge_height + 1,
+         guide_width=wedge_width + min_thickness, motor_z_offset=bracket_outer_width/2 + 1,
          pillar_to_pillar_distance=property(bracket_datasheet, "hole_to_hole_x_distance"),
-         guide_height=wedge_height + 1)
+         length=guide_length + guide_height)
      [["outer_width", pillar_to_pillar_distance + wedge_width + 2 * min_thickness],
       ["inner_width", pillar_to_pillar_distance - wedge_width], ["link_width", 5],
-      ["length", guide_length + guide_height],
-      ["pillar_to_pillar_distance", pillar_to_pillar_distance],
+      ["length", length], ["pillar_to_pillar_distance", pillar_to_pillar_distance],
       ["pillar_height", bracket_outer_width + 2], ["pillar_width", wedge_width + min_thickness],
       ["pillar_depth", guide_height], ["motor_z_offset", motor_z_offset],
-      ["guide_length", guide_length], ["guide_width", wedge_width + min_thickness],
+      ["guide_length", guide_length], ["guide_width", guide_width],
       ["guide_height", guide_height], ["min_thickness", min_thickness],
       ["pillar_hole_to_hole_distance", property(bracket_datasheet, "hole_to_hole_y_distance")],
-      ["fastening_screw_datasheet", property(bracket_datasheet, "fastening_screw_datasheet")]];
+      ["fastening_screw_datasheet", property(bracket_datasheet, "fastening_screw_datasheet")],
+      ["fastening_screw_x_offset", [(pillar_to_pillar_distance - wedge_width - guide_width)/2,
+                                    -(pillar_to_pillar_distance - wedge_width - guide_width)/2]],
+      ["fastening_screw_y_offset", [length/5, length * 4/5]]];
 
 
 module mMR08DMotorBaseSupport() {
@@ -54,7 +56,6 @@ module mMR08DMotorBaseSupport() {
      fastening_screw_diameter = property(fastening_screw_datasheet, "nominal_diameter");
 
      rotate([90, 0, 0]) {
-
           translate([0, 0, pillar_height/2]) {
                rotate([-90, 0, 0]) {
                     linear_extrude(height=min_thickness) {

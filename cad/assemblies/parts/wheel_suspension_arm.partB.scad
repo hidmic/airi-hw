@@ -23,7 +23,7 @@ module mWheelSuspensionArm_PartB() {
                          for (angle = property(kWheelSuspensionAxleJointDatasheet, "joint_fastening_angles")) {
                               rotate([0, 0, angle]) {
                                    translate([joint_fastening_diameter/2, 0, link_thickness]) {
-                                        mM3x8mmCountersunkScrewBore();
+                                        mM3CountersunkScrewBore();
                                    }
                               }
                          }
@@ -33,7 +33,7 @@ module mWheelSuspensionArm_PartB() {
                               for (angle = property(kWheelSuspensionPivotJointDatasheet, "joint_fastening_angles")) {
                                    rotate([0, 0, angle]) {
                                         translate([joint_fastening_diameter/2, 0, link_thickness]) {
-                                             mM3x8mmCountersunkScrewBore();
+                                             mM3CountersunkScrewBore();
                                         }
                                    }
                               }

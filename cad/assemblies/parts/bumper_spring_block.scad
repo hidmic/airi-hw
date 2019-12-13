@@ -175,10 +175,3 @@ module mBumperSpringRearBlock() {
 mBumperSpringFrontBlock();
 mBumperSpringRearBlock();
 
-/* translate([property(vBumperSpringBlockDatasheet(), "switch_x_offset"), */
-/*            property(vBumperSpringBlockDatasheet(), "switch_y_offset"), */
-/*            property(vBumperSpringBlockDatasheet(), "switch_z_offset")]) */
-/* /\* rotate([0, -90, 0]) *\/ */
-/* rotate([0, 0, 90]) */
-/* mKW10Z1PMicroSwitch(); */
-

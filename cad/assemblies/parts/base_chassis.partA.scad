@@ -14,11 +14,8 @@ module mBaseChassis_PartA() {
 
      support_pin_diameter = property(datasheet, "support_pin_diameter");
      support_pin_height = property(datasheet, "support_pin_height");
-
-     chassis_cover_datasheet = vChassisBaseCoverDatasheet();
-     cover_support_diameter = property(chassis_cover_datasheet, "support_diameter");
-     cover_support_angles = concat(property(chassis_cover_datasheet, "support_angles"),
-                                   property(chassis_cover_datasheet, "bay_support_angles"));
+     cover_support_diameter = property(datasheet, "cover_support_diameter");
+     cover_support_angles = property(datasheet, "cover_support_angles");
 
      render() {
           difference() {

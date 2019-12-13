@@ -16,13 +16,15 @@ function vChassisBaseCoverDatasheet() =
          bay_height=property(vRPLidarA1M8R1Datasheet(), "working_width") + 2,
          height=(property(chassis_datasheet, "height") -
                  property(chassis_datasheet, "base_height") -
-                 bay_height), cover_support_diameter=10)
+                 bay_height), cover_support_diameter=10,
+         inner_wireway_radius=50, outer_wireway_radius=170)
      [["height", height], ["bay_height", bay_height], ["panel_depth", height - min_thickness],
-      ["panel_length", 30], ["panel_width", 100], ["panel_angular_offset", -30],
-      ["wireway_depth", height - min_thickness], ["inner_wireway_radius", 50],
-      ["outer_wireway_radius", 140], ["wireway_conduit_angles", [-90, 0, 90, 180]],
+      ["panel_length", 40], ["panel_width", 80], ["panel_angular_offset", 0],
+      ["panel_r_offset", -(inner_wireway_radius + outer_wireway_radius)/2],
+      ["wireway_depth", height - min_thickness], ["inner_wireway_radius", inner_wireway_radius],
+      ["outer_wireway_radius", outer_wireway_radius], ["wireway_conduit_angles", [-135, -45, 45, 135]],
       ["wireway_conduit_width", 25], ["wireway_width", 15], ["wireway_taper_angle", 30],
-      ["support_angles", [-165, -135, -105, 105, 135, 165]],
+      ["support_angles", [-165, -135, -105, -75, 75, 105, 135, 165]],
       ["bay_support_angles", [-90, 90, 180]], ["sma_conn_angles", [-45, 45]],
       ["support_r_offset", inner_diameter/2 - cover_support_diameter/2],
       ["support_diameter", cover_support_diameter], ["pole_socket_diameter", 50],
@@ -59,6 +61,7 @@ module mChassisBaseCover() {
      panel_length = property(datasheet, "panel_length");
      panel_width = property(datasheet, "panel_width");
      panel_angular_offset = property(datasheet, "panel_angular_offset");
+     panel_r_offset = property(datasheet, "panel_r_offset");
 
      sma_conn_angles = property(datasheet, "sma_conn_angles");
 
@@ -131,18 +134,22 @@ module mChassisBaseCover() {
           cylinder(d=screw_nominal_diameter, h=2 * (min_thickness + kEpsilon), center=true);
 
           rotate([0, 0, panel_angular_offset])
-          translate([0, -(inner_wireway_radius + outer_wireway_radius)/2, 0]) {
-               translate([0, 0, height - panel_depth]) {
-                    linear_extrude(height=panel_depth + kEpsilon, scale=1.05) {
-                         fillet(r=fillet_radius) square([panel_length, panel_width], center=true);
+          translate([panel_r_offset, 0, 0]) {
+               rotate([0, 0, -90]) {
+                    translate([0, 0, height - panel_depth]) {
+                         linear_extrude(height=panel_depth + kEpsilon, scale=1.05) {
+                              fillet(r=fillet_radius) square([panel_length, panel_width], center=true);
+                         }
                     }
-               }
-               translate([0, 0, -kEpsilon]) {
-                    cylinder(d=pushbutton_cutout_diameter, h=height - panel_depth + 2 * kEpsilon);
-                    duplicate([0, 1, 0]) {
-                         translate([0, (panel_width + pushbutton_cutout_diameter)/4, 0]) {
-                              translate([-usb_conn_cutout_width/2, -usb_conn_cutout_length/2, 0]) {
-                                   cube([usb_conn_cutout_width, usb_conn_cutout_length, height - panel_depth + 2 * kEpsilon]);
+                    translate([0, 0, -kEpsilon]) {
+                         cylinder(d=pushbutton_cutout_diameter, h=height - panel_depth + 2 * kEpsilon);
+                         duplicate([0, 1, 0]) {
+                              translate([0, (panel_width + pushbutton_cutout_diameter)/4, 0]) {
+                                   translate([-usb_conn_cutout_width/2, -usb_conn_cutout_length/2, 0]) {
+                                        cube([usb_conn_cutout_width,
+                                              usb_conn_cutout_length,
+                                              height - panel_depth + 2 * kEpsilon]);
+                                   }
                               }
                          }
                     }

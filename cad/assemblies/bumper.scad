@@ -3,6 +3,8 @@ include <generic/lib.scad>;
 use <parts/oem/hcs04_sonar.scad>;
 use <parts/oem/kw10_micro_switch.scad>;
 use <parts/oem/f066_sae1070_spring.scad>;
+use <parts/oem/m2_countersunk_screw.scad>;
+use <parts/oem/m2_nut.scad>;
 
 use <parts/hcs04_sonar_bracket.scad>;
 
@@ -50,16 +52,35 @@ module mBumper() {
                                               0]) {
                                         translate([property(spring_block_datasheet, "switch_x_offset"),
                                                    property(spring_block_datasheet, "switch_y_offset"),
-                                                   property(spring_block_datasheet, "switch_z_offset")]) {
-                                             rotate([0, 0, 90]) mKW10Z1PMicroSwitch();
+                                                   0]) {
+                                             translate([0, 0, property(spring_block_datasheet, "switch_z_offset")]) {
+                                                  mKW10Z1PMicroSwitch();
+                                             }
+                                             let(switch_datasheet=vKW10Z1PMicroSwitchDatasheet(),
+                                                 switch_height=property(switch_datasheet, "height"),
+                                                 switch_mounting_hole_offset=property(switch_datasheet, "mounting_hole_offset"),
+                                                 switch_mounting_hole_distance=property(switch_datasheet, "mounting_hole_distance")) {
+                                                  translate([switch_height/2 - switch_mounting_hole_offset + 2 * kEpsilon, 0, 0]) {
+                                                       duplicate([0, 1, 0]) {
+                                                            translate([0, switch_mounting_hole_distance/2, 0]) {
+                                                                 mM2x20mmCountersunkScrew();
+                                                                 translate([0, 0, (property(spring_block_datasheet, "switch_z_offset") +
+                                                                                   property(switch_datasheet, "depth")/2)]) {
+                                                                      mM2Nut();
+                                                                 }
+                                                            }
+                                                       }
+                                                  }
+                                             }
                                         }
                                         translate([property(spring_block_datasheet, "spring_x_offset"),
                                                    property(spring_block_datasheet, "spring_y_offset"),
                                                    property(spring_block_datasheet, "spring_z_offset")]) {
                                              rotate([0, -90, 0]) mF066SAE1070Spring(
                                                   property(spring_block_datasheet, "spring_length")
-                                                  );
+                                             );
                                         }
+
                                    }
                               }
                          }

@@ -2,6 +2,7 @@ include <generic/lib.scad>;
 
 use <oem/100mm_rhino_rubber_wheel.scad>;
 use <oem/m3x5mm_threaded_insert.scad>;
+use <oem/m3_phillips_screw.scad>;
 
 use <chassis_base.scad>
 use <wheel_suspension_frame_base.scad>;
@@ -13,27 +14,33 @@ kM3x5mmThreadedInsertDatasheet = vM3x5mmThreadedInsertDatasheet();
 
 
 function vWheelBlockFrameDatasheet() =
-     let (outer_radius=property(kWheelSuspensionFrameBaseDatasheet, "outer_radius"),
-          main_radius=property(kWheelSuspensionFrameBaseDatasheet, "main_radius"),
-          thickness=property(kWheelSuspensionFrameBaseDatasheet, "thickness"),
-          wheel_width=property(k100mmRhinoRubberWheelDatasheet, "width"),
-          inner_radius=outer_radius - thickness)
-     [["outer_radius", outer_radius], ["inner_radius", inner_radius],
-      ["thickness", thickness], ["toe_width", 15], ["toe_hole_diameter", 3],
-      ["wheel_diameter", property(k100mmRhinoRubberWheelDatasheet, "diameter")],
-      ["wheel_width", wheel_width], ["width", wheel_width + 10],
-      ["wheel_axle_z_offset", (property(k100mmRhinoRubberWheelDatasheet, "diameter") / 2 -
-                               property(kChassisBaseDatasheet, "z_offset") -
-                               property(kChassisBaseDatasheet, "thickness"))],
-      ["support_angles", property(kWheelSuspensionFrameBaseDatasheet, "support_angles")],
+     let (chassis_datasheet=vChassisBaseDatasheet(),
+          wheel_suspension_frame_datasheet=vWheelSuspensionFrameBaseDatasheet(),
+          outer_radius=property(wheel_suspension_frame_datasheet, "outer_radius"),
+          main_radius=property(wheel_suspension_frame_datasheet, "main_radius"),
+          thickness=property(wheel_suspension_frame_datasheet, "thickness"),
+          wheel_datasheet=v100mmRhinoRubberWheelDatasheet(),
+          wheel_width=property(wheel_datasheet, "width"), width=wheel_width + 10,
+          toe_width=15, inner_radius=outer_radius - thickness)
+     [["outer_radius", outer_radius], ["inner_radius", inner_radius], ["thickness", thickness],
+      ["width", width], ["toe_width", toe_width], ["wheel_width", wheel_width],
+      ["fastening_hole_diameter", property(vM3PhillipsScrewDatasheet(), "nominal_diameter")],
+      ["fastening_x_offset", [inner_radius - toe_width/2, -inner_radius + toe_width/2]],
+      ["fastening_y_offset", [width/2 - width/5, -width/2 + width/5]],
+      ["wheel_diameter", property(wheel_datasheet, "diameter")],
+      ["wheel_axle_z_offset", (property(wheel_datasheet, "diameter") / 2 -
+                               property(chassis_datasheet, "z_offset") -
+                               property(chassis_datasheet, "thickness"))],
+      ["support_angles", property(wheel_suspension_frame_datasheet, "support_angles")],
       ["support_diameter", 2 * ((outer_radius + inner_radius)/2 - main_radius)],
       ["support_r_offset", main_radius]];
+
 
 module mWheelBlockFrame() {
      datasheet = vWheelBlockFrameDatasheet();
      frame_width = property(datasheet, "width");
      frame_toe_width = property(datasheet, "toe_width");
-     frame_toe_hole_diameter = property(datasheet, "toe_hole_diameter");
+     frame_fastening_hole_diameter = property(datasheet, "fastening_hole_diameter");
      frame_thickness = property(datasheet, "thickness");
      frame_outer_radius = property(datasheet, "outer_radius");
      frame_inner_radius = property(datasheet, "inner_radius");
@@ -62,9 +69,9 @@ module mWheelBlockFrame() {
           duplicate([1, 0, 0]) {
                translate([-frame_outer_radius, 0]) {
                     translate([frame_thickness, 0]) {
-                         square([frame_toe_width/2 - frame_toe_hole_diameter/2, frame_thickness]);
-                         translate([frame_toe_width/2 + frame_toe_hole_diameter/2, 0]) {
-                              square([frame_toe_width/2 - frame_toe_hole_diameter/2, frame_thickness]);
+                         square([frame_toe_width/2 - frame_fastening_hole_diameter/2, frame_thickness]);
+                         translate([frame_toe_width/2 + frame_fastening_hole_diameter/2, 0]) {
+                              square([frame_toe_width/2 - frame_fastening_hole_diameter/2, frame_thickness]);
                          }
                     }
                     square([frame_thickness, wheel_axle_z_offset]);
@@ -74,11 +81,11 @@ module mWheelBlockFrame() {
      duplicate([1, 0, 0]) {
           translate([-frame_outer_radius + frame_thickness + frame_toe_width/2, 0, 0]) {
                difference() {
-                    translate([- frame_toe_hole_diameter/2, 0, 0]) {
-                         cube([frame_toe_hole_diameter, frame_thickness, frame_width / 5]);
+                    translate([-frame_fastening_hole_diameter/2, 0, 0]) {
+                         cube([frame_fastening_hole_diameter, frame_thickness, frame_width / 5]);
                     }
                     translate([0, -kEpsilon, frame_width / 5]) {
-                         rotate([-90, 0, 0]) cylinder(d=frame_toe_hole_diameter, h=frame_thickness + 2 * kEpsilon);
+                         rotate([-90, 0, 0]) cylinder(d=frame_fastening_hole_diameter, h=frame_thickness + 2 * kEpsilon);
                     }
                }
           }

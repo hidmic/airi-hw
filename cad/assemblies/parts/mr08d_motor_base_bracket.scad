@@ -2,6 +2,7 @@ include <generic/lib.scad>;
 
 use <oem/mr08d_024022_motor.scad>;
 use <oem/m3x5mm_threaded_insert.scad>;
+use <oem/m3_phillips_screw.scad>;
 
 use <generic/motor_cap.scad>;
 use <mr08d_motor_front_cap.scad>;
@@ -44,7 +45,7 @@ function vMR08DMotorBaseBracketDatasheet() =
       ["rear_cap_support_height", rear_cap_z_offset - wall_thickness + property(rear_cap_support_datasheet, "height")],
       ["rear_cap_x_offset", (-outer_length + property(rear_cap_support_datasheet, "depth"))/2],
       ["rear_cap_z_offset", rear_cap_z_offset],
-      ["fastening_screw_datasheet", property(rear_cap_datasheet, "fastening_screw_datasheet")]];
+      ["fastening_screw_datasheet", vM3PhillipsScrewDatasheet()]];
 
 module mMR08DMotorBracketFrontCap() {
      mMR08DMotorFrontCap();

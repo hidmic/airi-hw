@@ -19,6 +19,7 @@ function v50mmBallCasterBaseDatasheet() =
          ball_diameter = property(caster_support_datasheet, "ball_diameter"),
          base_thickness = property(caster_support_datasheet, "base_thickness"),
          standoff_length = property(vM3x30mmHexThreadedStandoffDatasheet(), "length"),
+         hole_diameter = property(vM3x30mmHexThreadedStandoffDatasheet(), "hole_diameter"),
          support_z_offset = ball_z_offset + ball_diameter/2 - chassis_z_offset - chassis_thickness,
          standoff_z_offset = support_z_offset - base_thickness/2 - standoff_length/2)
      concat(
@@ -28,8 +29,10 @@ function v50mmBallCasterBaseDatasheet() =
                                     mount_diameter=property(caster_support_datasheet, "mount_diameter"),
                                     mount_height=standoff_z_offset -  base_thickness),
           [["support_z_offset", support_z_offset], ["support_opening_diameter", main_diameter + 1],
-           ["standoff_z_offset", standoff_z_offset], ["standoff_length", standoff_length]]
+           ["standoff_z_offset", standoff_z_offset], ["standoff_length", standoff_length],
+           ["mount_hole_diameter", hole_diameter]]
      );
+
 
 module m50mmBallCasterBase() {
      datasheet = v50mmBallCasterBaseDatasheet();
@@ -37,6 +40,7 @@ module m50mmBallCasterBase() {
      base_thickness = property(datasheet, "base_thickness");
      mount_offset = property(datasheet, "mount_offset");
      mount_height = property(datasheet, "mount_height");
+     mount_hole_diameter = property(datasheet, "mount_hole_diameter");
 
      support_opening_diameter = property(datasheet, "support_opening_diameter");
 
@@ -52,7 +56,7 @@ module m50mmBallCasterBase() {
                                    }
                               }
                          }
-                         let(hole_diameter=property(vM3x30mmHexStandoffDatasheet(), "hole_diameter")) {
+                         let(hole_diameter=mount_hole_diameter) {
                               cylinder(h=mount_height + base_thickness + 2 * kEpsilon, d=hole_diameter);
                          }
                     }

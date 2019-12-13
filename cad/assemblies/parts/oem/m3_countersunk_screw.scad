@@ -3,7 +3,7 @@ include <generic/lib.scad>;
 function vM3CountersunkScrew() =
      [["head_diameter", 6], ["nominal_diameter", 3], ["head_height", 1.7]];
 
-module mM3x8mmCountersunkScrewBore() {
+module mM3CountersunkScrewBore() {
      datasheet = vM3CountersunkScrew();
      translate([0, 0, -property(datasheet, "head_height")])
      cylinder(d1=property(datasheet, "nominal_diameter"),
@@ -16,3 +16,4 @@ module mM3x8mmCountersunkScrew() {
 }
 
 mM3x8mmCountersunkScrew();
+

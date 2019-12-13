@@ -5,7 +5,7 @@ function v12v5a4hBatteryDatasheet() =
 
 
 module m12v5a4hBattery() {
-     rotate([90, 0, 90]) {
+     rotate([90, 0, 0]) {
           color("gray") {
                import("stl/Battery12V_5A.stl");
           }

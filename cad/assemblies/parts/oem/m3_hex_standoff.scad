@@ -45,3 +45,18 @@ function vM3x15mmHexStandoffDatasheet() =
 module mM3x15mmHexStandoff() {
      pmMetricHexStandoff(datasheet=vM3x15mmHexStandoffDatasheet());
 }
+
+function vM3x10mmHexThreadedStandoffDatasheet() =
+     pvMetricHexStandoffDatasheet(hole_diameter=3, thread_pitch=0.5, length=10, width=5.5);
+
+module mM3x10mmHexThreadedStandoff() {
+     pmMetricHexStandoff(datasheet=vM3x10mmHexThreadedStandoffDatasheet());
+}
+
+function vM3x10mmHexStandoffDatasheet() =
+     pvMetricHexStandoffDatasheet(hole_diameter=3, length=10, width=5.5);
+
+module mM3x10mmHexStandoff() {
+     pmMetricHexStandoff(datasheet=vM3x10mmHexStandoffDatasheet());
+}
+
