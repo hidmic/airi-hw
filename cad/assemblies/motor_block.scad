@@ -10,6 +10,7 @@ use <motor_bracket.scad>;
 
 function vMotorBlockDatasheet() =
      let(base_support_datasheet=vMR08DMotorBaseSupportDatasheet(),
+         base_support_length=property(base_support_datasheet, "length"),
          pillar_height=property(base_support_datasheet, "pillar_height"),
          pillar_depth=property(base_support_datasheet, "pillar_depth"),
          guide_length = property(base_support_datasheet, "guide_length"),
@@ -19,10 +20,10 @@ function vMotorBlockDatasheet() =
          rear_cap_support_height=property(bracket_datasheet, "rear_cap_support_height"),
          rear_cap_datasheet=property(bracket_datasheet, "rear_cap_datasheet"),
          rear_cap_outer_diameter=property(rear_cap_datasheet, "outer_diameter"),
-         min_bracket_x_offset=rear_cap_z_offset_in_bracket + rear_cap_outer_diameter + pillar_depth,
-         min_motor_x_offset=min_bracket_x_offset - motor_z_offset_in_bracket,
-         max_bracket_x_offset=rear_cap_support_height + guide_length + pillar_depth,
-         max_motor_x_offset=max_bracket_x_offset - motor_z_offset_in_bracket)
+         min_bracket_x_offset=-rear_cap_support_height,
+         min_motor_x_offset=min_bracket_x_offset + motor_z_offset_in_bracket,
+         max_bracket_x_offset=base_support_length - (rear_cap_z_offset_in_bracket + rear_cap_outer_diameter + pillar_depth),
+         max_motor_x_offset=max_bracket_x_offset + motor_z_offset_in_bracket)
      concat(
           base_support_datasheet, bracket_datasheet,
           [["main_height", pillar_height],
@@ -37,6 +38,7 @@ function vMotorBlockDatasheet() =
 
 module mMotorBlock() {
      datasheet = vMotorBlockDatasheet();
+     length = property(datasheet, "length");
      motor_z_offset = property(datasheet, "motor_z_offset");
      guide_length = property(datasheet, "guide_length");
      pillar_depth = property(datasheet, "pillar_depth");
@@ -46,26 +48,26 @@ module mMotorBlock() {
 
      support_height = property(vMotorBracketDatasheet(), "rear_cap_support_height");
 
-     translate([bracket_x_offset, 0, motor_z_offset]) {
-          rotate([90, 0, -90]) {
-               mMotorBracket();
-          }
-     }
-
-     rotate([-90, 0, -90]) mMR08DMotorBaseSupport();
-
-     let(spring_length=bracket_x_offset - support_height - pillar_depth) {
-          translate([0, 0, motor_z_offset]) {
-               duplicate([0, 1, 0]) {
-                    duplicate([0, 0, 1]) {
-                         translate([0, pillar_to_pillar_distance/2,
-                                    -pillar_hole_to_hole_distance/2]) {
-                              translate([pillar_depth, 0, 0]) {
-                                   rotate([0, 90, 0]) {
-                                        mF058SAE1070Spring(spring_length);
+     translate([length, 0, 0]) {
+          rotate([0, 0, 180]) {
+               rotate([-90, 0, -90]) mMR08DMotorBaseSupport();
+               translate([length - bracket_x_offset, 0, motor_z_offset]) {
+                    rotate([90, 0, -90]) mMotorBracket();
+               }
+               let(spring_length=length - bracket_x_offset - support_height - pillar_depth) {
+                    translate([0, 0, motor_z_offset]) {
+                         duplicate([0, 1, 0]) {
+                              duplicate([0, 0, 1]) {
+                                   translate([0, pillar_to_pillar_distance/2,
+                                              -pillar_hole_to_hole_distance/2]) {
+                                        translate([pillar_depth, 0, 0]) {
+                                             rotate([0, 90, 0]) {
+                                                  mF058SAE1070Spring(spring_length);
+                                             }
+                                        }
+                                        mM3x50mmAllenScrew();
                                    }
                               }
-                              mM3x50mmAllenScrew();
                          }
                     }
                }

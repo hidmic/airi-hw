@@ -74,7 +74,7 @@ module mChassisCover_PartA() {
 
           difference() {
                linear_extrude(height=height - min_thickness) {
-                    outline(delta=min_thickness) {
+                      outline(delta=min_thickness) {
                          circle(d=inner_diameter);
                          ring(outer_radius=outer_wireway_radius, inner_radius=inner_wireway_radius);
                          for(angle = wireway_conduit_angles) {
@@ -103,13 +103,24 @@ module mChassisCover_PartA() {
                                         wall_outer_radius=inner_wireway_radius,
                                         wall_inner_radius=inner_wireway_radius - min_thickness);
                               }
+                              translate([inner_diameter/2 + min_thickness/2, 0]) {
+                                   curved_support_xsection(
+                                        support_radius=support_diameter/2,
+                                        hole_radius=screw_nominal_diameter/2,
+                                        fillet_radius=chassis_fillet_radius,
+                                        wall_outer_radius=inner_diameter/2 + min_thickness,
+                                        wall_inner_radius=inner_diameter/2,
+                                        internal=false);
+                              }
                          }
                     }
                }
                for(angle = property(datasheet, "fastening_angles")) {
-                    rotate([0, 0, angle]) {
-                         translate([property(datasheet, "fastening_r_offset"), 0, height - min_thickness]) {
-                              mM3x5mmThreadedInsertTaperCone();
+                    for (r_offset = property(datasheet, "fastening_r_offset")) {
+                         rotate([0, 0, angle]) {
+                              translate([r_offset, 0, height - min_thickness]) {
+                                   mM3x5mmThreadedInsertTaperCone();
+                              }
                          }
                     }
                }

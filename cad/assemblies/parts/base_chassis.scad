@@ -35,14 +35,14 @@ function vBaseChassisDatasheet() =
          left_wheel_block_datasheet=vLeftWheelBlockDatasheet(),
          left_wheel_axle_y_offset=property(left_wheel_block_datasheet, "wheel_axle_y_offset"),
          left_wheel_axle_z_offset=property(left_wheel_block_datasheet, "wheel_axle_z_offset"),
-         left_belt_datasheet=vGT2Belt280mmLong6mmWideDatasheet(),
+         left_belt_datasheet=vGT2Belt122mmLong6mmWideDatasheet(),
          left_belt_side_length=property(left_belt_datasheet, "side_length"),
          left_motor_block_x_offset=sqrt(pow(motor_z_offset - left_wheel_axle_z_offset, 2)
                                         + pow(left_belt_side_length, 2)) - motor_x_offset,
          right_wheel_block_datasheet=vRightWheelBlockDatasheet(),
          right_wheel_axle_y_offset=property(right_wheel_block_datasheet, "wheel_axle_y_offset"),
          right_wheel_axle_z_offset=property(right_wheel_block_datasheet, "wheel_axle_z_offset"),
-         right_belt_datasheet=vGT2Belt122mmLong6mmWideDatasheet(),
+         right_belt_datasheet=vGT2Belt280mmLong6mmWideDatasheet(),
          right_belt_side_length=property(right_belt_datasheet, "side_length"),
          right_motor_block_x_offset=sqrt(pow(motor_z_offset - right_wheel_axle_z_offset, 2)
                                          + pow(right_belt_side_length, 2)) - motor_x_offset,

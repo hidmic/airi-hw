@@ -1,6 +1,7 @@
 include <generic/lib.scad>;
 
 use <parts/oem/m2_nut.scad>;
+use <parts/oem/m3_phillips_screw.scad>;
 use <parts/oem/mr08d_024022_motor.scad>;
 use <parts/oem/gt2_pulley.scad>;
 
@@ -57,6 +58,15 @@ module mMotorBracket() {
                                         }
                                         translate([0, 0, -property(cap_datasheet, "wall_thickness")]) {
                                              mMR08DMotorBracketFrontCapScrew();
+                                        }
+                                   }
+                              }
+                         }
+                         let (motor_datasheet=property(cap_datasheet, "motor_datasheet")) {
+                              for(angle = property(motor_datasheet, "mount_angles")) {
+                                   rotate([0, 0, angle]) {
+                                        translate([property(motor_datasheet, "mount_r_offset")/2, 0]) {
+                                             mirror([0, 0, 1]) mM3x6mmPhillipsScrew();
                                         }
                                    }
                               }

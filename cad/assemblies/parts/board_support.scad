@@ -11,6 +11,7 @@ use <../motor_block.scad>;
 function vBoardSupportDatasheet() =
      let(chassis_datasheet=vChassisDatasheet(),
          motor_block_datasheet=vMotorBlockDatasheet(),
+         motor_block_screw_offset=property(motor_block_datasheet, "fastening_screw_x_offset")[0],
          x_max=(max(property(chassis_datasheet, "left_motor_block_x_offset"),
                     property(chassis_datasheet, "right_motor_block_x_offset")) +
                 property(motor_block_datasheet, "length")),
@@ -19,8 +20,9 @@ function vBoardSupportDatasheet() =
      [["height", 8], ["width", property(motor_block_datasheet, "outer_width")], ["length", x_max - x_min],
       ["x_offset", (x_max + x_min)/2], ["z_offset", property(motor_block_datasheet, "main_height")],
       ["lidar_x_offset", 0], ["lidar_y_offset", 0], ["computer_y_offset", -5],
-      ["computer_x_offset", x_max - property(vJetsonNanoDatasheet(), "length")/2]];
-
+      ["computer_x_offset", x_max - property(vJetsonNanoDatasheet(), "length")/2],
+      ["controller_support_locations", [[10, motor_block_screw_offset], [10, -motor_block_screw_offset],
+                                        [-55, motor_block_screw_offset], [-55, -motor_block_screw_offset]]]];
 
 module mBoardSupport() {
      datasheet = vBoardSupportDatasheet();
@@ -49,6 +51,11 @@ module mBoardSupport() {
                                    translate(location) {
                                         circle(d=property(vM3PhillipsScrewDatasheet(), "nominal_diameter"));
                                    }
+                              }
+                         }
+                         for (location = property(datasheet, "controller_support_locations")) {
+                              translate(location) {
+                                   circle(d=property(vM3PhillipsScrewDatasheet(), "nominal_diameter"));
                               }
                          }
                          let (chassis_datasheet=vChassisDatasheet()) {

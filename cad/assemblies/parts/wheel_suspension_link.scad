@@ -9,7 +9,7 @@ kWheelSuspensionAxleJointDatasheet = vWheelSuspensionAxleJointDatasheet();
 kWheelSuspensionPivotJointDatasheet = vWheelSuspensionPivotJointDatasheet();
 
 function vWheelSuspensionLinkDatasheet() =
-     [["thickness", 2], ["width", 12], ["length", 65], ["fillet_radius", 5]];
+     [["thickness", 2], ["width", 12], ["length", 60], ["fillet_radius", 5]];
 
 
 module mWheelSuspensionLink() {

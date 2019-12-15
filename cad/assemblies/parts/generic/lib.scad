@@ -304,3 +304,11 @@ module square_frame(length, width, link_width) {
      }
 }
 
+module wifi_logo(size, waves=3) {
+     for (i = [1:waves]) {
+          rounded_ring(outer_radius=(2 * i + 1) * size, inner_radius=2 * i * size, angles=[-45, 45]);
+     }
+     circle(r=size);
+}
+
+

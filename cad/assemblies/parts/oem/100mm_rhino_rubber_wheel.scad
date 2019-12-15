@@ -2,7 +2,7 @@ include <generic/lib.scad>;
 
 
 function v100mmRhinoRubberWheelDatasheet() =
-     [["diameter", 96], ["width", 32]];
+     [["diameter", 96], ["width", 32], ["inner_width", 8]];
 
 
 module m100mmRhinoRubberWheel() {
