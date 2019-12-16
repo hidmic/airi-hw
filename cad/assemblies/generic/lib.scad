@@ -1,4 +1,5 @@
-$fn = 32;
+quality_order=5;
+$fn = max(pow(2, quality_order) - 4, 0);
 
 kEpsilon = 1e-1;
 
