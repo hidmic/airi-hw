@@ -27,12 +27,16 @@ module mMR08DMotorFrontCap() {
      datasheet = vMR08DMotorFrontCapDatasheet();
      wall_thickness = property(datasheet, "wall_thickness");
 
-     pmMotorCap(datasheet) {
-          let (motor_datasheet=property(datasheet, "motor_datasheet")) {
-               for(angle = property(motor_datasheet, "mount_angles")) {
-                    rotate([0, 0, angle]) {
-                         translate([property(motor_datasheet, "mount_r_offset")/2, 0]) {
-                              circle(d=property(motor_datasheet, "mount_hole_diameter"));
+     color($default_color) {
+          render() {
+               pmMotorCap(datasheet) {
+                    let (motor_datasheet=property(datasheet, "motor_datasheet")) {
+                         for(angle = property(motor_datasheet, "mount_angles")) {
+                              rotate([0, 0, angle]) {
+                                   translate([property(motor_datasheet, "mount_r_offset")/2, 0]) {
+                                        circle(d=property(motor_datasheet, "mount_hole_diameter"));
+                                   }
+                              }
                          }
                     }
                }

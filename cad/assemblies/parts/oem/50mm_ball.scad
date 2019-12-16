@@ -1,4 +1,6 @@
 
 module m50mmBall() {
-     sphere(d=50.8);
+     color("silver") {
+          render() sphere(d=50.8);
+     }
 }

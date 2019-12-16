@@ -1,4 +1,6 @@
 
 module m10mmBall() {
-     sphere(d=10);
+     color("silver") {
+          render() sphere(d=10);
+     }
 }

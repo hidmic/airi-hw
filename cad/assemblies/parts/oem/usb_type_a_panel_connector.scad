@@ -19,15 +19,22 @@ module mUSBTypeAPanelConnector() {
      flare_height = property(datasheet, "flare_height");
      flare_length = property(datasheet, "flare_length");
      flare_width = property(datasheet, "flare_width");
-     linear_extrude(height=flare_height) {
-          difference() {
-               square([flare_length, flare_width], center=true);
-               hull() projection() mUSBTypeAFemaleConnector();
+
+     color("black") {
+          render() {
+               linear_extrude(height=flare_height) {
+                    difference() {
+                         square([flare_length, flare_width], center=true);
+                         hull() projection() mUSBTypeAFemaleConnector();
+                    }
+               }
           }
      }
-     conn_height = property(datasheet, "conn_height");
-     translate([0, 0, flare_height-conn_height/2]) {
-          mUSBTypeAFemaleConnector();
+     color("silver") {
+          conn_height = property(datasheet, "conn_height");
+          translate([0, 0, flare_height-conn_height/2]) {
+               render() mUSBTypeAFemaleConnector();
+          }
      }
 }
 

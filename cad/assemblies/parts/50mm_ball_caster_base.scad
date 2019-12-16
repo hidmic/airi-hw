@@ -44,30 +44,34 @@ module m50mmBallCasterBase() {
 
      support_opening_diameter = property(datasheet, "support_opening_diameter");
 
-     difference() {
-          pmBallCasterYoke(datasheet);
-          translate([0, 0, -kEpsilon]) {
-               duplicate([0, 1, 0]) {
-                    translate([0, mount_offset, 0]) {
-                         translate([0, 0, mount_height]) {
-                              linear_extrude(height=base_thickness + 2 * kEpsilon) {
-                                   offset(delta=kEpsilon) {
-                                        hull() projection() mM3x30mmHexStandoff();
+     color($default_color) {
+          render() {
+               difference() {
+                    pmBallCasterYoke(datasheet);
+                    translate([0, 0, -kEpsilon]) {
+                         duplicate([0, 1, 0]) {
+                              translate([0, mount_offset, 0]) {
+                                   translate([0, 0, mount_height]) {
+                                        linear_extrude(height=base_thickness + 2 * kEpsilon) {
+                                             offset(delta=kEpsilon) {
+                                                  hull() projection() mM3x30mmHexStandoff();
+                                             }
+                                        }
+                                   }
+                                   let(hole_diameter=mount_hole_diameter) {
+                                        cylinder(h=mount_height + base_thickness + 2 * kEpsilon, d=hole_diameter);
                                    }
                               }
                          }
-                         let(hole_diameter=mount_hole_diameter) {
-                              cylinder(h=mount_height + base_thickness + 2 * kEpsilon, d=hole_diameter);
-                         }
+                         cylinder(d=support_opening_diameter, h=base_thickness + 2 * kEpsilon);
                     }
                }
-               cylinder(d=support_opening_diameter, h=base_thickness + 2 * kEpsilon);
-          }
-     }
-     difference() {
-          cylinder(d=support_opening_diameter + 2 * base_thickness, h=base_thickness);
-          translate([0, 0, -kEpsilon]) {
-               cylinder(d=support_opening_diameter, h=base_thickness + 2 * kEpsilon);
+               difference() {
+                    cylinder(d=support_opening_diameter + 2 * base_thickness, h=base_thickness);
+                    translate([0, 0, -kEpsilon]) {
+                         cylinder(d=support_opening_diameter, h=base_thickness + 2 * kEpsilon);
+                    }
+               }
           }
      }
 }

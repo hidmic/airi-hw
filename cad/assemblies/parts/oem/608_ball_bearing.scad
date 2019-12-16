@@ -8,7 +8,13 @@ function v608BallBearingDatasheet() =
 
 
 module m608BallBearing() {
-     rotate([90, 0, 0]) import("stl/608.stl", convexity=10);
+     color("silver") {
+          render() {
+               rotate([90, 0, 0]) {
+                    import("stl/608.stl", convexity=10);
+               }
+          }
+     }
 }
 
 m608BallBearing();

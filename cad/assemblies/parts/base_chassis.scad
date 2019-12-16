@@ -9,6 +9,8 @@ use <oem/m3x5mm_threaded_insert.scad>;
 use <10mm_ball_caster_base.scad>;
 use <50mm_ball_caster_base.scad>;
 
+use <dc_input_bracket.scad>;
+
 use <chassis_base.scad>;
 use <chassis_base_cover.scad>;
 use <bumper_base.scad>;
@@ -87,7 +89,8 @@ function vBaseChassisDatasheet() =
       ["bottom_airway_length", property(motor_block_datasheet, "outer_width")],
       ["bottom_airway_x_offset", [for (x = [-60:6:-14]) x]],
       ["front_airway_r_offset", [for (r = [12:6:30]) (inner_diameter/2 - r)]],
-      ["front_airway_theta_offset", [-22.5, 22.5]], ["front_airway_angular_width", 25]];
+      ["front_airway_theta_offset", [-22.5, 22.5]], ["front_airway_angular_width", 25],
+      ["dc_input_r_offset", inner_diameter * 0.5 * 0.8], ["dc_input_theta_offset", -55]];
 
 
 module mBaseChassis() {
@@ -108,7 +111,10 @@ module mBaseChassis() {
      front_airway_theta_offset = property(datasheet, "front_airway_theta_offset");
      front_airway_angular_width = property(datasheet, "front_airway_angular_width");
 
-     render() {
+     dc_input_r_offset = property(datasheet, "dc_input_r_offset");
+     dc_input_theta_offset = property(datasheet, "dc_input_theta_offset");
+
+     color($default_color) {
           difference() {
                mChassisShell();
                for (angle = wall_airway_angles) {
@@ -155,11 +161,17 @@ module mBaseChassis() {
                          translate([property(datasheet, "ir_sensor_x_offset"), 0, 0]) {
                               for (angle = property(datasheet, "ir_sensor_angles")) {
                                    rotate([0, 0, angle]) {
-                                        translate([property(datasheet, "ir_sensor_r_offset"),
-                                                   0, thickness/2 + kEpsilon]) {
-                                             cube([property(ir_sensor_datasheet, "sensor_width"),
-                                                   property(ir_sensor_datasheet, "sensor_length"),
-                                                   thickness + 2 * kEpsilon], center=true);
+                                        translate([property(datasheet, "ir_sensor_r_offset"), 0, thickness/2 + kEpsilon]) {
+                                             rotate([0, 0, -90]) {
+                                                  cube([property(ir_sensor_datasheet, "sensor_length") + 1,
+                                                        property(ir_sensor_datasheet, "sensor_width") + 1,
+                                                        thickness + 2 * kEpsilon], center=true);
+                                                  translate([0, -(property(ir_sensor_datasheet, "sensor_y_offset") -
+                                                                  property(ir_sensor_datasheet, "hole_y_offset")), 0]) {
+                                                       cylinder(d=property(ir_sensor_datasheet, "hole_diameter"),
+                                                                h=thickness + 2 * kEpsilon, center=true);
+                                                  }
+                                             }
                                         }
                                    }
                               }
@@ -239,6 +251,15 @@ module mBaseChassis() {
                               cylinder(d=property(datasheet, "battery_stop_hole_diameter"), h=thickness + 2 * kEpsilon);
                          }
                     }
+                    rotate([0, 0, dc_input_theta_offset]) {
+                         translate([dc_input_r_offset, 0, 0]) {
+                              rotate([0, 0, 145]) {
+                                   linear_extrude(height=thickness + 2 * kEpsilon) {
+                                        mDCInputOpeningArea();
+                                   }
+                              }
+                         }
+                    }
                }
           }
           mChassisVolumeConstrain() {
@@ -314,7 +335,15 @@ module mBaseChassis() {
                     }
                }
           }
+          rotate([0, 0, dc_input_theta_offset]) {
+               translate([dc_input_r_offset, 0, thickness]) {
+                    rotate([0, 0, 145]) mDCInputBracket();
+               }
+          }
      }
+
 }
 
 mBaseChassis();
+
+

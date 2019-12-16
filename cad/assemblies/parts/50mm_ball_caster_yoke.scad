@@ -23,25 +23,29 @@ module m50mmBallCasterYoke() {
      mount_offset = property(datasheet, "mount_offset");
      mount_height = property(datasheet, "mount_height");
 
-     difference() {
-          pmBallCasterYoke(datasheet);
-          translate([0, 0, -kEpsilon]) {
-               duplicate([0, 1, 0]) {
-                    translate([0, mount_offset, 0]) {
-                         translate([0, 0, mount_height]) {
-                              linear_extrude(height=base_thickness + 2 * kEpsilon) {
-                                   offset(delta=kEpsilon) {
-                                        hull() projection() mM3x30mmHexStandoff();
+     color($default_color) {
+          render() {
+               difference() {
+                    pmBallCasterYoke(datasheet);
+                    translate([0, 0, -kEpsilon]) {
+                         duplicate([0, 1, 0]) {
+                              translate([0, mount_offset, 0]) {
+                                   translate([0, 0, mount_height]) {
+                                        linear_extrude(height=base_thickness + 2 * kEpsilon) {
+                                             offset(delta=kEpsilon) {
+                                                  hull() projection() mM3x30mmHexStandoff();
+                                             }
+                                        }
+                                   }
+                                   let(hole_diameter=property(vM3x30mmHexStandoffDatasheet(), "hole_diameter")) {
+                                        cylinder(h=mount_height + base_thickness + 2 * kEpsilon, d=hole_diameter);
                                    }
                               }
                          }
-                         let(hole_diameter=property(vM3x30mmHexStandoffDatasheet(), "hole_diameter")) {
-                              cylinder(h=mount_height + base_thickness + 2 * kEpsilon, d=hole_diameter);
+                         let(hole_diameter=property(vM3x5mmThreadedInsertDatasheet(), "nominal_diameter")) {
+                              cylinder(h=base_thickness + 2 * kEpsilon, d=hole_diameter);
                          }
                     }
-               }
-               let(hole_diameter=property(vM3x5mmThreadedInsertDatasheet(), "nominal_diameter")) {
-                    cylinder(h=base_thickness + 2 * kEpsilon, d=hole_diameter);
                }
           }
      }

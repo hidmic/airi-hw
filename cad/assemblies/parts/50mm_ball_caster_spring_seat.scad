@@ -28,14 +28,18 @@ module m50mmBallCasterSpringSeat() {
      inner_diameter = property(datasheet, "inner_diameter");
      height = property(datasheet, "height");
 
-     difference() {
-          union() {
-               cylinder(d=outer_diameter, h=base_thickness);
-               cylinder(d=inner_diameter, h=height);
-          }
-          let(hole_diameter=property(vM3x5mmThreadedInsertDatasheet(), "nominal_diameter")) {
-               translate([0, 0, -kEpsilon]) {
-                    cylinder(d=hole_diameter, h=height + 2 * kEpsilon);
+     color($default_color) {
+          render() {
+               difference() {
+                    union() {
+                         cylinder(d=outer_diameter, h=base_thickness);
+                         cylinder(d=inner_diameter, h=height);
+                    }
+                    let(hole_diameter=property(vM3x5mmThreadedInsertDatasheet(), "nominal_diameter")) {
+                         translate([0, 0, -kEpsilon]) {
+                              cylinder(d=hole_diameter, h=height + 2 * kEpsilon);
+                         }
+                    }
                }
           }
      }

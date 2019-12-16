@@ -10,11 +10,16 @@ function vJetsonNanoDatasheet() =
 
 module mJetsonNano() {
      height = property(vJetsonNanoDatasheet(), "height");
-     rotate([0, 0, -90])
-     translate([0, 0, height/2 - 2.2])
-     rotate([90, 0, 0])
-     translate([-2.51098442, -41.02810287, 13.])
-     import("stl/Jetson-Nano-DK.stl");
+
+     color("dimgray") {
+          render() {
+               rotate([0, 0, -90])
+               translate([0, 0, height/2 - 2.2])
+               rotate([90, 0, 0])
+               translate([-2.51098442, -41.02810287, 13.])
+               import("stl/Jetson-Nano-DK.stl");
+          }
+     }
 }
 
 mJetsonNano();

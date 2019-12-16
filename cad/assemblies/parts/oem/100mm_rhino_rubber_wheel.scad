@@ -6,9 +6,13 @@ function v100mmRhinoRubberWheelDatasheet() =
 
 
 module m100mmRhinoRubberWheel() {
-     let (width=property(v100mmRhinoRubberWheelDatasheet(), "width")) {
-          translate([0, width/2, 0]) {
-               rotate([-90, 0, 0]) import("stl/3601-0014-0096.stl");
+     color([0.1, 0.1, 0.1]) {
+          render() {
+               let (width=property(v100mmRhinoRubberWheelDatasheet(), "width")) {
+                    translate([0, width/2, 0]) {
+                         rotate([-90, 0, 0]) import("stl/3601-0014-0096.stl");
+                    }
+               }
           }
      }
 }

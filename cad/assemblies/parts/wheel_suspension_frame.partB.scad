@@ -29,16 +29,18 @@ module mWheelSuspensionFrame_PartB() {
      base_angular_length = property(datasheet, "angular_length");
      base_support_hole_diameter = property(datasheet, "support_hole_diameter");
 
-     mirror([0, 1, 0]) {
-          mWheelSuspensionFrameBase();
-          for (theta = [0, base_angular_length]) {
-               rotate([0, 0, theta]) {
-                    translate([base_main_radius, 0, 0]) {
-                         translate([0, 0, base_thickness]) {
-                              difference() {
-                                   cylinder(d=male_snap_fit_diameter, h=male_snap_fit_height);
-                                   translate([0, 0, -kEpsilon]) {
-                                        cylinder(d=base_support_hole_diameter, h=male_snap_fit_height + 2 * kEpsilon);
+     color($default_color) {
+          mirror([0, 1, 0]) {
+               mWheelSuspensionFrameBase();
+               for (theta = [0, base_angular_length]) {
+                    rotate([0, 0, theta]) {
+                         translate([base_main_radius, 0, 0]) {
+                              translate([0, 0, base_thickness]) {
+                                   difference() {
+                                        cylinder(d=male_snap_fit_diameter, h=male_snap_fit_height);
+                                        translate([0, 0, -kEpsilon]) {
+                                             cylinder(d=base_support_hole_diameter, h=male_snap_fit_height + 2 * kEpsilon);
+                                        }
                                    }
                               }
                          }

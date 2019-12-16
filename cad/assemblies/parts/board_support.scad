@@ -26,6 +26,7 @@ function vBoardSupportDatasheet() =
 
 module mBoardSupport() {
      datasheet = vBoardSupportDatasheet();
+
      color("white", 0.3) {
           translate([0, 0, property(datasheet, "z_offset")]) {
                linear_extrude(height=property(datasheet, "height")) {
@@ -93,4 +94,5 @@ module mBoardSupport() {
 }
 
 
+projection()
 mBoardSupport();

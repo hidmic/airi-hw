@@ -32,16 +32,19 @@ module mWheelSuspensionPivotJointXSection() {
 
 module mWheelSuspensionPivotJoint() {
      datasheet = vWheelSuspensionPivotJointDatasheet();
-     render() {
-          difference() {
-               pmJoint(datasheet);
-               let(joint_fastening_angles=property(datasheet, "joint_fastening_angles"),
-                   joint_fastening_diameter=property(datasheet, "joint_fastening_diameter"),
-                   threaded_insert_z_offset=property(datasheet, "height")) {
-                    for (i = [0:len(joint_fastening_angles)-1]) {
-                         rotate([0, 0, joint_fastening_angles[i]]) {
-                              translate([joint_fastening_diameter/2, 0, threaded_insert_z_offset]) {
-                                   mM3x5mmThreadedInsertTaperCone();
+
+     color($default_color) {
+          render() {
+               difference() {
+                    pmJoint(datasheet);
+                    let(joint_fastening_angles=property(datasheet, "joint_fastening_angles"),
+                        joint_fastening_diameter=property(datasheet, "joint_fastening_diameter"),
+                        threaded_insert_z_offset=property(datasheet, "height")) {
+                         for (i = [0:len(joint_fastening_angles)-1]) {
+                              rotate([0, 0, joint_fastening_angles[i]]) {
+                                   translate([joint_fastening_diameter/2, 0, threaded_insert_z_offset]) {
+                                        mM3x5mmThreadedInsertTaperCone();
+                                   }
                               }
                          }
                     }

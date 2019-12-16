@@ -5,7 +5,7 @@ function vGT2Pulley20T8mmBore6mmWideDatasheet() =
       ["tooth_length", 7.4]];
 
 module mGT2Pulley20T8mmBore6mmWide() {
-     import("stl/gt2_20t_b8_w6.stl");
+     color("silver") render() import("stl/gt2_20t_b8_w6.stl");
 }
 
 mGT2Pulley20T8mmBore6mmWide();

@@ -11,13 +11,14 @@ module mSMAFemaleBulkheadConnectorCutuotSection() {
      }
 }
 
-
 module mSMAFemaleBulkheadConnector() {
-     rotate([0, 0, 90]) {
-          translate ([0, 0, -12.5]) {
-               rotate([0, -90, 0]) {
-                    scale([25.4, 25.4, 25.4]) {  // inch to mm
-                         import("stl/sma_female_bulkhead_connector.stl");
+     color("darkgoldenrod") {
+          rotate([0, 0, 90]) {
+               translate ([0, 0, -12.5]) {
+                    rotate([0, -90, 0]) {
+                         scale([25.4, 25.4, 25.4]) {  // inch to mm
+                              render() import("stl/sma_female_bulkhead_connector.stl");
+                         }
                     }
                }
           }

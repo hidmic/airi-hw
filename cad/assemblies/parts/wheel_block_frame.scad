@@ -49,48 +49,51 @@ module mWheelBlockFrame() {
      frame_support_angles = property(datasheet, "support_angles");
      frame_support_diameter = property(datasheet, "support_diameter");
 
-     linear_extrude(height=frame_width) {
-          translate([0, wheel_axle_z_offset]) {
-               ring(inner_radius=frame_inner_radius, outer_radius=frame_outer_radius, angles=[0, 180]);
-               for(angle=frame_support_angles) {
-                    rotate([0, 0, angle]) {
-                         threaded_insert_minor_diameter =
-                              property(kM3x5mmThreadedInsertDatasheet, "minor_diameter");
-                         translate([frame_outer_radius, 0]) {
-                              curved_support_xsection(support_radius=frame_support_diameter/2,
-                                                      hole_radius=threaded_insert_minor_diameter / 2,
-                                                      fillet_radius=threaded_insert_minor_diameter / 4,
-                                                      wall_inner_radius=frame_inner_radius,
-                                                      wall_outer_radius=frame_outer_radius);
+     color($default_color) {
+          render() {
+               linear_extrude(height=frame_width) {
+                    translate([0, wheel_axle_z_offset]) {
+                         ring(inner_radius=frame_inner_radius, outer_radius=frame_outer_radius, angles=[0, 180]);
+                         for(angle=frame_support_angles) {
+                              rotate([0, 0, angle]) {
+                                   threaded_insert_minor_diameter =
+                                        property(kM3x5mmThreadedInsertDatasheet, "minor_diameter");
+                                   translate([frame_outer_radius, 0]) {
+                                        curved_support_xsection(support_radius=frame_support_diameter/2,
+                                                                hole_radius=threaded_insert_minor_diameter / 2,
+                                                                fillet_radius=threaded_insert_minor_diameter / 4,
+                                                                wall_inner_radius=frame_inner_radius,
+                                                                wall_outer_radius=frame_outer_radius);
+                                   }
+                              }
+                         }
+                    }
+                    duplicate([1, 0, 0]) {
+                         translate([-frame_outer_radius, 0]) {
+                              translate([frame_thickness, 0]) {
+                                   square([frame_toe_width/2 - frame_fastening_hole_diameter/2, frame_thickness]);
+                                   translate([frame_toe_width/2 + frame_fastening_hole_diameter/2, 0]) {
+                                        square([frame_toe_width/2 - frame_fastening_hole_diameter/2, frame_thickness]);
+                                   }
+                              }
+                              square([frame_thickness, wheel_axle_z_offset]);
+                         }
+                    }
+               }
+               duplicate([1, 0, 0]) {
+                    translate([-frame_outer_radius + frame_thickness + frame_toe_width/2, 0, 0]) {
+                         difference() {
+                              translate([-frame_fastening_hole_diameter/2, 0, 0]) {
+                                   cube([frame_fastening_hole_diameter, frame_thickness, frame_width / 5]);
+                              }
+                              translate([0, -kEpsilon, frame_width / 5]) {
+                                   rotate([-90, 0, 0]) cylinder(d=frame_fastening_hole_diameter, h=frame_thickness + 2 * kEpsilon);
+                              }
                          }
                     }
                }
           }
-          duplicate([1, 0, 0]) {
-               translate([-frame_outer_radius, 0]) {
-                    translate([frame_thickness, 0]) {
-                         square([frame_toe_width/2 - frame_fastening_hole_diameter/2, frame_thickness]);
-                         translate([frame_toe_width/2 + frame_fastening_hole_diameter/2, 0]) {
-                              square([frame_toe_width/2 - frame_fastening_hole_diameter/2, frame_thickness]);
-                         }
-                    }
-                    square([frame_thickness, wheel_axle_z_offset]);
-               }
-          }
      }
-     duplicate([1, 0, 0]) {
-          translate([-frame_outer_radius + frame_thickness + frame_toe_width/2, 0, 0]) {
-               difference() {
-                    translate([-frame_fastening_hole_diameter/2, 0, 0]) {
-                         cube([frame_fastening_hole_diameter, frame_thickness, frame_width / 5]);
-                    }
-                    translate([0, -kEpsilon, frame_width / 5]) {
-                         rotate([-90, 0, 0]) cylinder(d=frame_fastening_hole_diameter, h=frame_thickness + 2 * kEpsilon);
-                    }
-               }
-          }
-     }
-
 }
 
 

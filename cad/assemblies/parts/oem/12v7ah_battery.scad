@@ -5,7 +5,9 @@ function v12v7ahBatteryDatasheet() =
 
 
 module m12v7ahBattery() {
-     color("gray") import("stl/Batterie.stl");
+     color("dimgray") {
+          render() import("stl/Batterie.stl");
+     }
 }
 
 

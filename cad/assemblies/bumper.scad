@@ -63,7 +63,7 @@ module mBumper() {
                                                   translate([switch_height/2 - switch_mounting_hole_offset + 2 * kEpsilon, 0, 0]) {
                                                        duplicate([0, 1, 0]) {
                                                             translate([0, switch_mounting_hole_distance/2, 0]) {
-                                                                 mM2x20mmCountersunkScrew();
+                                                                 translate([0, 0, -kEpsilon]) mM2x20mmCountersunkScrew();
                                                                  translate([0, 0, (property(spring_block_datasheet, "switch_z_offset") +
                                                                                    property(switch_datasheet, "depth")/2)]) {
                                                                       mM2Nut();

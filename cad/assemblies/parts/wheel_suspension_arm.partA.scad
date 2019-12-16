@@ -20,11 +20,15 @@ function vWheelSuspensionArm_PartA_Datasheet() =
       ["encoder_fastening_diameter", encoder_fastening_diameter]];
 
 module mWheelSuspensionArm_PartA() {
-     mWheelSuspensionLink();
-     translate([0, 0, property(kWheelSuspensionLinkDatasheet, "thickness")]) {
-          mWheelSuspensionAxleJoint();
-          translate([property(kWheelSuspensionLinkDatasheet, "length"), 0, 0]) {
-               mWheelSuspensionPivotJoint();
+     color($default_color) {
+          render() {
+               mWheelSuspensionLink();
+               translate([0, 0, property(kWheelSuspensionLinkDatasheet, "thickness")]) {
+                    mWheelSuspensionAxleJoint();
+                    translate([property(kWheelSuspensionLinkDatasheet, "length"), 0, 0]) {
+                         mWheelSuspensionPivotJoint();
+                    }
+               }
           }
      }
 }

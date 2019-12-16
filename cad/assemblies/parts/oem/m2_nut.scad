@@ -14,7 +14,7 @@ module mM2NutXSection() {
 }
 
 module mM2Nut() {
-     import("stl/din934_m2_nut.stl");
+     color("silver") render() import("stl/din934_m2_nut.stl");
 }
 
 mM2Nut();

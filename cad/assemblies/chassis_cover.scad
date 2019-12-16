@@ -25,7 +25,7 @@ module mChassisCover() {
      translate([0, 0, property(vChassisBayDatasheet(), "height")]) {
           translate([0, 0, property(datasheet, "height")]) {
                translate([0, 0, property(datasheet, "pole_socket_depth")]) {
-                    //mPolePlug();
+                    mPolePlug();
                }
                translate([0, 0, property(vNdAlM3WasherDatasheet(), "thickness")]) {
                     mM3x12mmPhillipsScrew();

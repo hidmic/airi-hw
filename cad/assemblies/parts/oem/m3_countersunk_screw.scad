@@ -12,7 +12,7 @@ module mM3CountersunkScrewBore() {
 }
 
 module mM3x8mmCountersunkScrew() {
-     import("stl/m3x8mm_countersunk_screw.stl");
+     color("silver") render() import("stl/m3x8mm_countersunk_screw.stl");
 }
 
 mM3x8mmCountersunkScrew();

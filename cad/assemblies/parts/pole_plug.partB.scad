@@ -44,31 +44,36 @@ module mPolePlug_PartB() {
      screw_head_diameter = property(screw_datasheet, "max_head_diameter");
      screw_nominal_diameter = property(screw_datasheet, "nominal_diameter");
 
-     difference() {
-          union() {
-               translate([0, 0, base_thickness]) {
-                    let(taper_height=height - base_thickness, major_diameter=inner_diameter,
-                        minor_diameter=inner_diameter - 2 * taper_height * tan(taper_angle)) {
-                         cylinder(d1=major_diameter, d2=minor_diameter, h=taper_height);
-                    }
-               }
-               cylinder(d=outer_diameter, h=base_thickness);
-          }
-          translate([0, 0, height - washer_thickness]) {
-               cylinder(d=washer_outer_diameter + kEpsilon, h=washer_thickness + kEpsilon);
-               mM3x5mmThreadedInsertTaperCone();
-          }
-          translate([0, 0, -kEpsilon]) {
-               cylinder(d=screw_nominal_diameter, h=base_thickness + 2 * kEpsilon);
-          }
-          for(angle = fastening_angles) {
-               rotate([0, 0, angle]) {
-                    translate([fastening_r_offset, 0, 0]) {
+
+     color($default_color) {
+          render() {
+               difference() {
+                    union() {
                          translate([0, 0, base_thickness]) {
-                              cylinder(d=screw_head_diameter, h=height);
+                              let(taper_height=height - base_thickness, major_diameter=inner_diameter,
+                                  minor_diameter=inner_diameter - 2 * taper_height * tan(taper_angle)) {
+                                   cylinder(d1=major_diameter, d2=minor_diameter, h=taper_height);
+                              }
                          }
-                         translate([0, 0, -kEpsilon]) {
-                              cylinder(d=screw_nominal_diameter, h=height);
+                         cylinder(d=outer_diameter, h=base_thickness);
+                    }
+                    translate([0, 0, height - washer_thickness]) {
+                         cylinder(d=washer_outer_diameter + kEpsilon, h=washer_thickness + kEpsilon);
+                         mM3x5mmThreadedInsertTaperCone();
+                    }
+                    translate([0, 0, -kEpsilon]) {
+                         cylinder(d=screw_nominal_diameter, h=base_thickness + 2 * kEpsilon);
+                    }
+                    for(angle = fastening_angles) {
+                         rotate([0, 0, angle]) {
+                              translate([fastening_r_offset, 0, 0]) {
+                                   translate([0, 0, base_thickness]) {
+                                        cylinder(d=screw_head_diameter, h=height);
+                                   }
+                                   translate([0, 0, -kEpsilon]) {
+                                        cylinder(d=screw_nominal_diameter, h=height);
+                                   }
+                              }
                          }
                     }
                }

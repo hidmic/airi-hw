@@ -6,5 +6,5 @@ function v100x8mmSteelShaftDatasheet() =
      pvShaftDatasheet(length=100, diameter=8);
 
 module m100x8mmSteelShaft() {
-     pmShaft(v100x8mmSteelShaftDatasheet());
+     color("silver") render() pmShaft(v100x8mmSteelShaftDatasheet());
 }

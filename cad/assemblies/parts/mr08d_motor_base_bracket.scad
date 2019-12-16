@@ -88,45 +88,49 @@ module mMR08DMotorBaseBracket() {
      front_cap_support_datasheet = property(datasheet, "front_cap_support_datasheet");
      rear_cap_support_datasheet = property(datasheet, "rear_cap_support_datasheet");
 
-     linear_extrude(height=base_thickness) {
-          square_frame(outer_length, main_width, link_width);
-     }
-
-     let(x_offset=property(datasheet, "rear_cap_x_offset"),
-         z_offset=property(datasheet, "rear_cap_z_offset"),
-         height=property(rear_cap_support_datasheet, "height"),
-         wall_thickness=property(rear_cap_support_datasheet, "wall_thickness")) {
-          translate([x_offset, 0, 0]) {
-               linear_extrude(height=z_offset - wall_thickness) {
-                    projection() pmMotorCapBaseSupport(rear_cap_support_datasheet);
+     color($default_color) {
+          render() {
+               linear_extrude(height=base_thickness) {
+                    square_frame(outer_length, main_width, link_width);
                }
-               translate([0, 0, z_offset - wall_thickness]) {
-                    difference() {
-                         pmMotorCapBaseSupport(rear_cap_support_datasheet);
-                         duplicate([0, 1, 0]) {
-                              translate([0, hole_to_hole_y_distance/2, height]) {
-                                   mM3x5mmThreadedInsertTaperCone();
+
+               let(x_offset=property(datasheet, "rear_cap_x_offset"),
+                   z_offset=property(datasheet, "rear_cap_z_offset"),
+                   height=property(rear_cap_support_datasheet, "height"),
+                   wall_thickness=property(rear_cap_support_datasheet, "wall_thickness")) {
+                    translate([x_offset, 0, 0]) {
+                         linear_extrude(height=z_offset - wall_thickness) {
+                              projection() pmMotorCapBaseSupport(rear_cap_support_datasheet);
+                         }
+                         translate([0, 0, z_offset - wall_thickness]) {
+                              difference() {
+                                   pmMotorCapBaseSupport(rear_cap_support_datasheet);
+                                   duplicate([0, 1, 0]) {
+                                        translate([0, hole_to_hole_y_distance/2, height]) {
+                                             mM3x5mmThreadedInsertTaperCone();
+                                        }
+                                   }
                               }
                          }
                     }
                }
-          }
-     }
 
-     let(x_offset=property(datasheet, "front_cap_x_offset"),
-         z_offset=property(datasheet, "front_cap_z_offset"),
-         height=property(front_cap_support_datasheet, "height"),
-         wall_thickness=property(front_cap_support_datasheet, "wall_thickness")) {
-          translate([x_offset, 0, 0]) {
-               linear_extrude(height=z_offset - wall_thickness) {
-                    projection() pmMotorCapBaseSupport(front_cap_support_datasheet);
-               }
-               translate([0, 0, z_offset - wall_thickness]) {
-                    difference() {
-                         pmMotorCapBaseSupport(front_cap_support_datasheet);
-                         duplicate([0, 1, 0]) {
-                              translate([0, hole_to_hole_y_distance/2, height]) {
-                                   mM3x5mmThreadedInsertTaperCone();
+               let(x_offset=property(datasheet, "front_cap_x_offset"),
+                   z_offset=property(datasheet, "front_cap_z_offset"),
+                   height=property(front_cap_support_datasheet, "height"),
+                   wall_thickness=property(front_cap_support_datasheet, "wall_thickness")) {
+                    translate([x_offset, 0, 0]) {
+                         linear_extrude(height=z_offset - wall_thickness) {
+                              projection() pmMotorCapBaseSupport(front_cap_support_datasheet);
+                         }
+                         translate([0, 0, z_offset - wall_thickness]) {
+                              difference() {
+                                   pmMotorCapBaseSupport(front_cap_support_datasheet);
+                                   duplicate([0, 1, 0]) {
+                                        translate([0, hole_to_hole_y_distance/2, height]) {
+                                             mM3x5mmThreadedInsertTaperCone();
+                                        }
+                                   }
                               }
                          }
                     }

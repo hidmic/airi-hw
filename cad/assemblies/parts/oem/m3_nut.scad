@@ -4,7 +4,7 @@ function vM3NutDatasheet() =
 
 
 module mM3Nut() {
-     import("stl/din934_m3_nut.stl");
+     color("silver") render() import("stl/din934_m3_nut.stl");
 }
 
 mM3Nut();

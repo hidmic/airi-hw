@@ -49,63 +49,65 @@ module mChassisCover_PartB() {
      screw_nominal_diameter = property(screw_datasheet, "nominal_diameter");
      screw_max_head_diameter = property(screw_datasheet, "max_head_diameter");
 
-     render() {
-          /* difference() { */
-          /*      linear_extrude(height=min_thickness) { */
-          /*           difference() { */
-          /*                circle(r=inner_wireway_radius); */
-          /*                rotate([0, 0, panel_angular_offset]) { */
-          /*                     translate([panel_r_offset, 0, 0]) { */
-          /*                          rotate([0, 0, -90]) { */
-          /*                               circle(d=pushbutton_cutout_diameter); */
-          /*                               duplicate([0, 1, 0]) { */
-          /*                                    translate([0, (panel_width + pushbutton_cutout_diameter)/4]) { */
-          /*                                         translate([-usb_conn_cutout_width/2, -usb_conn_cutout_length/2]) { */
-          /*                                              square([usb_conn_cutout_width, usb_conn_cutout_length]); */
-          /*                                         } */
-          /*                                    } */
-          /*                               } */
-          /*                          } */
-          /*                     } */
-          /*                } */
-          /*                for(angle = property(datasheet, "fastening_angles")) { */
-          /*                     for (r_offset = property(datasheet, "fastening_r_offset")) { */
-          /*                          rotate([0, 0, angle]) { */
-          /*                               translate([r_offset, 0]) { */
-          /*                                    circle(d=screw_nominal_diameter); */
-          /*                               } */
-          /*                          } */
-          /*                     } */
-          /*                } */
-          /*                circle(d=screw_nominal_diameter); */
-          /*           } */
-          /*      } */
-          /*      translate([0, 0, min_thickness/2]) { */
-          /*           linear_extrude(height=min_thickness/2) { */
-          /*                for (angle = [-120, 0, 120]) { */
-          /*                     rotate([0, 0, angle]) { */
-          /*                          translate([inner_diameter, 0]) { */
-          /*                               wifi_logo(10); */
-          /*                          } */
-          /*                     } */
-          /*                } */
-          /*           } */
-          /*      } */
-          /* } */
-          translate([0, 0, min_thickness]) {
-               let(pole_block_major_diameter=pole_block_diameter + 2 * pole_socket_depth * tan(pole_block_taper_angle),
-                   pole_block_minor_diameter=pole_block_diameter, pole_socket_major_diameter=pole_socket_diameter,
-                   pole_socket_minor_diameter=pole_socket_diameter - 2 * pole_socket_depth * tan(pole_socket_taper_angle)) {
-                    difference() {
-                         cylinder(d1=pole_block_major_diameter,
-                                  d2=pole_block_minor_diameter,
-                                  h=pole_socket_depth);
-                         translate([0, 0, kEpsilon]) {
-                              cylinder(d1=pole_socket_minor_diameter,
-                                       d2=pole_socket_major_diameter,
-                                       h=pole_socket_depth + kEpsilon);
+     color($default_color) {
+          render() {
+               difference() {
+                    linear_extrude(height=min_thickness) {
+                         difference() {
+                              circle(r=inner_wireway_radius);
+                              rotate([0, 0, panel_angular_offset]) {
+                                   translate([panel_r_offset, 0, 0]) {
+                                        rotate([0, 0, -90]) {
+                                             circle(d=pushbutton_cutout_diameter);
+                                             duplicate([0, 1, 0]) {
+                                                  translate([0, (panel_width + pushbutton_cutout_diameter)/4]) {
+                                                       translate([-usb_conn_cutout_width/2, -usb_conn_cutout_length/2]) {
+                                                            square([usb_conn_cutout_width, usb_conn_cutout_length]);
+                                                       }
+                                                  }
+                                             }
+                                        }
+                                   }
+                              }
+                              for(angle = property(datasheet, "fastening_angles")) {
+                                   for (r_offset = property(datasheet, "fastening_r_offset")) {
+                                        rotate([0, 0, angle]) {
+                                             translate([r_offset, 0]) {
+                                                  circle(d=screw_nominal_diameter);
+                                             }
+                                        }
+                                   }
+                              }
+                              circle(d=screw_nominal_diameter);
                          }
+                    }
+                    translate([0, 0, min_thickness/2]) {
+                         linear_extrude(height=min_thickness/2) {
+                              for (angle = [-120, 0, 120]) {
+                                   rotate([0, 0, angle]) {
+                                        translate([inner_diameter, 0]) {
+                                             wifi_logo(10);
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               }
+               translate([0, 0, min_thickness]) {
+                    let(pole_block_major_diameter=pole_block_diameter + 2 * pole_socket_depth * tan(pole_block_taper_angle),
+                        pole_block_minor_diameter=pole_block_diameter, pole_socket_major_diameter=pole_socket_diameter,
+                        pole_socket_minor_diameter=pole_socket_diameter - 2 * pole_socket_depth * tan(pole_socket_taper_angle)) {
+                         difference() {
+                              cylinder(d1=pole_block_major_diameter,
+                                       d2=pole_block_minor_diameter,
+                                       h=pole_socket_depth);
+                              translate([0, 0, kEpsilon]) {
+                                   cylinder(d1=pole_socket_minor_diameter,
+                                            d2=pole_socket_major_diameter,
+                                            h=pole_socket_depth + kEpsilon);
+                              }
 
+                         }
                     }
                }
           }

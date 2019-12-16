@@ -10,24 +10,26 @@ module mSTM32Disco() {
      width = property(datasheet, "width");
      thickness = property(datasheet, "thickness");
 
-     linear_extrude(height=thickness) {
-          difference() {
-               square([width, length], center=true);
-               for(x = [-width/2 + 6.33, width/2 - 6.33]) {
-                    for(y = [length/2 - 3.34 - 2.54, length/2 - 3.34]) {
-                         translate([x, y]) {
-                              circle(d=1.5, $fn=64);
+     color("mediumblue") {
+          linear_extrude(height=thickness) {
+               difference() {
+                    square([width, length], center=true);
+                    for(x = [-width/2 + 6.33, width/2 - 6.33]) {
+                         for(y = [length/2 - 3.34 - 2.54, length/2 - 3.34]) {
+                              translate([x, y]) {
+                                   circle(d=1.5, $fn=64);
+                              }
                          }
                     }
-               }
-               for(x = [-width/2 + 6.33, -width/2 + 6.33 + 2.54, width/2 - 6.33 - 2.54, width/2 - 6.33]) {
-                    for(y = [0:2.54:60.96]) {
-                         translate([x, y + 2.22 - length/2]) {
-                              circle(d=1.5, $fn=64);
+                    for(x = [-width/2 + 6.33, -width/2 + 6.33 + 2.54, width/2 - 6.33 - 2.54, width/2 - 6.33]) {
+                         for(y = [0:2.54:60.96]) {
+                              translate([x, y + 2.22 - length/2]) {
+                                   circle(d=1.5, $fn=64);
+                              }
                          }
                     }
-               }
 
+               }
           }
      }
 }

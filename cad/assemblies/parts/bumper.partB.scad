@@ -18,24 +18,26 @@ module mBumper_PartB() {
      chassis_inner_diameter = property(chassis_datasheet, "inner_diameter");
      chassis_fillet_radius = property(chassis_datasheet, "fillet_radius");
 
-     render(convexity=10) {
-          difference() {
-               mBumperBase();
-               translate([0, 0, -chassis_height + bumper_height/2]) mChassisBBox();
-          }
-          translate([0, 0, bumper_height/2]) {
-               for(angle = bumper_support_angles) {
-                    rotate([0, 0, angle]) {
-                         linear_extrude(height=bumper_height/2) {
-                              translate([(chassis_outer_diameter + chassis_inner_diameter)/4, 0, 0]) {
-                                   difference() {
-                                        curved_support_xsection(
-                                             support_radius=bumper_support_diameter/2,
-                                             fillet_radius=chassis_fillet_radius,
-                                             wall_outer_radius=chassis_outer_diameter/2,
-                                             wall_inner_radius=chassis_inner_diameter/2);
-                                        translate([-bumper_support_diameter/2, 0]) {
-                                             circle(d=bumper_support_pin_diameter);
+     color($default_color) {
+          render(convexity=10) {
+               difference() {
+                    mBumperBase();
+                    translate([0, 0, -chassis_height + bumper_height/2]) mChassisBBox();
+               }
+               translate([0, 0, bumper_height/2]) {
+                    for(angle = bumper_support_angles) {
+                         rotate([0, 0, angle]) {
+                              linear_extrude(height=bumper_height/2) {
+                                   translate([(chassis_outer_diameter + chassis_inner_diameter)/4, 0, 0]) {
+                                        difference() {
+                                             curved_support_xsection(
+                                                  support_radius=bumper_support_diameter/2,
+                                                  fillet_radius=chassis_fillet_radius,
+                                                  wall_outer_radius=chassis_outer_diameter/2,
+                                                  wall_inner_radius=chassis_inner_diameter/2);
+                                             translate([-bumper_support_diameter/2, 0]) {
+                                                  circle(d=bumper_support_pin_diameter);
+                                             }
                                         }
                                    }
                               }

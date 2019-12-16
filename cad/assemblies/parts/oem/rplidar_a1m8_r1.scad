@@ -6,10 +6,12 @@ function vRPLidarA1M8R1Datasheet() =
 
 
 module mRPLidarA1M8R1() {
-    translate([-13, 0, 25])
-    rotate([90, 0, 180])
-    translate([77.3244, -744.642, -132.9176])
-    import("stl/RPLIDAR-A1M8-R1.stl");
+     color("dimgray") {
+          translate([-13, 0, 25])
+          rotate([90, 0, 180])
+          translate([77.3244, -744.642, -132.9176])
+          render() import("stl/RPLIDAR-A1M8-R1.stl");
+     }
 }
 
 mRPLidarA1M8R1();

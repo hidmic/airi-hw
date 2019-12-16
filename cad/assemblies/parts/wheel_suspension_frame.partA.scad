@@ -37,26 +37,28 @@ module mWheelSuspensionFrame_PartA() {
      base_main_radius = property(datasheet, "main_radius");
      base_angular_length = property(datasheet, "angular_length");
 
-     mWheelSuspensionFrameBase();
-     for (theta = [0, base_angular_length]) {
-          rotate([0, 0, theta]) {
-               translate([base_main_radius, 0, 0]) {
-                    translate([0, 0, base_thickness]) {
-                         difference() {
-                              cylinder(d1=female_snap_fit_major_diameter,
-                                       d2=female_snap_fit_minor_diameter,
-                                       h=female_snap_fit_height);
-                              translate([0, 0, -kEpsilon]) {
-                                   cylinder(d1=female_snap_fit_major_diameter - female_snap_fit_thickness,
-                                            d2=female_snap_fit_minor_diameter - female_snap_fit_thickness,
-                                            h=female_snap_fit_height + 2 * kEpsilon);
-                              }
-                              for (angle = female_snap_fit_cut_angles) {
-                                   rotate([0, 0, angle]) {
-                                        translate([0, 0, female_snap_fit_height - female_snap_fit_cut_length / 2 + kEpsilon]) {
-                                             cube([female_snap_fit_cut_width,
-                                                   2 * female_snap_fit_major_diameter,
-                                                   female_snap_fit_cut_length], center=true);
+     color($default_color) {
+          mWheelSuspensionFrameBase();
+          for (theta = [0, base_angular_length]) {
+               rotate([0, 0, theta]) {
+                    translate([base_main_radius, 0, 0]) {
+                         translate([0, 0, base_thickness]) {
+                              difference() {
+                                   cylinder(d1=female_snap_fit_major_diameter,
+                                            d2=female_snap_fit_minor_diameter,
+                                            h=female_snap_fit_height);
+                                   translate([0, 0, -kEpsilon]) {
+                                        cylinder(d1=female_snap_fit_major_diameter - female_snap_fit_thickness,
+                                                 d2=female_snap_fit_minor_diameter - female_snap_fit_thickness,
+                                                 h=female_snap_fit_height + 2 * kEpsilon);
+                                   }
+                                   for (angle = female_snap_fit_cut_angles) {
+                                        rotate([0, 0, angle]) {
+                                             translate([0, 0, female_snap_fit_height - female_snap_fit_cut_length / 2 + kEpsilon]) {
+                                                  cube([female_snap_fit_cut_width,
+                                                        2 * female_snap_fit_major_diameter,
+                                                        female_snap_fit_cut_length], center=true);
+                                             }
                                         }
                                    }
                               }

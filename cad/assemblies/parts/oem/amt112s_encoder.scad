@@ -12,9 +12,14 @@ module mAMT112SEncoder() {
      width = property(datasheet, "width");
      length = property(datasheet, "length");
      axle_to_top_offset = property(datasheet, "axle_to_top_offset");
-     rotate([0, 0, 180]) {
-          translate([-width/2, 0, -(length - axle_to_top_offset)]) {
-               rotate([90, 0, 0]) import("stl/CUI_AMT112S-4096-8000-S.STL");
+
+     color("slategray") {
+          render() {
+               rotate([0, 0, 180]) {
+                    translate([-width/2, 0, -(length - axle_to_top_offset)]) {
+                         rotate([90, 0, 0]) import("stl/CUI_AMT112S-4096-8000-S.STL");
+                    }
+               }
           }
      }
 }

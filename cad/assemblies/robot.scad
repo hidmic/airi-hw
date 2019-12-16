@@ -70,11 +70,16 @@ module mRobot() {
                               }
                               for (x_offset = property(wheel_block_datasheet, "fastening_x_offset")) {
                                    for (y_offset = property(wheel_block_datasheet, "fastening_y_offset")) {
-                                        translate([x_offset, y_offset, -chassis_thickness]) {
-                                             mirror([0, 0, 1]) mM3x12mmPhillipsScrew();
-                                        }
-                                        translate([x_offset, y_offset, wheel_block_thickness]) {
-                                             mM3Nut();
+                                        translate([x_offset, y_offset, 0]) {
+                                             translate([0, 0, -chassis_thickness]) {
+                                                  mirror([0, 0, 1]) mM3x12mmPhillipsScrew();
+                                             }
+                                             translate([0, 0, wheel_block_thickness]) {
+                                                  mM3Washer();
+                                                  translate([0, 0, property(vM3WasherDatasheet(), "thickness")]) {
+                                                       mM3Nut();
+                                                  }
+                                             }
                                         }
                                    }
                               }
@@ -231,8 +236,18 @@ module mRobot() {
                     for (angle = property(chassis_datasheet, "ir_sensor_angles")) {
                          translate([property(chassis_datasheet, "ir_sensor_x_offset"), 0, 0]) {
                               rotate([0, 0, angle]) {
-                                   translate([property(chassis_datasheet, "ir_sensor_r_offset"), 0, 0]) {
-                                        rotate([0, 0, -90]) mKY033IRSensor();
+                                   let(ir_sensor_datasheet=vKY033IRSensorDatasheet()) {
+                                        translate([property(chassis_datasheet, "ir_sensor_r_offset"), 0, 0]) {
+                                             rotate([0, 0, -90]) {
+                                                  translate([0, 0, property(ir_sensor_datasheet, "sensor_z_offset")]) {
+                                                       mKY033IRSensor();
+                                                  }
+                                                  translate([0, -(property(ir_sensor_datasheet, "sensor_y_offset") -
+                                                                  property(ir_sensor_datasheet, "hole_y_offset")), 0]) {
+                                                       mM3x10mmHexStandoff();
+                                                  }
+                                             }
+                                        }
                                    }
                               }
                          }
