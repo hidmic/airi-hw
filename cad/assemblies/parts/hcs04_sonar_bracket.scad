@@ -29,31 +29,32 @@ module mHCS04SonarBracket() {
      sonar_hole_diameter = property(kHCS04SonarDatasheet, "hole_diameter");
 
      color($default_color) {
-          render(convexity = 10) {
-               rotate([0, -mounting_polar_angle, 0])
+          rotate([0, -mounting_polar_angle, 0]) {
                difference() {
                     rotate([0, mounting_polar_angle, 0]) {
-                         let(extrusion_scale=(4 * distance_to_wall * tan(sonar_horizontal_fov/2) + width  + 2 * thickness)/(width + 2 * thickness)) {
-                              linear_extrude(height=2 * distance_to_wall, scale=extrusion_scale) {
-                                   difference() {
-                                        square([length, width + 2 * thickness], center=true);
-                                        square([length + kEpsilon, width], center=true);
-                                   }
-                              }
-                         }
-                         let(extrusion_scale=(2 * thickness * tan(sonar_horizontal_fov/2) + width  + 2 * thickness)/(width + 2 * thickness)) {
-                              linear_extrude(height=thickness, scale=extrusion_scale) {
-                                   difference() {
-                                        square([length, width], center=true);
-                                        for (x = [-sonar_hole_to_hole_length/2, sonar_hole_to_hole_length/2]) {
-                                             for (y = [-sonar_hole_to_hole_width/2, sonar_hole_to_hole_width/2]) {
-                                                  translate([x, y, 0]) circle(d=sonar_hole_diameter);
+                         difference() {
+                              union() {
+                                   let(extrusion_scale=(4 * distance_to_wall * tan(sonar_horizontal_fov/2) + width  + 2 * thickness)/(width + 2 * thickness)) {
+                                        linear_extrude(height=2 * distance_to_wall, scale=extrusion_scale) {
+                                             difference() {
+                                                  square([length, width + 2 * thickness], center=true);
+                                                  square([length, width-kEpsilon], center=true);
                                              }
                                         }
-                                        translate([length/2 - length/6, 0]) {
-                                             square([length/3, property(datasheet, "connector_width")], center=true);
+                                   }
+                                   let(extrusion_scale=(2 * thickness * tan(sonar_horizontal_fov/2) + width  + 2 * thickness)/(width + 2 * thickness)) {
+                                        linear_extrude(height=thickness, scale=extrusion_scale) {
+                                             square([length, width], center=true);
                                         }
                                    }
+                              }
+                              for (x = [-sonar_hole_to_hole_length/2, sonar_hole_to_hole_length/2]) {
+                                   for (y = [-sonar_hole_to_hole_width/2, sonar_hole_to_hole_width/2]) {
+                                        translate([x, y, -kEpsilon]) cylinder(d=sonar_hole_diameter, h=thickness + 2 * kEpsilon);
+                                   }
+                              }
+                              translate([length/2 - length/3, -property(datasheet, "connector_width")/2, -kEpsilon]) {
+                                   cube([length/2, property(datasheet, "connector_width"), thickness + 2 * kEpsilon]);
                               }
                          }
                     }

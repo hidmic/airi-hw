@@ -26,11 +26,9 @@ module mF2276SAE1070Spring(length=kF2276SAE1070SpringLength) {
      wire_radius = property(datasheet, "wire_diameter") / 2;
 
      color("silver") {
-          render() {
-               translate([0, 0, wire_radius]) {
-                    spring(Windings=n_windings, R=main_radius, r=wire_radius,
-                           h=length - 2 * wire_radius, slices=50);
-               }
+          translate([0, 0, wire_radius]) {
+               spring(Windings=n_windings, R=main_radius, r=wire_radius,
+                      h=length - 2 * wire_radius, slices=50);
           }
      }
 }

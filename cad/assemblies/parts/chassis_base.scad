@@ -44,18 +44,26 @@ module mChassisVolumeConstrain() {
      height = property(datasheet, "height");
      outer_diameter = property(datasheet, "outer_diameter");
      fillet_radius = property(datasheet, "fillet_radius");
+     /* difference() { */
+     /*      rounded_cylinder(diameter=outer_diameter, height=height, */
+     /*                       fillet_radius=fillet_radius); */
+     /*      difference() { */
+     /*           translate([0, 0, -kEpsilon]) { */
+     /*                rounded_cylinder(diameter=outer_diameter + kEpsilon, */
+     /*                                 height=height + 2 * kEpsilon, */
+     /*                                 fillet_radius=fillet_radius); */
+     /*           } */
+     /*           children(); */
+     /*      } */
+     /* } */
      difference() {
-          rounded_cylinder(diameter=outer_diameter,
-                           height=height,
-                           fillet_radius=fillet_radius);
+          children();
           difference() {
-               translate([0, 0, -kEpsilon]) {
-                    rounded_cylinder(diameter=outer_diameter + kEpsilon,
-                                     height=height + 2 * kEpsilon,
-                                     fillet_radius=fillet_radius);
+               translate([0, 0, height/2]) {
+                    cube(2 * outer_diameter, center=true);
                }
-               children();
+               rounded_cylinder(diameter=outer_diameter, height=height,
+                                fillet_radius=fillet_radius);
           }
      }
 }
-

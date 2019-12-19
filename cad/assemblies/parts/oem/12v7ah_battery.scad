@@ -1,3 +1,4 @@
+include <generic/lib.scad>;
 
 function v12v7ahBatteryDatasheet() =
      [["length", 150], ["width", 65],
@@ -6,7 +7,7 @@ function v12v7ahBatteryDatasheet() =
 
 module m12v7ahBattery() {
      color("dimgray") {
-          render() import("stl/Batterie.stl");
+          import_mesh("stl/Batterie.stl");
      }
 }
 

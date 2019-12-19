@@ -1,4 +1,4 @@
-
+include <generic/lib.scad>;
 
 function v688BallBearingDatasheet() =
      [["height", 5],
@@ -9,10 +9,8 @@ function v688BallBearingDatasheet() =
 
 module m688BallBearing() {
      color("silver") {
-          render() {
-               rotate([90, 0, 0]) {
-                    import("stl/688-2z.stl", convexity=10);
-               }
+          rotate([90, 0, 0]) {
+               import_mesh("stl/688-2z.stl");
           }
      }
 }

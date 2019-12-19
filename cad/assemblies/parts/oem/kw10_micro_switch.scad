@@ -10,10 +10,9 @@ function vKW10Z1PMicroSwitchDatasheet() =
 
 module mKW10Z1PMicroSwitch() {
      color("slategray") {
-          render() {
-               translate([kEpsilon/2, 0, 0]) {
-                    rotate([0, 0, 90]) scale(10) import("stl/kw10_z1p_micro_switch.stl");
-               }
+          translate([kEpsilon/2, 0, 0]) {
+               rotate([0, 0, 90]) scale(10)
+               import_mesh("stl/kw10_z1p_micro_switch.stl");
           }
      }
 }

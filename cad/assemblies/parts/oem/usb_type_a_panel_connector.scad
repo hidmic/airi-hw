@@ -10,7 +10,7 @@ module mUSBTypeAPanelConnector() {
      module mUSBTypeAFemaleConnector() {
           rotate([0, 0, 90]) {
                translate([-53.92913818, 0.57096958, 0.19999933]) {
-                    import("stl/usb_type_a_female_connector.stl");
+                    import_mesh("stl/usb_type_a_female_connector.stl");
                }
           }
      }

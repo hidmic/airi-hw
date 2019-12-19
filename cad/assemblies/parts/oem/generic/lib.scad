@@ -1,11 +1,20 @@
-quality_order=5;
-$fn = max(pow(2, quality_order) - 4, 0);
+quality_order = -1;
+$fn = quality_order >= 0 ? pow(2, quality_order) : 0;
+$fa = 4;
+$fs = 1/64;
 
-kEpsilon = 1e-1;
+kEpsilon = 1/32;
+
+$noimport = false;
+module import_mesh(filename) {
+     if (!$noimport) import(filename);
+}
 
 function property(table, key) = table[search([key], table)[0]][1];
 
 module sector(radius, angles, fn = $fn) {
+     fn = fn == 0 ? round(360 / ((radius * PI * $fa / 180) < $fs ? ($fs / radius) : $fa)) : fn;
+
      r = radius / cos(180 / fn);
      step = -360 / fn;
 
@@ -23,13 +32,23 @@ module sector(radius, angles, fn = $fn) {
 }
 
 module ring(inner_radius, outer_radius, angles = [0, 360], fn = $fn) {
-     difference() {
-          sector(radius=outer_radius, angles=angles, fn=fn);
-          sector(radius=inner_radius, angles=angles+[-kEpsilon, kEpsilon], fn=fn);
+     if (abs(angles[1] - angles[0]) < 360) {
+          difference() {
+               sector(radius=outer_radius, angles=angles, fn=fn);
+               sector(radius=inner_radius, angles=angles+[-kEpsilon, kEpsilon], fn=fn);
+          }
+     } else {
+          difference() {
+               circle(r=outer_radius);
+               circle(r=inner_radius);
+          }
      }
 }
 
 module rounded_ring(inner_radius, outer_radius, angles = [0, 360], fn = $fn) {
+     fn = let(radius = (outer_radius + inner_radius)/2)
+          fn == 0 ? round(360 / ((radius * PI * $fa / 180) < $fs ? ($fs / radius) : $fa)) : fn;
+
      step_angle = 360 / fn;
      ring_width = outer_radius - inner_radius;
      ring_mean_radius = (outer_radius + inner_radius) / 2;
@@ -49,20 +68,23 @@ module rounded_ring(inner_radius, outer_radius, angles = [0, 360], fn = $fn) {
 module fillet(r) {
      difference() {
           difference() {
-               offset(r=-r - kEpsilon)
+               offset(r=-r * (1 + 1 / 1024)) {
                     offset(delta=r) {
-                    children();
+                         children();
+                    }
                }
-               offset(r=r)
+               offset(r=r * (1 + 1 / 1024)) {
                     offset(delta=-r) {
-                    children();
+                         children();
+                    }
                }
           }
           children();
      }
-     offset(r=r)
+     offset(r=r * (1 + 1 / 1024)) {
           offset(delta=-r) {
-          children();
+               children();
+          }
      }
 }
 
@@ -205,7 +227,7 @@ function steps(start, end, n) = [start:(end - start)/(n - 1):end];
 function sigmoid(x) = 1.0 / (1.0 + exp(-x));
 
 module sigmoid_profile(length, width, order=10, fn = $fn) {
-     step = length / fn;
+     step = fn > 0 ? length / fn : $fs;
      points = concat(
           [[0, 0]],
           [for (x = [step:step:length-step]) [x, width * sigmoid(2 * order * ((x / length) - 0.5))]],
@@ -216,7 +238,7 @@ module sigmoid_profile(length, width, order=10, fn = $fn) {
 }
 
 module exp_nerve_xsection(height, length, decay_rate = 5, fn = $fn) {
-     step = length / fn;
+     step = fn > 0 ? length / fn : $fs;
      points = concat(
           [[0, 0]],
           [for (x = [0:step:length-step]) [x, height * exp(-x/decay_rate)]],

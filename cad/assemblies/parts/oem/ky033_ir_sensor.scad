@@ -12,14 +12,11 @@ function vKY033IRSensorDatasheet() =
       ["hole_diameter", 3],
       ["thickness", thickness]];
 
-echo(vKY033IRSensorDatasheet());
 
 module mKY033IRSensor() {
      color("darkblue") {
-          render() {
-               translate([0, -property(vKY033IRSensorDatasheet(), "sensor_y_offset"), 0]) {
-                    scale(10) import("stl/ky033_ir_sensor.stl");
-               }
+          translate([0, -property(vKY033IRSensorDatasheet(), "sensor_y_offset"), 0]) {
+               scale(10) import_mesh("stl/ky033_ir_sensor.stl");
           }
      }
 }

@@ -5,7 +5,7 @@ function v35x1_5mmORingDatasheet() =
 
 module m35x1_5mmORing() {
      color("black") {
-          render() pmORing(v35x1_5mmORingDatasheet());
+          pmORing(v35x1_5mmORingDatasheet());
      }
 }
 

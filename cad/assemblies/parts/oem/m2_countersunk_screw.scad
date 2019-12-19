@@ -13,7 +13,7 @@ module mM2CountersunkScrewBore() {
 }
 
 module mM2x20mmCountersunkScrew() {
-     color("silver") render() import("stl/m2x20mm_countersunk_screw.stl");
+     color("silver") import_mesh("stl/m2x20mm_countersunk_screw.stl");
 }
 
 mM2x20mmCountersunkScrew();

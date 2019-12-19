@@ -10,7 +10,7 @@ module m100mmRhinoRubberWheel() {
           render() {
                let (width=property(v100mmRhinoRubberWheelDatasheet(), "width")) {
                     translate([0, width/2, 0]) {
-                         rotate([-90, 0, 0]) import("stl/3601-0014-0096.stl");
+                         rotate([-90, 0, 0]) import_mesh("stl/3601-0014-0096.stl");
                     }
                }
           }

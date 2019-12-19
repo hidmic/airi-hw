@@ -1,3 +1,4 @@
+include <generic/lib.scad>;
 
 function vGT2Pulley20T8mmBore6mmWideDatasheet() =
      [["body_diameter", 16], ["body_length", 16], ["bore_diameter", 8],
@@ -5,7 +6,7 @@ function vGT2Pulley20T8mmBore6mmWideDatasheet() =
       ["tooth_length", 7.4]];
 
 module mGT2Pulley20T8mmBore6mmWide() {
-     color("silver") render() import("stl/gt2_20t_b8_w6.stl");
+     color("silver") import_mesh("stl/gt2_20t_b8_w6.stl");
 }
 
 mGT2Pulley20T8mmBore6mmWide();

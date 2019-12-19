@@ -19,16 +19,14 @@ module m50mmBallCasterSupport() {
      mount_offset = property(datasheet, "mount_offset");
 
      color($default_color) {
-          render() {
-               difference() {
-                    pmBallCasterSupport(datasheet);
-                    translate([0, 0, -kEpsilon]) {
-                         duplicate([0, 1, 0]) {
-                              translate([0, mount_offset, 0]) {
-                                   linear_extrude(height=base_thickness + 2 * kEpsilon) {
-                                        offset(delta=kEpsilon) {
-                                             hull() projection() mM3x40mmHexStandoff();
-                                        }
+          difference() {
+               pmBallCasterSupport(datasheet);
+               translate([0, 0, -kEpsilon]) {
+                    duplicate([0, 1, 0]) {
+                         translate([0, mount_offset, 0]) {
+                              linear_extrude(height=base_thickness + 2 * kEpsilon) {
+                                   offset(delta=kEpsilon) {
+                                        hull() projection() mM3x40mmHexStandoff();
                                    }
                               }
                          }

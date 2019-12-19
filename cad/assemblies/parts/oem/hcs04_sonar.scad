@@ -19,7 +19,7 @@ module mHCS04SonarFrustum() {
 module mHCS04Sonar() {
      color("darkblue") {
           rotate([0, 0, 90]) {
-               render() import("stl/HC-SR04.stl");
+               import_mesh("stl/HC-SR04.stl");
           }
      }
 }

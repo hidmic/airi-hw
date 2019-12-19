@@ -15,7 +15,7 @@ module mM3x5mmThreadedInsertTaperCone() {
 }
 
 module mM3x5mmThreadedInsert() {
-     color("darkgoldenrod") render() import("stl/m3x5mm_threaded_insert.stl");
+     color("darkgoldenrod") import_mesh("stl/m3x5mm_threaded_insert.stl");
 }
 
 mM3x5mmThreadedInsert();

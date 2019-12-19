@@ -6,7 +6,7 @@ function vPJ082BHConnectorDatasheet() =
 module mPJ082BHConnector() {
      color("silver") {
           translate([-46.77696228, -20.51359606, -12.1999979 + 10]) {
-               import("stl/pj-082bh.stl");
+               import_mesh("stl/pj-082bh.stl");
           }
      }
 }

@@ -22,20 +22,18 @@ module m10mmBallCasterYoke() {
      mount_height = property(datasheet, "mount_height");
 
      color($default_color) {
-          render() {
-               difference() {
-                    union() {
-                         pmBallCasterYoke(datasheet);
-                         translate([0, 0, base_thickness]) {
-                              cylinder(d=property(vF174SAE1070SpringDatasheet(), "inner_diameter"), h=mount_height);
-                         }
+          difference() {
+               union() {
+                    pmBallCasterYoke(datasheet);
+                    translate([0, 0, base_thickness]) {
+                         cylinder(d=property(vF174SAE1070SpringDatasheet(), "inner_diameter"), h=mount_height);
                     }
-                    duplicate([0, 1, 0]) {
-                         translate([0, mount_offset, -kEpsilon]) {
-                              translate([0, 0, mount_height]) {
-                                   linear_extrude(height=base_thickness + 2 * kEpsilon) {
-                                        hull() projection() mM3x15mmHexStandoff();
-                                   }
+               }
+               duplicate([0, 1, 0]) {
+                    translate([0, mount_offset, -kEpsilon]) {
+                         translate([0, 0, mount_height]) {
+                              linear_extrude(height=base_thickness + 2 * kEpsilon) {
+                                   hull() projection() mM3x15mmHexStandoff();
                               }
                          }
                     }

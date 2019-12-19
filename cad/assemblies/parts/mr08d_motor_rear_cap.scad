@@ -28,7 +28,7 @@ module mMR08DMotorRearCapScrew() {
 
 
 module mMR08DMotorRearCap() {
-     color($default_color) render() pmMotorCap(vMR08DMotorRearCapDatasheet());
+     color($default_color) pmMotorCap(vMR08DMotorRearCapDatasheet());
 }
 
 mMR08DMotorRearCap();

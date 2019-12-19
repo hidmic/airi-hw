@@ -24,8 +24,8 @@ use <rear_ball_caster.scad>;
 use <front_ball_caster.scad>;
 
 
-SHOW_COVER=true;
-SHOW_CHASSIS=true;
+SHOW_COVER=false;
+SHOW_CHASSIS=false;
 SHOW_DRIVETRAIN=true;
 SHOW_ELECTRONICS=true;
 

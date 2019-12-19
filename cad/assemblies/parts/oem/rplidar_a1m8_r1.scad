@@ -1,3 +1,4 @@
+include <generic/lib.scad>;
 
 function vRPLidarA1M8R1Datasheet() =
      [["working_width", 6], ["range", 6000], ["laser_top_offset", 9], ["main_diameter", 70],
@@ -10,7 +11,7 @@ module mRPLidarA1M8R1() {
           translate([-13, 0, 25])
           rotate([90, 0, 180])
           translate([77.3244, -744.642, -132.9176])
-          render() import("stl/RPLIDAR-A1M8-R1.stl");
+          import_mesh("stl/RPLIDAR-A1M8-R1.stl");
      }
 }
 

@@ -8,7 +8,7 @@ module mGY521IMU() {
      color("mediumblue") {
           let(length=property(vGY521IMUDatasheet(), "length"),
               width=property(vGY521IMUDatasheet(), "width")) {
-               translate([-length/2, -width/2, 0]) render() import("stl/GY521.stl");
+               translate([-length/2, -width/2, 0]) import_mesh("stl/GY521.stl");
           }
      }
 }

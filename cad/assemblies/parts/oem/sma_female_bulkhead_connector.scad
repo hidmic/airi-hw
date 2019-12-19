@@ -1,3 +1,4 @@
+include <generic/lib.scad>;
 
 function vSMAFemaleBulkheadConnectorDatasheet() =
      [["thread_length", 11], ["thread_diameter", 6.4]];
@@ -17,7 +18,7 @@ module mSMAFemaleBulkheadConnector() {
                translate ([0, 0, -12.5]) {
                     rotate([0, -90, 0]) {
                          scale([25.4, 25.4, 25.4]) {  // inch to mm
-                              render() import("stl/sma_female_bulkhead_connector.stl");
+                              import_mesh("stl/sma_female_bulkhead_connector.stl");
                          }
                     }
                }

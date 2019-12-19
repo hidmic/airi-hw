@@ -57,80 +57,78 @@ module mMR08DMotorBaseSupport() {
      fastening_screw_diameter = property(fastening_screw_datasheet, "nominal_diameter");
 
      color($default_color) {
-          render() {
-               rotate([90, 0, 0]) {
-                    translate([0, 0, pillar_height/2]) {
-                         rotate([-90, 0, 0]) {
-                              linear_extrude(height=min_thickness) {
-                                   difference() {
-                                        square_frame(pillar_to_pillar_distance + link_width, pillar_height, link_width);
-                                        duplicate([1, 0, 0]) {
-                                             translate([pillar_to_pillar_distance/2, 0])
-                                                  square([link_width + kEpsilon, pillar_height + 2 * kEpsilon], center=true);
-                                        }
+          rotate([90, 0, 0]) {
+               translate([0, 0, pillar_height/2]) {
+                    rotate([-90, 0, 0]) {
+                         linear_extrude(height=min_thickness) {
+                              difference() {
+                                   square_frame(pillar_to_pillar_distance + link_width, pillar_height, link_width);
+                                   duplicate([1, 0, 0]) {
+                                        translate([pillar_to_pillar_distance/2, 0])
+                                             square([link_width + kEpsilon, pillar_height + 2 * kEpsilon], center=true);
                                    }
                               }
                          }
                     }
-                    duplicate([1, 0, 0]) {
-                         translate([pillar_to_pillar_distance/2, 0, 0]) {
-                              translate([0, 0, pillar_height/2]) {
-                                   duplicate([0, 0, 1]) {
-                                        translate([0, 0, -pillar_height/2]) {
-                                             translate([min_thickness/2 + guide_width/2, 0, guide_height]) {
-                                                  rotate([0, -90, 0]) {
-                                                       linear_extrude(height=min_thickness) {
-                                                            polygon([[0, 0], [pillar_height/3, 0], [0, pillar_height/3]]);
-                                                       }
+               }
+               duplicate([1, 0, 0]) {
+                    translate([pillar_to_pillar_distance/2, 0, 0]) {
+                         translate([0, 0, pillar_height/2]) {
+                              duplicate([0, 0, 1]) {
+                                   translate([0, 0, -pillar_height/2]) {
+                                        translate([min_thickness/2 + guide_width/2, 0, guide_height]) {
+                                             rotate([0, -90, 0]) {
+                                                  linear_extrude(height=min_thickness) {
+                                                       polygon([[0, 0], [pillar_height/3, 0], [0, pillar_height/3]]);
                                                   }
                                              }
-                                             let(bracket_datasheet=vMR08DMotorBaseBracketDatasheet()) {
-                                                  translate([0, pillar_depth, 0]) {
-                                                       rotate([-90, 0, 0]) {
-                                                            linear_extrude(height=guide_length) {
-                                                                 translate([0, -kEpsilon - guide_height]) {
-                                                                      difference() {
-                                                                           translate([-(guide_width - min_thickness)/2, kEpsilon]) {
-                                                                                square([guide_width, guide_height]);
-                                                                           }
-                                                                           offset(delta=kEpsilon)
-                                                                                translate([0, kEpsilon]) {
-                                                                                pmMotorCapBaseSupportWedgeXSection(
-                                                                                     property(bracket_datasheet, "rear_cap_support_datasheet"));
-                                                                           }
+                                        }
+                                        let(bracket_datasheet=vMR08DMotorBaseBracketDatasheet()) {
+                                             translate([0, pillar_depth, 0]) {
+                                                  rotate([-90, 0, 0]) {
+                                                       linear_extrude(height=guide_length) {
+                                                            translate([0, -kEpsilon - guide_height]) {
+                                                                 difference() {
+                                                                      translate([-(guide_width - min_thickness)/2, kEpsilon]) {
+                                                                           square([guide_width, guide_height]);
+                                                                      }
+                                                                      offset(delta=kEpsilon)
+                                                                           translate([0, kEpsilon]) {
+                                                                           pmMotorCapBaseSupportWedgeXSection(
+                                                                                property(bracket_datasheet, "rear_cap_support_datasheet"));
                                                                       }
                                                                  }
                                                             }
                                                        }
                                                   }
                                              }
-                                             linear_extrude(height=min_thickness) {
-                                                  translate([-guide_width + min_thickness/2, length/2]) {
-                                                       difference() {
-                                                            square([guide_width, length], center=true);
-                                                            translate([0, length/5]) {
-                                                                 square([fastening_screw_diameter, length], center=true);
-                                                                 translate([0, -length/2]) circle(d=fastening_screw_diameter);
-                                                            }
+                                        }
+                                        linear_extrude(height=min_thickness) {
+                                             translate([-guide_width + min_thickness/2, length/2]) {
+                                                  difference() {
+                                                       square([guide_width, length], center=true);
+                                                       translate([0, length/5]) {
+                                                            square([fastening_screw_diameter, length], center=true);
+                                                            translate([0, -length/2]) circle(d=fastening_screw_diameter);
                                                        }
                                                   }
                                              }
                                         }
                                    }
                               }
-                              translate([0, pillar_depth/2, 0]) {
-                                   difference() {
-                                        translate([min_thickness/2, 0, pillar_height/2]) {
-                                             cube([pillar_width, pillar_depth, pillar_height], center=true);
-                                        }
-                                        translate([0, 0, motor_z_offset]) {
-                                             duplicate([0, 0, 1]) {
-                                                  translate([0, 0, pillar_hole_to_hole_distance/2]) {
-                                                       rotate([90, 0,  0]) {
-                                                            cylinder(d=fastening_screw_diameter,
-                                                                     h=pillar_depth + 2 * kEpsilon,
-                                                                     center=true);
-                                                       }
+                         }
+                         translate([0, pillar_depth/2, 0]) {
+                              difference() {
+                                   translate([min_thickness/2, 0, pillar_height/2]) {
+                                        cube([pillar_width, pillar_depth, pillar_height], center=true);
+                                   }
+                                   translate([0, 0, motor_z_offset]) {
+                                        duplicate([0, 0, 1]) {
+                                             translate([0, 0, pillar_hole_to_hole_distance/2]) {
+                                                  rotate([90, 0,  0]) {
+                                                       cylinder(d=fastening_screw_diameter,
+                                                                h=pillar_depth + 2 * kEpsilon,
+                                                                center=true);
                                                   }
                                              }
                                         }
