@@ -1,8 +1,0 @@
-# Electrónica
-
-## Herramientas
-
-KiCAD?
-
-## Organización
-

@@ -1,7 +1,0 @@
-# Mecánica
-
-## Organización 
-
-## Herramientas
-
-OpenSCAD?
