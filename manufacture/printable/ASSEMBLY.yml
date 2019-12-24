@@ -1,0 +1,52 @@
+base_chassis:
+  parts:
+    - base_chassis.partA.stl
+    - base_chassis.partB.stl
+  preview: base_chassis.png
+
+chassis_cover:
+  parts:
+    - chassis_cover.partA.stl
+    - chassis_cover.partB.stl
+    - pole_plug.partA.stl
+    - pole_plug.partB.stl
+  preview: chassis_cover.png
+
+bumper:
+  parts:
+    - bumper.partA.stl
+    - bumper.partB.stl
+    - hcs04_sonar_bracket.stl
+  preview: bumper.png
+
+motor_block:
+  parts:
+    - mr08d_motor_base_bracket.stl
+    - mr08d_motor_base_support.stl
+    - mr08d_motor_front_cap.stl
+    - mr08d_motor_rear_cap.stl
+  preview: motor_block.png
+
+wheel_block:
+  parts:
+    - wheel_block_frame.stl
+    - wheel_suspension_arm.partA.stl
+    - wheel_suspension_arm.partB.stl
+    - wheel_suspension_frame.partA.stl
+    - wheel_suspension_frame.partB.stl
+  preview: wheel_block.png
+
+front_caster:
+  parts:
+    - 10mm_ball_caster_base.stl
+    - 10mm_ball_caster_support.stl
+    - 10mm_ball_caster_yoke.stl
+  preview: front_ball_caster.png
+
+rear_caster:
+  parts:
+    - 50mm_ball_caster_base.stl
+    - 50mm_ball_caster_spring_seat.stl
+    - 50mm_ball_caster_support.stl
+    - 50mm_ball_caster_yoke.stl
+  preview: rear_ball_caster.png

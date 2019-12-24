@@ -24,7 +24,8 @@ module mBaseChassis_PartA() {
                     mChassisBBox();
                }
           }
-          mChassisVolumeConstrain() {
+
+          if (!$simple) mChassisVolumeConstrain() {
                for(angle = cover_support_angles) {
                     rotate(angle) {
                          linear_extrude(height=height/2) {

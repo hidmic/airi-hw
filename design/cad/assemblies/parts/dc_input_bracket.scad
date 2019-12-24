@@ -73,3 +73,5 @@ module mDCInputBracket() {
           }
      }
 }
+
+mDCInputBracket();

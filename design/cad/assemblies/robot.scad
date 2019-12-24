@@ -25,14 +25,14 @@ use <right_wheel_block.scad>;
 use <rear_ball_caster.scad>;
 use <front_ball_caster.scad>;
 
-SHOW_BAY=true;
+SHOW_BAY=false;
 SHOW_BUMPER=true;
-SHOW_COVER=true;
-SHOW_CHASSIS=true;
-SHOW_DRIVETRAIN=true;
-SHOW_TRANSMISSION=true;
-SHOW_CASTERS=true;
-SHOW_ELECTRONICS=true;
+SHOW_COVER=false;
+SHOW_CHASSIS=false;
+SHOW_DRIVETRAIN=false;
+SHOW_TRANSMISSION=false;
+SHOW_CASTERS=false;
+SHOW_ELECTRONICS=false;
 
 module mRobot() {
      chassis_datasheet = vChassisDatasheet();
@@ -114,7 +114,7 @@ module mRobot() {
                                         }
                                    }
                               }
-                              mMotorBlock();
+                              if (!$simple) mMotorBlock();
                          }
                     }
 
@@ -179,7 +179,7 @@ module mRobot() {
                                         }
                                    }
                               }
-                              mirror([0, 1, 0]) mMotorBlock();
+                              if (!$simple) mirror([0, 1, 0]) mMotorBlock();
                          }
                     }
 

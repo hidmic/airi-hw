@@ -24,7 +24,7 @@ module mBaseChassis_PartB() {
                     mirror([0, 0, 1]) mChassisBBox();
                }
           }
-          mChassisVolumeConstrain() {
+          if (!$simple) mChassisVolumeConstrain() {
                translate([0, 0, height/2]) {
                     for(angle = cover_support_angles) {
                          rotate(angle) {

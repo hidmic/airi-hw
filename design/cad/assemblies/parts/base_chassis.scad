@@ -284,59 +284,61 @@ module mBaseChassis() {
                     mChassisBBox();
                }
           }
-          let(battery_datasheet=v12v5a4hBatteryDatasheet(),
-              battery_length=property(battery_datasheet, "length"),
-              battery_width=property(battery_datasheet, "width"),
-              battery_height=property(battery_datasheet, "height"),
-              stop_height=property(datasheet, "battery_stop_height")) {
-               translate([0, 0, thickness]) {
-                    duplicate([0, 1, 0]) {
-                         translate([property(datasheet, "battery_x_offset"),
-                                    property(datasheet, "battery_y_offset"), 0]) {
-                              linear_extrude(height=stop_height) {
-                                   translate([-battery_width/2, -battery_length/2]) {
-                                        difference() {
-                                             union() {
-                                                  translate([-thickness, battery_length+thickness]) {
-                                                       mirror([0, 1, 0]) square([battery_width/5, battery_length/5]);
-                                                  }
-                                                  translate([battery_width+thickness, -thickness]) {
-                                                       mirror([1, 0, 0]) {
-                                                            square([  + battery_width/5, battery_length/5]);
+          if (!$simple) {
+               let(battery_datasheet=v12v5a4hBatteryDatasheet(),
+                   battery_length=property(battery_datasheet, "length"),
+                   battery_width=property(battery_datasheet, "width"),
+                   battery_height=property(battery_datasheet, "height"),
+                   stop_height=property(datasheet, "battery_stop_height")) {
+                    translate([0, 0, thickness]) {
+                         duplicate([0, 1, 0]) {
+                              translate([property(datasheet, "battery_x_offset"),
+                                         property(datasheet, "battery_y_offset"), 0]) {
+                                   linear_extrude(height=stop_height) {
+                                        translate([-battery_width/2, -battery_length/2]) {
+                                             difference() {
+                                                  union() {
+                                                       translate([-thickness, battery_length+thickness]) {
+                                                            mirror([0, 1, 0]) square([battery_width/5, battery_length/5]);
+                                                       }
+                                                       translate([battery_width+thickness, -thickness]) {
+                                                            mirror([1, 0, 0]) {
+                                                                 square([  + battery_width/5, battery_length/5]);
+                                                            }
+                                                       }
+                                                       translate([-thickness, -thickness]) {
+                                                            square([battery_width/5, battery_length/5]);
                                                        }
                                                   }
-                                                  translate([-thickness, -thickness]) {
-                                                       square([battery_width/5, battery_length/5]);
+                                                  offset(delta=kEpsilon) {
+                                                       square([battery_width, battery_length]);
                                                   }
-                                             }
-                                             offset(delta=kEpsilon) {
-                                                  square([battery_width, battery_length]);
                                              }
                                         }
                                    }
                               }
-                         }
-                         translate([property(datasheet, "battery_stop_x_offset"),
-                                    property(datasheet, "battery_stop_y_offset"),
-                                    0]) {
-                              difference() {
-                                   translate([0, 0, stop_height/2]) {
-                                        cube([property(datasheet, "battery_stop_side_length"),
-                                              property(datasheet, "battery_stop_side_length"),
-                                              stop_height], center=true);
-                                   }
-                                   translate([0, 0, stop_height]) mM3x5mmThreadedInsertTaperCone();
-                                   translate([0, 0, -kEpsilon]) {
-                                        cylinder(d=property(datasheet, "battery_stop_hole_diameter"), h=stop_height + 2 * kEpsilon);
+                              translate([property(datasheet, "battery_stop_x_offset"),
+                                         property(datasheet, "battery_stop_y_offset"),
+                                         0]) {
+                                   difference() {
+                                        translate([0, 0, stop_height/2]) {
+                                             cube([property(datasheet, "battery_stop_side_length"),
+                                                   property(datasheet, "battery_stop_side_length"),
+                                                   stop_height], center=true);
+                                        }
+                                        translate([0, 0, stop_height]) mM3x5mmThreadedInsertTaperCone();
+                                        translate([0, 0, -kEpsilon]) {
+                                             cylinder(d=property(datasheet, "battery_stop_hole_diameter"), h=stop_height + 2 * kEpsilon);
+                                        }
                                    }
                               }
                          }
                     }
                }
-          }
-          rotate([0, 0, dc_input_theta_offset]) {
-               translate([dc_input_r_offset, 0, thickness]) {
-                    rotate([0, 0, 145]) mDCInputBracket();
+               rotate([0, 0, dc_input_theta_offset]) {
+                    translate([dc_input_r_offset, 0, thickness]) {
+                         rotate([0, 0, 145]) mDCInputBracket();
+                    }
                }
           }
      }
@@ -344,5 +346,4 @@ module mBaseChassis() {
 }
 
 mBaseChassis();
-
 

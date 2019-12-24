@@ -25,7 +25,8 @@ module mBumper_PartA() {
                     mChassisBBox();
                }
           }
-          for(angle = bumper_support_angles) {
+
+          if (!$simple) for(angle = bumper_support_angles) {
                rotate([0, 0, angle]) {
                     linear_extrude(height=bumper_height/2) {
                          translate([(chassis_outer_diameter + chassis_inner_diameter)/4, 0]) {
@@ -38,7 +39,8 @@ module mBumper_PartA() {
                     }
                }
           }
-          for(angle = bumper_support_angles) {
+
+          if (!$simple) for(angle = bumper_support_angles) {
                rotate(angle) {
                     translate([(chassis_outer_diameter + chassis_inner_diameter)/4 - bumper_support_diameter/2 + kEpsilon,
                                0, bumper_height/2]) {

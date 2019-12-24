@@ -53,7 +53,7 @@ module mWheelBlockFrame() {
           linear_extrude(height=frame_width) {
                translate([0, wheel_axle_z_offset]) {
                     ring(inner_radius=frame_inner_radius, outer_radius=frame_outer_radius, angles=[0, 180]);
-                    for(angle=frame_support_angles) {
+                    if (!$simple) for(angle=frame_support_angles) {
                          rotate([0, 0, angle]) {
                               threaded_insert_minor_diameter =
                                    property(kM3x5mmThreadedInsertDatasheet, "minor_diameter");

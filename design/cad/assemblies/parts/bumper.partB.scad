@@ -23,7 +23,7 @@ module mBumper_PartB() {
                mBumperBase();
                translate([0, 0, -chassis_height + bumper_height/2]) mChassisBBox();
           }
-          translate([0, 0, bumper_height/2]) {
+          if (!$simple) translate([0, 0, bumper_height/2]) {
                for(angle = bumper_support_angles) {
                     rotate([0, 0, angle]) {
                          linear_extrude(height=bumper_height/2) {
