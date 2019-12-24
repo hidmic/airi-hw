@@ -2,12 +2,6 @@ include <generic/lib.scad>;
 
 use <generic/standoffs.scad>;
 
-function vM3x30mmHexThreadedStandoffDatasheet() =
-     pvMetricHexStandoffDatasheet(hole_diameter=3, thread_pitch=0.5, length=30, width=5.5);
-
-module mM3x30mmHexThreadedStandoff() {
-     color("darkgoldenrod") pmMetricHexStandoff(datasheet=vM3x30mmHexThreadedStandoffDatasheet());
-}
 
 function vM3x30mmHexStandoffDatasheet() =
      pvMetricHexStandoffDatasheet(hole_diameter=3, length=30, width=5.5);
@@ -16,6 +10,12 @@ module mM3x30mmHexStandoff() {
      color("darkgoldenrod") pmMetricHexStandoff(datasheet=vM3x30mmHexStandoffDatasheet());
 }
 
+function vM3x30mmHexThreadedStandoffDatasheet() =
+     pvMetricHexStandoffDatasheet(hole_diameter=3, thread_pitch=0.5, length=30, width=5.5);
+
+module mM3x30mmHexThreadedStandoff() {
+     color("darkgoldenrod") pmMetricHexStandoff(datasheet=vM3x30mmHexThreadedStandoffDatasheet());
+}
 
 function vM3x40mmHexThreadedStandoffDatasheet() =
      pvMetricHexStandoffDatasheet(hole_diameter=3, thread_pitch=0.5, length=40, width=5.5);

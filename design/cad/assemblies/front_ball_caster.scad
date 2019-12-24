@@ -13,6 +13,8 @@ use <parts/10mm_ball_caster_base.scad>;
 use <parts/10mm_ball_caster_support.scad>;
 use <parts/10mm_ball_caster_yoke.scad>;
 
+SHOW_BALL=true;
+
 function vFrontBallCasterDatasheet() = v10mmBallCasterSupportDatasheet();
 
 module mFrontBallCaster() {
@@ -54,22 +56,21 @@ module mFrontBallCaster() {
      translate([0, 0, base_main_height + support_base_thickness]) {
           rotate([0, 180, 0]) {
                translate([0, 0, ball_z_offset]) {
-                    m10mmBall();
+                    if (SHOW_BALL) m10mmBall();
                }
                m10mmBallCasterSupport();
           }
      }
      duplicate([0, 1, 0]) {
           translate([0, mount_offset, base_mount_height]) {
-               mM3x15mmHexThreadedStandoff();
+               if (!$simple) {
+                    mM3x15mmHexThreadedStandoff();
+               } else {
+                    mM3x15mmHexStandoff();
+               }
           }
      }
      m10mmBallCasterBase();
-     /* duplicate([0, 1, 0]) { */
-     /*      translate([0, mount_offset, 0]) { */
-     /*           rotate([0, 180, 0]) mM3x6mmPhillipsScrew(); */
-     /*      } */
-     /* } */
 }
 
 mFrontBallCaster();

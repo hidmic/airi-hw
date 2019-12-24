@@ -23,10 +23,12 @@ module mF174SAE1070Spring(length=kF174SAE1070SpringLength) {
                     property(datasheet, "inner_diameter")) / 4;
      wire_radius = property(datasheet, "wire_diameter") / 2;
 
-     color("silver") {
-          translate([0, 0, wire_radius]) {
-               spring(Windings=n_windings, R=main_radius, r=wire_radius,
-                      h=length - 2 * wire_radius, slices=50);
+     if (!$simple) {
+          color("silver") {
+               translate([0, 0, wire_radius]) {
+                    spring(Windings=n_windings, R=main_radius, r=wire_radius,
+                           h=length - 2 * wire_radius, slices=50);
+               }
           }
      }
 }

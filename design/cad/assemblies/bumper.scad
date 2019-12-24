@@ -29,7 +29,10 @@ module mBumper() {
      bracket_thickness = property(vHCS04SonarBracketDatasheet(), "thickness");
 
      translate([0, 0, bumper_z_offset]) {
-          mBumper_PartA();
+          union() {
+               mBumper_PartA();
+               mBumper_PartB();
+          }
           for (angle = sonar_mounting_angles) {
                rotate([0, 0, angle]) {
                     translate([sonar_mounting_radius, 0, sonar_mounting_z_offset])  {
@@ -87,8 +90,25 @@ module mBumper() {
                     }
                }
           }
-          mBumper_PartB();
+          let(outer_diameter=property(vChassisBaseDatasheet(), "outer_diameter"),
+              rubber_angular_width=property(datasheet, "angular_width") - 20,
+              rubber_thickness=5, rubber_width=15) {
+               color("black") {
+                    for (z = [12.5, 35, 90]) {
+                         translate([0, 0, z]) {
+                              rotate([0, 0, -rubber_angular_width/2]) {
+                                   rotate_extrude(angle=rubber_angular_width) {
+                                        translate([outer_diameter/2, -rubber_width/2, 0]) {
+                                             square([rubber_thickness, rubber_width]);
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               }
+          }
      }
 }
+
 
 mBumper();

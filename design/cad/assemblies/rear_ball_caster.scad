@@ -12,6 +12,9 @@ use <parts/50mm_ball_caster_support.scad>;
 use <parts/50mm_ball_caster_spring_seat.scad>;
 use <parts/50mm_ball_caster_yoke.scad>;
 
+SHOW_SUSPENSION=true;
+SHOW_BALL=true;
+
 function vRearBallCasterDatasheet() =
      v50mmBallCasterBaseDatasheet();
 
@@ -37,36 +40,38 @@ module mRearBallCaster() {
      translate([0, 0, yoke_z_offset]) {
           rotate([0, 180, 0]) {
                m50mmBallCasterYoke();
-               translate([0, 0, yoke_base_thickness]) {
-                    translate([0, 0, 5]) {
-                         let(e_min=property(vM3NutDatasheet(), "e_min"), m_max=property(vM3NutDatasheet(), "m_max")) {
-                              difference() {
-                                   m50mmBallCasterSpringSeat();
-                                   translate([0, 0, -kEpsilon]) cylinder(d=e_min, h=m_max + kEpsilon);
-                                   translate([0, 0, m_max]) {
-                                        mirror([0, 0, 1]) mM3x5mmThreadedInsertTaperCone();
+               if (SHOW_SUSPENSION) {
+                    translate([0, 0, yoke_base_thickness]) {
+                         translate([0, 0, 5]) {
+                              let(e_min=property(vM3NutDatasheet(), "e_min"), m_max=property(vM3NutDatasheet(), "m_max")) {
+                                   difference() {
+                                        m50mmBallCasterSpringSeat();
+                                        translate([0, 0, -kEpsilon]) cylinder(d=e_min, h=m_max + kEpsilon);
+                                        translate([0, 0, m_max]) {
+                                             mirror([0, 0, 1]) mM3x5mmThreadedInsertTaperCone();
+                                        }
+                                   }
+                                   translate([0, 0, m_max]) mM3x5mmThreadedInsert();
+                                   translate([0, 0, seat_base_thickness]) {
+                                        mF2276SAE1070Spring(spring_length - 5);
                                    }
                               }
-                              translate([0, 0, m_max]) mM3x5mmThreadedInsert();
-                              translate([0, 0, seat_base_thickness]) {
-                                   mF2276SAE1070Spring(spring_length - 5);
-                              }
+                         }
+                         mM3Nut();
+                    }
+                    duplicate([0, 1, 0]) {
+                         translate([0, mount_offset, 0]) {
+                              rotate([0, 180, 0]) mM3x12mmPhillipsScrew();
                          }
                     }
-                    mM3Nut();
+                    rotate([0, 180, 0]) mM3x12mmPhillipsScrew();
                }
-               duplicate([0, 1, 0]) {
-                    translate([0, mount_offset, 0]) {
-                         rotate([0, 180, 0]) mM3x12mmPhillipsScrew();
-                    }
-               }
-               rotate([0, 180, 0]) mM3x12mmPhillipsScrew();
           }
      }
      translate([0, 0, support_z_offset]) {
           rotate([0, 180, 0]) {
                translate([0, 0, ball_z_offset]) {
-                    m50mmBall();
+                    if(SHOW_BALL) m50mmBall();
                }
                m50mmBallCasterSupport();
           }
@@ -74,7 +79,11 @@ module mRearBallCaster() {
      translate([0, 0, support_z_offset - support_base_thickness/2]) {
           duplicate([0, 1, 0]) {
                translate([0, mount_offset, -standoff_length/2]) {
-                    mM3x30mmHexThreadedStandoff();
+                    if (!$simple) {
+                         mM3x30mmHexThreadedStandoff();
+                    } else {
+                         mM3x30mmHexStandoff();
+                    }
                }
           }
      }

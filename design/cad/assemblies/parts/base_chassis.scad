@@ -92,7 +92,6 @@ function vBaseChassisDatasheet() =
       ["front_airway_theta_offset", [-22.5, 22.5]], ["front_airway_angular_width", 25],
       ["dc_input_r_offset", inner_diameter * 0.5 * 0.8], ["dc_input_theta_offset", -55]];
 
-
 module mBaseChassis() {
      datasheet = vBaseChassisDatasheet();
      height = property(datasheet, "height");

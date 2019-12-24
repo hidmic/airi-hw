@@ -20,12 +20,14 @@ module mUSBTypeAPanelConnector() {
      flare_length = property(datasheet, "flare_length");
      flare_width = property(datasheet, "flare_width");
 
-     color("black") {
-          render() {
-               linear_extrude(height=flare_height) {
-                    difference() {
-                         square([flare_length, flare_width], center=true);
-                         hull() projection() mUSBTypeAFemaleConnector();
+     if (!$simple) {
+          color("black") {
+               render() {
+                    linear_extrude(height=flare_height) {
+                         difference() {
+                              square([flare_length, flare_width], center=true);
+                              hull() projection() mUSBTypeAFemaleConnector();
+                         }
                     }
                }
           }

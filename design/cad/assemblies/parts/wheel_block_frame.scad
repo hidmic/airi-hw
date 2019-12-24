@@ -32,7 +32,7 @@ function vWheelBlockFrameDatasheet() =
                                property(chassis_datasheet, "z_offset") -
                                property(chassis_datasheet, "thickness"))],
       ["support_angles", property(wheel_suspension_frame_datasheet, "support_angles")],
-      ["support_diameter", 2 * ((outer_radius + inner_radius)/2 - main_radius)],
+      ["support_diameter", 2 * (inner_radius - main_radius)],
       ["support_r_offset", main_radius]];
 
 
@@ -57,7 +57,7 @@ module mWheelBlockFrame() {
                          rotate([0, 0, angle]) {
                               threaded_insert_minor_diameter =
                                    property(kM3x5mmThreadedInsertDatasheet, "minor_diameter");
-                              translate([frame_outer_radius, 0]) {
+                              translate([(frame_inner_radius + frame_outer_radius)/2, 0]) {
                                    curved_support_xsection(support_radius=frame_support_diameter/2,
                                                            hole_radius=threaded_insert_minor_diameter / 2,
                                                            fillet_radius=threaded_insert_minor_diameter / 4,

@@ -1,7 +1,7 @@
 SCAD ?= openscad
 OUT_DIR ?= output
 
-QUALITY_ORDER ?= 5
+SCAD_FLAGS ?= -D "\$$quality=6;\$$simple=false;"
 
 printables: \
   assemblies/parts/10mm_ball_caster_base.stl \
@@ -31,16 +31,16 @@ printables: \
   assemblies/parts/wheel_suspension_frame.partB.stl
 
 cuttables: \
-	assemblies/parts/chassis_bay.svg \
-  assemblies/parts/board_support.svg
+	assemblies/parts/chassis_base_bay.dxf \
+  assemblies/parts/board_support.dxf
 
 %.stl: %.scad
 	mkdir -p $(OUT_DIR)/$(@D)
-	$(SCAD) -D "quality_order=$(QUALITY_ORDER)" -o $(OUT_DIR)/$@ $<
+	$(SCAD) $(SCAD_FLAGS) -o $(OUT_DIR)/$@ $<
 
-%.svg: %.scad
+%.dxf: %.scad
 	mkdir -p $(OUT_DIR)/$(@D)
-	$(SCAD) -D "quality_order=$(QUALITY_ORDER)" -o $(OUT_DIR)/$@ $<
+	$(SCAD) $(SCAD_FLAGS) -o $(OUT_DIR)/$@ $<
 
 
 clean:

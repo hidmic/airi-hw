@@ -1,12 +1,8 @@
-quality_order = -1;
-$fn = quality_order >= 0 ? pow(2, quality_order) : 0;
+$simple = false;
+$quality = -1;
+$fn = $quality >= 0 ? pow(2, $quality) : 0;
 $fa = 4;
 $fs = 1/64;
-
-$noimport = false;
-module import_mesh(filename) {
-     if (!$noimport) import(filename);
-}
 
 kEpsilon = 1/32;
 

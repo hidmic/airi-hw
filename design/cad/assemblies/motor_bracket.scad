@@ -9,6 +9,7 @@ use <parts/mr08d_motor_base_bracket.scad>;
 use <parts/mr08d_motor_front_cap.scad>;
 use <parts/mr08d_motor_rear_cap.scad>;
 
+SHOW_MOTOR=true;
 
 function vMotorBracketDatasheet() =
      let (motor_datasheet=vMR08D024022MotorDatasheet())
@@ -62,11 +63,13 @@ module mMotorBracket() {
                                    }
                               }
                          }
-                         let (motor_datasheet=property(cap_datasheet, "motor_datasheet")) {
-                              for(angle = property(motor_datasheet, "mount_angles")) {
-                                   rotate([0, 0, angle]) {
-                                        translate([property(motor_datasheet, "mount_r_offset")/2, 0]) {
-                                             mirror([0, 0, 1]) mM3x6mmPhillipsScrew();
+                         if (SHOW_MOTOR) {
+                              let (motor_datasheet=property(cap_datasheet, "motor_datasheet")) {
+                                   for(angle = property(motor_datasheet, "mount_angles")) {
+                                        rotate([0, 0, angle]) {
+                                             translate([property(motor_datasheet, "mount_r_offset")/2, 0]) {
+                                                  mirror([0, 0, 1]) mM3x6mmPhillipsScrew();
+                                             }
                                         }
                                    }
                               }
@@ -86,9 +89,11 @@ module mMotorBracket() {
                }
           }
      }
-     translate([0, 0, property(datasheet, "motor_z_offset")]) {
-          translate([property(datasheet, "inner_length")/2, 0, 0]) {
-               mMR08D024022Motor();
+     if (SHOW_MOTOR) {
+          translate([0, 0, property(datasheet, "motor_z_offset")]) {
+               translate([property(datasheet, "inner_length")/2, 0, 0]) {
+                    mMR08D024022Motor();
+               }
           }
      }
 }

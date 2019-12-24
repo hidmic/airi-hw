@@ -34,6 +34,7 @@ function vBumperBaseDatasheet() =
       ["support_pin_height", 4], ["support_diameter", chassis_support_diameter],
       ["support_angles", [-angular_width/2+10, -22.5, 22.5, angular_width/2-10]]];
 
+echo(vBumperBaseDatasheet());
 
 module mBumperLockXSection() {
      datasheet = vBumperBaseDatasheet();
@@ -76,6 +77,30 @@ module mBumperBaseComplement() {
           cube([chassis_outer_diameter, chassis_inner_diameter * sin(angular_width/2), height + kEpsilon]);
      }
 }
+
+module mBumperPrimitive() {
+     datasheet = vBumperBaseDatasheet();
+     height = property(datasheet, "height");
+     angular_width = property(datasheet, "angular_width");
+
+     chassis_datasheet = vChassisBaseDatasheet();
+     chassis_height = property(chassis_datasheet, "height");
+     chassis_outer_diameter = property(chassis_datasheet, "outer_diameter");
+     chassis_fillet_radius = property(chassis_datasheet, "fillet_radius");
+
+     difference() {
+          translate([0, 0, -chassis_fillet_radius - height/2]) {
+               mChassisShell();
+          }
+          translate([-chassis_outer_diameter/2 * (1 - cos(angular_width/2)), 0, -chassis_height/2]) {
+               mChassisBBox();
+          }
+          translate([0, 0, -chassis_height - height/2]) mChassisBBox();
+          translate([0, 0, height/2]) mChassisBBox();
+     }
+}
+
+scale([0.1, 0.1, 0.1]) mBumperPrimitive();
 
 module mBumperBase() {
      datasheet = vBumperBaseDatasheet();
@@ -155,4 +180,4 @@ module mBumperBase() {
      }
 }
 
-mBumperBase();
+//mBumperBase();

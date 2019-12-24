@@ -14,7 +14,7 @@ kWheelSuspensionLinkDatasheet = vWheelSuspensionLinkDatasheet();
 function vWheelSuspensionFrameBaseDatasheet() =
      let(pivot_radius=property(kWheelSuspensionLinkDatasheet, "length"),
          outer_radius=pivot_radius + property(kWheelSuspensionPivotJointDatasheet, "outer_diameter")/2,
-         width=10, thickness=2, main_radius=outer_radius - width/2 - thickness, inner_radius=main_radius - width/2,
+         width=10, thickness=3, main_radius=outer_radius - width/2 - thickness, inner_radius=main_radius - width/2,
          support_hole_diameter=property(kM3x5mmThreadedInsertDatasheet, "nominal_diameter") + 4 * kEpsilon)
      [["main_radius", main_radius], ["outer_radius", outer_radius], ["inner_radius", inner_radius],
       ["pivot_radius", pivot_radius], ["width", width], ["thickness", thickness], ["fillet_radius", 3],

@@ -5,18 +5,18 @@ use <oem/5mm_flat_top_led.scad>;
 use <chassis_base.scad>;
 use <chassis_base_cover.scad>;
 
-function vChassisBayDatasheet() =
+function vChassisBaseBayDatasheet() =
      let(outer_diameter=property(vChassisBaseDatasheet(), "outer_diameter"),
-         height=property(vChassisBaseCoverDatasheet(), "bay_height"),
-         width=25)
+         width=15, inner_diameter=outer_diameter - 2 * width,
+         height=property(vChassisBaseCoverDatasheet(), "bay_height"))
      [["outer_diameter", outer_diameter],
-      ["inner_diameter", outer_diameter - width],
+      ["inner_diameter", inner_diameter],
       ["height", height], ["width", width],
       ["light_source_angles", [30:60:360-30]],
-      ["light_source_r_offset", outer_diameter - width/2]];
+      ["light_source_r_offset", (outer_diameter + inner_diameter)/4]];
 
-module mChassisBay() {
-     datasheet = vChassisBayDatasheet();
+module mChassisBaseBay() {
+     datasheet = vChassisBaseBayDatasheet();
      inner_diameter = property(datasheet, "inner_diameter");
      outer_diameter = property(datasheet, "outer_diameter");
      height = property(datasheet, "height");
@@ -58,4 +58,4 @@ module mChassisBay() {
 }
 
 projection()
-mChassisBay();
+mChassisBaseBay();
