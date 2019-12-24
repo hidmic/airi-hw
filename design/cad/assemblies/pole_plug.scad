@@ -1,8 +1,10 @@
 include <generic/lib.scad>;
 
 use <parts/oem/m8_nut.scad>;
+
 use <parts/oem/m3_phillips_screw.scad>;
 use <parts/oem/m3x5mm_threaded_insert.scad>;
+use <parts/oem/m8x50mm_threaded_stud.scad>;
 use <parts/oem/ndal_m3_washer.scad>;
 
 use <parts/pole_plug.partA.scad>;
@@ -47,6 +49,10 @@ module mPolePlug() {
                          mM3x6mmPhillipsScrew();
                     }
                }
+          }
+          translate([0, 0, (-property(partA_datasheet, "base_thickness")
+                            -property(vM8NutDatasheet(), "m_max"))]) {
+               rotate([0, -90, 0]) mM8x50mmThreadedStud();
           }
      }
 }
