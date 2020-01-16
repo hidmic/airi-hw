@@ -7,9 +7,9 @@ $default_color = [0.203125, 0.203125, 0.203125];
 
 kEpsilon = 1/32;
 
-$noimport = false;
+$simple = false;
 module import_mesh(filename) {
-     if (!$noimport) import(filename);
+     if (!$simple) import(filename);
 }
 
 function property(table, key) = table[search([key], table)[0]][1];

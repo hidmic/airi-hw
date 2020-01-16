@@ -35,7 +35,6 @@ function vMotorBlockDatasheet() =
            ["motor_x_offset", (min_motor_x_offset + max_motor_x_offset)/2]]
      );
 
-
 module mMotorBlock() {
      datasheet = vMotorBlockDatasheet();
      length = property(datasheet, "length");

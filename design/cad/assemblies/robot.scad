@@ -15,6 +15,8 @@ use <parts/oem/m3_nut.scad>;
 
 use <parts/board_support.scad>;
 
+use <controller.scad>;
+
 use <chassis_bay.scad>;
 use <bumper.scad>;
 use <chassis.scad>;
@@ -26,13 +28,13 @@ use <rear_ball_caster.scad>;
 use <front_ball_caster.scad>;
 
 SHOW_BAY=false;
-SHOW_BUMPER=true;
+SHOW_BUMPER=false;
 SHOW_COVER=false;
 SHOW_CHASSIS=false;
 SHOW_DRIVETRAIN=false;
 SHOW_TRANSMISSION=false;
 SHOW_CASTERS=false;
-SHOW_ELECTRONICS=false;
+SHOW_ELECTRONICS=true;
 
 module mRobot() {
      chassis_datasheet = vChassisDatasheet();
@@ -114,6 +116,7 @@ module mRobot() {
                                         }
                                    }
                               }
+                              translate([2, 0, 0])
                               if (!$simple) mMotorBlock();
                          }
                     }
@@ -242,9 +245,14 @@ module mRobot() {
                                         mJetsonNano();
                                    }
                               }
+                              translate([property(board_support_datasheet, "controller_x_offset"),
+                                         property(board_support_datasheet, "controller_y_offset"),
+                                         -board_support_height-property(vControllerDatasheet(), "height")]) {
+                                   mController();
+                              }
+                              rotate([0, 0, 90]) mGY521IMU();
                          }
                     }
-                    rotate([0, 0, 90]) mGY521IMU();
                     for (angle = property(chassis_datasheet, "ir_sensor_angles")) {
                          translate([property(chassis_datasheet, "ir_sensor_x_offset"), 0, 0]) {
                               rotate([0, 0, angle]) {

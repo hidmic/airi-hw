@@ -37,7 +37,7 @@ module mBumper() {
                rotate([0, 0, angle]) {
                     translate([sonar_mounting_radius, 0, sonar_mounting_z_offset])  {
                          rotate([0, sonar_mounting_polar_angle, 0]) {
-                              mHCS04SonarBracket();
+                              if (!$simple) mHCS04SonarBracket();
                               translate([0, 0, bracket_thickness + 2]) {
                                    mHCS04Sonar();
                               }

@@ -1,10 +1,14 @@
-$simple = false;
 $quality = -1;
 $fn = $quality >= 0 ? pow(2, $quality) : 0;
 $fa = 4;
 $fs = 1/64;
 
 kEpsilon = 1/32;
+
+$simple = false;
+module import_mesh(filename) {
+     if (!$simple) import(filename);
+}
 
 function property(table, key) = table[search([key], table)[0]][1];
 
