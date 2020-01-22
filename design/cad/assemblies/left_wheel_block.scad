@@ -16,9 +16,9 @@ use <parts/wheel_block_frame.scad>;
 use <wheel_suspension_arm.scad>;
 use <wheel_suspension_frame.scad>;
 
-SHOW_WHEEL=false;
+SHOW_WHEEL=true;
 SHOW_BLOCK=true;
-SHOW_SUSPENSION=false;
+SHOW_SUSPENSION=true;
 
 function vLeftWheelBlockDatasheet() =
      let(shaft_datasheet=v100x8mmSteelShaftDatasheet())

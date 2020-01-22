@@ -11,7 +11,7 @@ kWheelSuspensionAxleJointDatasheet = vWheelSuspensionAxleJointDatasheet();
 kM3x5mmThreadedInsertDatasheet = vM3x5mmThreadedInsertDatasheet();
 
 function vWheelSuspensionPivotJointDatasheet() =
-     let(outer_diameter=22, axle_diameter=6,
+     let(outer_diameter=22, axle_diameter=7,
          inner_diameter=axle_diameter - 2 * kEpsilon,
          joint_fastening_diameter=(outer_diameter + inner_diameter) / 2,
          joint_fastening_angles=property(kWheelSuspensionAxleJointDatasheet, "joint_fastening_angles"),

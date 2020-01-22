@@ -44,8 +44,8 @@ module mWheelSuspensionFrame_PartA() {
                         d2=female_snap_fit_minor_diameter,
                         h=female_snap_fit_height);
                translate([0, 0, -kEpsilon]) {
-                    cylinder(d1=female_snap_fit_major_diameter - female_snap_fit_thickness,
-                             d2=female_snap_fit_minor_diameter - female_snap_fit_thickness,
+                    cylinder(d1=female_snap_fit_major_diameter - 2 * female_snap_fit_thickness,
+                             d2=female_snap_fit_minor_diameter - 2 * female_snap_fit_thickness,
                              h=female_snap_fit_height + 2 * kEpsilon);
                }
                for (angle = female_snap_fit_cut_angles) {

@@ -15,7 +15,7 @@ function vWheelSuspensionFrame_PartB_Datasheet() =
          female_snap_fit_height=property(kWheelSuspensionFrame_PartA_Datasheet, "female_snap_fit_height"))
      concat(
           vWheelSuspensionFrameBaseDatasheet(),
-          [["male_snap_fit_diameter", female_snap_fit_major_diameter - female_snap_fit_thickness], ["male_snap_fit_height", female_snap_fit_height]]
+          [["male_snap_fit_diameter", female_snap_fit_major_diameter - 2 * female_snap_fit_thickness], ["male_snap_fit_height", female_snap_fit_height]]
      );
 
 module mWheelSuspensionFrame_PartB() {
