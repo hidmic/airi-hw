@@ -1,0 +1,184 @@
+(ExpressProject "TPS2HA08B-Q1_TRANS"
+  (ProjectVersion "19981106")
+  (ProjectType "Analog or A/D Mixed Mode")
+  (Folder "Design Resources"
+    (Folder "Library"
+      (File ".\drv8874_trans.olb"
+        (Type "Schematic Library")))
+    (NoModify)
+    (File ".\drv8874_trans.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (RootChangedForceReNetlist "x")
+    (PSPICE_Regenerate_Netlist_Flag "FALSE")
+    (Netlist_TAB "4")
+    (PSPICE_Output_File "DRV8874_TRANS.lib")
+    (PSPICE_View_Output "TRUE")
+    (PSPICE_Subcircuit_Format "TRUE")
+    (PSPICE_Do_DRC_Markers "TRUE")
+    (PSPICE_Hier_Format "FALSE")
+    (PSPICE_Hier_Descend "TRUE")
+    (PSPICE_Hier_DoNot_Descend "FALSE")
+    (PSPICE_Alt_Template "PSpiceTemplate")
+    (Board_sim_option "VHDL_flow"))
+  (Folder "Outputs")
+  (Folder "PSpice Resources"
+    (Folder "Simulation Profiles"
+      (File.PSpice.{09528990-3187-11D2-BC7B-00A0C90CBF91}
+         ".\drv8874_trans-pspicefiles\drv8874_startup\trans.sim"
+        (DisplayName "DRV8874_STARTUP-trans")
+        (Type "PSpice Profile"))
+      (ActiveProfile ".\drv8874_trans-pspicefiles\drv8874_startup\trans.sim"))
+    (Folder "Stimulus Files"
+      (Sort User))
+    (Folder "Include Files"
+      (Sort User))
+    (Folder "Model Libraries"
+      (Sort User)
+      (File ".\drv8874_trans.lib"
+        (Type "PSpiceLibrary")
+        (DisplayName ".\drv8874_trans.lib"))))
+  (DefaultLibraryBrowseDirectory "library\PSpice")
+  (PartMRUSelector
+    (DRV8874_TRANS
+      (FullPartName "DRV8874_TRANS.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\PART_NUMBERS\DRV8874\ACTIVE_WORK_FPT\EXPERIMENTS\DRV8874\DRV8874_PSPICE_TRANS\DRV8874_TRANS.OLB")
+      (DeviceIndex "0"))
+    (NOR2_BASIC_GEN
+      (FullPartName "NOR2_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (INV_DELAY_BASIC_GEN
+      (FullPartName "INV_DELAY_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (C
+      (FullPartName "C.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (R
+      (FullPartName "R.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (E
+      (FullPartName "E.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (VDC
+      (FullPartName "VDC.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (ABM1/I
+      (FullPartName "ABM1/I.Normal")
+      (LibraryName "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\ABM.OLB")
+      (DeviceIndex "0"))
+    (ABM/I
+      (FullPartName "ABM/I.Normal")
+      (LibraryName "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\ABM.OLB")
+      (DeviceIndex "0"))
+    (AND3_BASIC_GEN
+      (FullPartName "AND3_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (IDC
+      (FullPartName "IDC.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (AND2_BASIC_GEN
+      (FullPartName "AND2_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (IC1
+      (FullPartName "IC1.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\SPECIAL.OLB")
+      (DeviceIndex "0"))
+    (OR2_BASIC_GEN
+      (FullPartName "OR2_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (BUF_DELAY_BASIC_GEN
+      (FullPartName "BUF_DELAY_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (SRLATCHRHP_BASIC_GEN
+      (FullPartName "SRLATCHRHP_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (S
+      (FullPartName "S.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (VPWL
+      (FullPartName "VPWL.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (VPWL_ENH
+      (FullPartName "VPWL_ENH.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (VPWL_FILE
+      (FullPartName "VPWL_FILE.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (INV_BASIC_GEN
+      (FullPartName "INV_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (VPULSE
+      (FullPartName "VPULSE.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_16.2\TOOLS\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (NAND2_BASIC_GEN
+      (FullPartName "NAND2_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (BUF_BASIC_GEN
+      (FullPartName "BUF_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0"))
+    (OR3_BASIC_GEN
+      (FullPartName "OR3_BASIC_GEN.Normal")
+      (LibraryName
+         "C:\FPT_WS\FPT_DS\MISC\LDO TRAINING\STANDARD MACRO OLB FILES\GATES_GEN.OLB")
+      (DeviceIndex "0")))
+  (MPSSessionName "x0264633")
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources"
+         "C:\FPT_WS\FPT_DS\Part_Numbers\DRV8874\Release_FPT\PSPICE\DRV8874_PSPICE_TRANS\drv8874_trans.dsn")
+      (Select "Design Resources"
+         "C:\FPT_WS\FPT_DS\Part_Numbers\DRV8874\Release_FPT\PSPICE\DRV8874_PSPICE_TRANS\drv8874_trans.dsn"
+         "DRV8874_STARTUP"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 2 3 -1 -1 -8 -30 0 200 0 372"))
+      (Tab 0)))
+  (LastUsedLibraryBrowseDirectory
+     "C:\FPT_WS\FPT_DS\Part_Numbers\DRV8874\Active_Work_FPT\Experiments\DRV8874\DRV8874_PSPICE_TRANS")
+  (ISPCBBASICLICENSE "false"))
